@@ -1,0 +1,15 @@
+mutation createEnvironmentService($input: EnvironmentServiceInput){
+    createEnvironmentService(input: $input){
+        id
+        environment{
+                id
+                name
+            }
+        service{
+                id
+                name
+            }
+        stack
+    }
+}
+

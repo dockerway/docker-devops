@@ -1,0 +1,15 @@
+mutation updateEnvironmentService($id: ID!, $input: EnvironmentServiceInput){
+    updateEnvironmentService(id: $id, input: $input){
+        id
+        environment{
+                id
+                name
+            }
+        service{
+                id
+                name
+            }
+        stack
+    }
+}
+

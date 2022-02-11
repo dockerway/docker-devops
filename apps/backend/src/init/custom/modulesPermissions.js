@@ -4,8 +4,60 @@ import {
  BASE_SHOW
 } from '../../modules/base/permissions'
 
+import {
+    PLATFORM_CREATE,
+    PLATFORM_DELETE,
+    PLATFORM_MENU,
+    PLATFORM_SHOW,
+    PLATFORM_UPDATE
+} from '../../modules/devops/permissions/Platform'
 
+
+import {
+    SERVICE_CREATE,
+    SERVICE_DELETE,
+    SERVICE_MENU,
+    SERVICE_SHOW,
+    SERVICE_UPDATE
+} from '../../modules/devops/permissions/Service'
+
+
+import {
+    ENVIRONMENT_CREATE,
+    ENVIRONMENT_DELETE,
+    ENVIRONMENT_MENU,
+    ENVIRONMENT_SHOW,
+    ENVIRONMENT_UPDATE
+} from '../../modules/devops/permissions/Environment'
+
+import {
+    ENVIRONMENTSERVICE_CREATE,
+    ENVIRONMENTSERVICE_DELETE,
+    ENVIRONMENTSERVICE_MENU,
+    ENVIRONMENTSERVICE_SHOW,
+    ENVIRONMENTSERVICE_UPDATE
+} from '../../modules/devops/permissions/EnvironmentService'
 
 export default [
-    BASE_SHOW
+    BASE_SHOW,
+    PLATFORM_CREATE,
+    PLATFORM_DELETE,
+    PLATFORM_MENU,
+    PLATFORM_SHOW,
+    PLATFORM_UPDATE,
+    SERVICE_CREATE,
+    SERVICE_DELETE,
+    SERVICE_MENU,
+    SERVICE_SHOW,
+    SERVICE_UPDATE,
+    ENVIRONMENT_CREATE,
+    ENVIRONMENT_DELETE,
+    ENVIRONMENT_MENU,
+    ENVIRONMENT_SHOW,
+    ENVIRONMENT_UPDATE,
+    ENVIRONMENTSERVICE_CREATE,
+    ENVIRONMENTSERVICE_DELETE,
+    ENVIRONMENTSERVICE_MENU,
+    ENVIRONMENTSERVICE_SHOW,
+    ENVIRONMENTSERVICE_UPDATE
 ]

@@ -1,0 +1,14 @@
+query findEnvironmentService($id:ID!){
+    findEnvironmentService(id:$id){
+        id
+        environment{
+                id
+                name
+            }
+        service{
+                id
+                name
+            }
+        stack
+    }
+}

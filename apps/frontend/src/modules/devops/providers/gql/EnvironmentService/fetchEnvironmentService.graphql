@@ -1,0 +1,15 @@
+query fetchEnvironmentService{
+    fetchEnvironmentService{
+        id
+        environment{
+                id
+                name
+            }
+        service{
+                id
+                name
+            }
+        stack
+    }
+}
+

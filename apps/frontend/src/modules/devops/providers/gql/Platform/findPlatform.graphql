@@ -1,0 +1,6 @@
+query findPlatform($id:ID!){
+    findPlatform(id:$id){
+        id
+        name
+    }
+}

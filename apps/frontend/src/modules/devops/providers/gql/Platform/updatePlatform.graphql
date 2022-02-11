@@ -1,0 +1,7 @@
+mutation updatePlatform($id: ID!, $input: PlatformInput){
+    updatePlatform(id: $id, input: $input){
+        id
+        name
+    }
+}
+

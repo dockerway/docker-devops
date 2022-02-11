@@ -1,0 +1,37 @@
+
+        
+        
+type Platform{
+id: ID!
+ name: String!
+}
+
+type PlatformPaginated{
+    totalItems: Int!
+    page: Int!
+    items: [Platform!]
+}
+
+type Query {
+    findPlatform(id:ID!): Platform
+    fetchPlatform: [Platform]
+    paginatePlatform( pageNumber: Int, itemsPerPage: Int, search: String, filters: [FilterInput],orderBy: String, orderDesc: Boolean): PlatformPaginated  
+    
+    
+}
+
+input PlatformInput{
+    name: String!
+}
+
+type PlatformDelete{
+    id: ID!
+    success: Boolean!
+}
+
+
+type Mutation {
+    createPlatform(input: PlatformInput): Platform
+    updatePlatform(id: ID!, input: PlatformInput): Platform
+    deletePlatform(id: ID!): PlatformDelete!
+}

@@ -1,0 +1,7 @@
+mutation createPlatform($input: PlatformInput){
+    createPlatform(input: $input){
+        id
+        name
+    }
+}
+

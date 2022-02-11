@@ -1,0 +1,41 @@
+
+        
+        
+type EnvironmentService{
+id: ID!
+ environment: Environment!
+ service: Service!
+ stack: String!
+}
+
+type EnvironmentServicePaginated{
+    totalItems: Int!
+    page: Int!
+    items: [EnvironmentService!]
+}
+
+type Query {
+    findEnvironmentService(id:ID!): EnvironmentService
+    fetchEnvironmentService: [EnvironmentService]
+    paginateEnvironmentService( pageNumber: Int, itemsPerPage: Int, search: String, filters: [FilterInput],orderBy: String, orderDesc: Boolean): EnvironmentServicePaginated  
+    
+    
+}
+
+input EnvironmentServiceInput{
+    environment: ID!
+ service: ID!
+ stack: String!
+}
+
+type EnvironmentServiceDelete{
+    id: ID!
+    success: Boolean!
+}
+
+
+type Mutation {
+    createEnvironmentService(input: EnvironmentServiceInput): EnvironmentService
+    updateEnvironmentService(id: ID!, input: EnvironmentServiceInput): EnvironmentService
+    deleteEnvironmentService(id: ID!): EnvironmentServiceDelete!
+}

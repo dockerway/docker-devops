@@ -1,0 +1,54 @@
+type VariableService{
+    name: String!
+    defaultValue: String
+}
+
+type Service{
+    id: ID!
+    name: String!
+    description: String
+    platform: Platform!
+    volumes: [String]
+    ports: [String]
+    variables: [VariableService]
+}
+
+type ServicePaginated{
+    totalItems: Int!
+    page: Int!
+    items: [Service!]
+}
+
+type Query {
+    findService(id:ID!): Service
+    fetchService: [Service]
+    paginateService( pageNumber: Int, itemsPerPage: Int, search: String, filters: [FilterInput],orderBy: String, orderDesc: Boolean): ServicePaginated
+
+
+}
+
+input VariableServiceInput{
+    name: String!
+    defaultValue: String
+}
+
+input ServiceInput{
+    name: String!
+    description: String
+    platform: ID!
+    volumes: [String]
+    ports: [String]
+    variables: [VariableServiceInput]
+}
+
+type ServiceDelete{
+    id: ID!
+    success: Boolean!
+}
+
+
+type Mutation {
+    createService(input: ServiceInput): Service
+    updateService(id: ID!, input: ServiceInput): Service
+    deleteService(id: ID!): ServiceDelete!
+}

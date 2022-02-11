@@ -1,0 +1,18 @@
+query paginateEnvironmentService( $pageNumber: Int, $itemsPerPage:Int, $search: String, $filters: [FilterInput], $orderBy: String, $orderDesc: Boolean){
+    paginateEnvironmentService( pageNumber: $pageNumber, itemsPerPage: $itemsPerPage, search: $search, filters: $filters, orderBy: $orderBy, orderDesc: $orderDesc){
+        totalItems
+        page
+        items{
+          id
+          environment{
+                id
+                name
+            }
+        service{
+                id
+                name
+            }
+        stack
+        }
+    }
+}

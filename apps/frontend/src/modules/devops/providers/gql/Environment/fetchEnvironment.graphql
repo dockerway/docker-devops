@@ -1,0 +1,10 @@
+query fetchEnvironment{
+    fetchEnvironment{
+        id
+        name
+        permission
+        dockerApiUrl
+        dockerApiToken
+    }
+}
+

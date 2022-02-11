@@ -1,0 +1,7 @@
+mutation deleteEnvironment($id: ID!){
+    deleteEnvironment(id: $id){
+        id
+        success
+    }
+}
+

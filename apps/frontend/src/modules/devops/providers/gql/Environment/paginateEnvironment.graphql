@@ -1,0 +1,13 @@
+query paginateEnvironment( $pageNumber: Int, $itemsPerPage:Int, $search: String, $filters: [FilterInput], $orderBy: String, $orderDesc: Boolean){
+    paginateEnvironment( pageNumber: $pageNumber, itemsPerPage: $itemsPerPage, search: $search, filters: $filters, orderBy: $orderBy, orderDesc: $orderDesc){
+        totalItems
+        page
+        items{
+          id
+          name
+        permission
+        dockerApiUrl
+        dockerApiToken
+        }
+    }
+}

@@ -1,0 +1,18 @@
+query fetchService{
+    fetchService{
+        id
+        name
+        description
+        platform{
+            id
+            name
+        }
+        volumes
+        ports
+        variables{
+            name
+            defaultValue
+        }
+    }
+}
+

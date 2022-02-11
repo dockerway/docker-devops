@@ -1,0 +1,49 @@
+enum permissionEnum{
+    ENV_DEV_VIEW,
+    ENV_DEV_EDIT,
+    ENV_QA_VIEW,
+    ENV_QA_EDIT,
+    ENV_PROD_VIEW,
+    ENV_PROD_EDIT
+}
+
+type Environment{
+    id: ID!
+    name: String!
+    permission: [permissionEnum]
+    dockerApiUrl: String
+    dockerApiToken: String
+}
+
+type EnvironmentPaginated{
+    totalItems: Int!
+    page: Int!
+    items: [Environment!]
+}
+
+type Query {
+    findEnvironment(id:ID!): Environment
+    fetchEnvironment: [Environment]
+    paginateEnvironment( pageNumber: Int, itemsPerPage: Int, search: String, filters: [FilterInput],orderBy: String, orderDesc: Boolean): EnvironmentPaginated
+
+
+}
+
+input EnvironmentInput{
+    name: String!
+    permission: [permissionEnum]
+    dockerApiUrl: String
+    dockerApiToken: String
+}
+
+type EnvironmentDelete{
+    id: ID!
+    success: Boolean!
+}
+
+
+type Mutation {
+    createEnvironment(input: EnvironmentInput): Environment
+    updateEnvironment(id: ID!, input: EnvironmentInput): Environment
+    deleteEnvironment(id: ID!): EnvironmentDelete!
+}

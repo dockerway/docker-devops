@@ -1,0 +1,17 @@
+query findService($id:ID!){
+    findService(id:$id){
+        id
+        name
+        description
+        platform{
+            id
+            name
+        }
+        volumes
+        ports
+        variables{
+            name
+            defaultValue
+        }
+    }
+}

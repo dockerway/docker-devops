@@ -1,0 +1,18 @@
+mutation updateService($id: ID!, $input: ServiceInput){
+    updateService(id: $id, input: $input){
+        id
+        name
+        description
+        platform{
+            id
+            name
+        }
+        volumes
+        ports
+        variables{
+            name
+            defaultValue
+        }
+    }
+}
+

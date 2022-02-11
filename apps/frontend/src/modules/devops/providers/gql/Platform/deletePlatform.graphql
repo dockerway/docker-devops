@@ -1,0 +1,7 @@
+mutation deletePlatform($id: ID!){
+    deletePlatform(id: $id){
+        id
+        success
+    }
+}
+
