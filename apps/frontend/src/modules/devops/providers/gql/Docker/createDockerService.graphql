@@ -1,0 +1,30 @@
+mutation createDockerService($input: DockerServiceInput!){
+    createDockerService(input: $input){
+        id
+        name
+        stack
+        image{
+            name
+            tag
+            fullname
+        }
+        createdAt
+        updatedAt
+        ports{
+            hostPort
+            containerPort
+        }
+        volumes{
+            hostVolume
+            containerVolume
+        }
+        envs{
+            name
+            value
+        }
+        labels{
+            name
+            value
+        }
+    }
+}

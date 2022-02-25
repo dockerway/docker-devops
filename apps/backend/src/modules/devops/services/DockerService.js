@@ -64,3 +64,36 @@ export const findDockerService = function (id) {
 
     })
 }
+
+
+export const createDockerService = function ({serviceId, name, image, replicas = 1, volumes = [], ports = [], envs = [], labels = []}) {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+
+            let environmentService = await findEnvironmentService(serviceId)
+
+            let dockerApiUrl = environmentService.environment.dockerApiUrl
+
+            let serviceName = environmentService.stack + "_" + environmentService.service.name
+
+            let path = '/api/docker/service'
+            const URL = dockerApiUrl + path
+
+            let data = {name, image, replicas, volumes, ports, envs, labels}
+
+            let response = await axios.post(URL,data)
+
+            if(response.status = 200){
+
+                console.log("findServiceTag Response ", response.data)
+                resolve(response.data)
+            }
+
+
+        } catch (e) {
+            reject(e)
+        }
+
+    })
+}

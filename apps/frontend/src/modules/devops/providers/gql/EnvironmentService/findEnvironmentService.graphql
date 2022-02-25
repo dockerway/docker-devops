@@ -10,5 +10,17 @@ query findEnvironmentService($id:ID!){
                 name
             }
         stack
+        ports{
+            hostPort
+            containerPort
+        }
+        volumes{
+            hostVolume
+            containerVolume
+        }
+        variables{
+            name
+            value
+        }
     }
 }

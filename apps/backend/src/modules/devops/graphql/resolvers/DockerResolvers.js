@@ -7,7 +7,7 @@ import {
 
 } from "../../permissions/EnvironmentService";
 
-import {findDockerService, findDockerServiceTag} from "../../services/DockerService";
+import {createDockerService, findDockerService, findDockerServiceTag} from "../../services/DockerService";
 
 export default {
     Query: {
@@ -23,7 +23,12 @@ export default {
         },
     },
     Mutation: {
-
+        createDockerService: (_, {input}, {user,rbac}) => {
+            if (!user) throw new AuthenticationError("Unauthenticated")
+            if(!rbac.isAllowed(user.id, ENVIRONMENTSERVICE_SHOW)) throw new ForbiddenError("Not Authorized")
+            console.log("input",input)
+            return createDockerService(input)
+        },
     }
 
 }

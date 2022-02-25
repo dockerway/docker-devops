@@ -10,6 +10,18 @@ query fetchEnvironmentService{
                 name
             }
         stack
+        ports{
+            hostPort
+            containerPort
+        }
+        volumes{
+            hostVolume
+            containerVolume
+        }
+        variables{
+            name
+            value
+        }
     }
 }
 

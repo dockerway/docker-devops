@@ -46,3 +46,40 @@ type Query {
     findDockerServiceTag(id: ID!): String
     findDockerService(id: ID!): DockerService
 }
+
+input PortInput{
+    protocol: String
+    containerPort: Int
+    hostPort: Int
+}
+
+input VolumeInput{
+    type: String
+    containerVolume: String
+    hostVolume: String
+}
+
+input EnvInput{
+    name: String
+    value: String
+}
+
+input LabelInput{
+    name: String
+    value: String
+}
+
+input DockerServiceInput {
+    serviceId: String!
+    name: String!
+    image: String!
+    replicas: Int
+    ports: [PortInput]
+    volumes: [VolumeInput]
+    envs: [EnvInput]
+    labels: [LabelInput]
+}
+
+type Mutation {
+    createDockerService(input: DockerServiceInput!): DockerService
+}

@@ -33,8 +33,9 @@
 
       <v-card-actions class="py-1 my-0">
         <v-spacer></v-spacer>
-        <v-btn x-small @click="getFromService">GET FROM SERVICE</v-btn>
-        <v-btn x-small @click="getFromEnvironment">GET FROM ENVIRONMENT</v-btn>
+        <v-btn x-small color="blue" @click="getFromService">GET FROM SERVICE</v-btn>
+        <v-btn x-small color="green" @click="getFromEnvironment">GET FROM ENVIRONMENT</v-btn>
+        <v-btn x-small color="purple" @click="createDockerService">CREATE</v-btn>
       </v-card-actions>
       <v-toolbar flat dense>
         <v-tabs
@@ -197,6 +198,29 @@ export default {
         DockerProvider.findDockerService(this.id)
             .then(r => {
               resolve(r.data.findDockerService)
+            })
+            .catch(err => reject(err))
+      })
+    },
+
+    async createDockerService() {
+      let service = await this.findService()
+
+      return new Promise( (resolve, reject) => {
+
+
+
+        let data = {
+          serviceId: this.id,
+          name: this.form.stack+"_"+service.name ,
+          image: "httpd:alpine",
+          ports: this.form.ports,
+          volumes: this.form.volumes,
+          envs: this.form.envs,
+        }
+        DockerProvider.createDockerService(data)
+            .then(r => {
+              resolve(r.data.createDockerService)
             })
             .catch(err => reject(err))
       })

@@ -10,6 +10,18 @@ mutation updateEnvironmentService($id: ID!, $input: EnvironmentServiceInput){
                 name
             }
         stack
+        ports{
+            hostPort
+            containerPort
+        }
+        volumes{
+            hostVolume
+            containerVolume
+        }
+        variables{
+            name
+            value
+        }
     }
 }
 

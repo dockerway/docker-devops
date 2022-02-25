@@ -3,16 +3,28 @@ query paginateEnvironmentService( $pageNumber: Int, $itemsPerPage:Int, $search: 
         totalItems
         page
         items{
-          id
-          environment{
+            id
+            environment{
                 id
                 name
             }
-        service{
+            service{
                 id
                 name
             }
-        stack
+            stack
+            ports{
+                hostPort
+                containerPort
+            }
+            volumes{
+                hostVolume
+                containerVolume
+            }
+            variables{
+                name
+                value
+            }
         }
     }
 }

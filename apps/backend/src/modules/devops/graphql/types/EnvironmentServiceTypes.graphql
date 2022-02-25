@@ -4,8 +4,8 @@ type VariableEnvService{
 }
 
 type PortEnvService{
-    hostPort: String!
-    containerPort: String!
+    hostPort: Int!
+    containerPort: Int!
 }
 
 
@@ -45,8 +45,8 @@ input VariableEnvServiceInput{
 }
 
 input PortEnvServiceInput{
-    hostPort: String!
-    containerPort: String!
+    hostPort: Int!
+    containerPort: Int!
 }
 
 

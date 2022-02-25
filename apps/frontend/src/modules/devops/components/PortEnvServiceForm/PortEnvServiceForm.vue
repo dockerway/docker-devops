@@ -5,7 +5,8 @@
     <v-text-field
         prepend-icon="description"
         name="name"
-        v-model="form.hostPort"
+        type="number"
+        v-model.number="form.hostPort"
         :label="$t('devops.environmentService.labels.hostPort')"
         :placeholder="$t('devops.environmentService.labels.hostPort')"
         color="secondary"
@@ -16,7 +17,8 @@
     <v-text-field
         prepend-icon="task"
         name="value"
-        v-model="form.containerPort"
+        type="number"
+        v-model.number="form.containerPort"
         :label="$t('devops.environmentService.labels.containerPort')"
         :placeholder="$t('devops.environmentService.labels.containerPort')"
         color="secondary"
