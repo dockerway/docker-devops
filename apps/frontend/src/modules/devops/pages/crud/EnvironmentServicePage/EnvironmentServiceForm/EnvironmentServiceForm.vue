@@ -54,7 +54,6 @@
         <v-spacer></v-spacer>
         <v-btn x-small color="blue" @click="getFromService">GET FROM SERVICE</v-btn>
         <v-btn x-small color="green" @click="getFromEnvironment">GET FROM ENVIRONMENT</v-btn>
-        <v-btn x-small color="purple" @click="createDockerService">CREATE</v-btn>
       </v-card-actions>
       <v-toolbar flat dense>
         <v-tabs
@@ -244,17 +243,7 @@ export default {
       })
     },
 
-    async createDockerService() {
 
-      return new Promise( (resolve, reject) => {
-
-        DockerProvider.createDockerService(this.id)
-            .then(r => {
-              resolve(r.data.createDockerService)
-            })
-            .catch(err => reject(err))
-      })
-    }
   },
   data() {
     return {

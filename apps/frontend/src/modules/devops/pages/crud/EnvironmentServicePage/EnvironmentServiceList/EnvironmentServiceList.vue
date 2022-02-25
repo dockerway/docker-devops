@@ -48,7 +48,7 @@
         </template>
 
         <template v-slot:item.version="{ item }">
-          {{item.version ? item.version : ''}}
+          {{ item.version ? item.version : '' }}
         </template>
 
 
@@ -60,6 +60,16 @@
           <div class="text-xs-center" v-t="'common.loading'"></div>
         </template>
 
+        <template v-slot:item.deploy="{ item }">
+          <v-btn
+              color="purple" class="white--text"
+              x-small
+              @click="serviceToCreate = item.id"
+          >
+            Deploy
+          </v-btn>
+        </template>
+
         <template v-slot:item.action="{ item }">
           <show-button @click="$emit('show', item)"/>
           <edit-button v-if="$store.getters.hasPermission('ENVIRONMENTSERVICE_UPDATE')" @click="$emit('update', item)"/>
@@ -69,6 +79,13 @@
 
       </v-data-table>
     </v-col>
+
+    <environment-service-docker-create
+        v-if="serviceToCreate"
+        :service-id="serviceToCreate"
+        @close="serviceToCreate = null"
+    ></environment-service-docker-create>
+
   </v-row>
 </template>
 
@@ -77,11 +94,16 @@ import EnvironmentServiceProvider from "../../../../providers/EnvironmentService
 
 import {DeleteButton, EditButton, ShowButton, SearchInput} from "@dracul/common-frontend"
 import DockerProvider from "@/modules/devops/providers/DockerProvider";
+import EnvironmentServiceDockerCreate
+  from "@/modules/devops/components/EnvironmentServiceDockerCreate/EnvironmentServiceDockerCreate";
 
 
 export default {
   name: "EnvironmentServiceList",
-  components: {DeleteButton, EditButton, ShowButton, SearchInput},
+  components: {
+    EnvironmentServiceDockerCreate,
+    DeleteButton, EditButton, ShowButton, SearchInput
+  },
 
   data() {
     return {
@@ -99,7 +121,8 @@ export default {
             operator: 'eq', //(eq|contain|regex|gt|lt|lte|gte)
             value: ''
         }*/
-      ]
+      ],
+      serviceToCreate: null
     }
   },
   computed: {
@@ -112,6 +135,7 @@ export default {
         {text: this.$t('devops.environmentService.labels.image'), value: 'image'},
         {text: this.$t('devops.environmentService.labels.replicas'), value: 'replicas'},
         //Actions
+        {text: 'deploy', value: 'deploy', sortable: false},
         {text: this.$t('common.actions'), value: 'action', sortable: false},
       ]
     },
@@ -143,7 +167,7 @@ export default {
         this.items = r.data.paginateEnvironmentService.items
         this.totalItems = r.data.paginateEnvironmentService.totalItems
 
-        for(let item of this.items){
+        for (let item of this.items) {
           this.findServiceTag(item)
         }
 
@@ -154,8 +178,8 @@ export default {
     findServiceTag(item) {
       DockerProvider.findServiceTag(item.id)
           .then(r => {
-                //item.version = r.data.findServiceTag
-            this.$set(item,'version',r.data.findServiceTag)
+            //item.version = r.data.findServiceTag
+            this.$set(item, 'version', r.data.findServiceTag)
           })
     }
   }
