@@ -9,7 +9,12 @@ mutation createEnvironmentService($input: EnvironmentServiceInput){
                 id
                 name
             }
-        stack
+        stack{
+            id
+            name
+        }
+        image
+        replicas
         ports{
             hostPort
             containerPort
@@ -18,7 +23,11 @@ mutation createEnvironmentService($input: EnvironmentServiceInput){
             hostVolume
             containerVolume
         }
-        variables{
+        envs{
+            name
+            value
+        }
+        labels{
             name
             value
         }

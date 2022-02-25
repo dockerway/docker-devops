@@ -39,6 +39,13 @@ export default [
                 permission: 'ENVIRONMENT_MENU'
             },
             {
+                icon: 'table_rows',
+                text: 'menu.stack',
+                link: {name: "StackPage"},
+                panel: false,
+                permission: 'STACK_MENU'
+            },
+            {
                 icon: 'tune',
                 text: 'menu.environmentService',
                 link: {name: "EnvironmentServicePage"},

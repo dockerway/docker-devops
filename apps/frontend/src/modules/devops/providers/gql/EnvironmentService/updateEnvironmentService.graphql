@@ -2,14 +2,19 @@ mutation updateEnvironmentService($id: ID!, $input: EnvironmentServiceInput){
     updateEnvironmentService(id: $id, input: $input){
         id
         environment{
-                id
-                name
-            }
+            id
+            name
+        }
         service{
-                id
-                name
-            }
-        stack
+            id
+            name
+        }
+        stack{
+            id
+            name
+        }
+        image
+        replicas
         ports{
             hostPort
             containerPort
@@ -18,7 +23,11 @@ mutation updateEnvironmentService($id: ID!, $input: EnvironmentServiceInput){
             hostVolume
             containerVolume
         }
-        variables{
+        envs{
+            name
+            value
+        }
+        labels{
             name
             value
         }

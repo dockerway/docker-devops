@@ -1,4 +1,4 @@
-type VariableService{
+type EnvService{
     name: String!
     defaultValue: String
 }
@@ -9,8 +9,8 @@ type Service{
     description: String
     platform: Platform!
     volumes: [String]
-    ports: [String]
-    variables: [VariableService]
+    ports: [Int]
+    envs: [EnvService]
 }
 
 type ServicePaginated{
@@ -27,7 +27,7 @@ type Query {
 
 }
 
-input VariableServiceInput{
+input EnvServiceInput{
     name: String!
     defaultValue: String
 }
@@ -38,7 +38,7 @@ input ServiceInput{
     platform: ID!
     volumes: [String]
     ports: [String]
-    variables: [VariableServiceInput]
+    envs: [EnvServiceInput]
 }
 
 type ServiceDelete{

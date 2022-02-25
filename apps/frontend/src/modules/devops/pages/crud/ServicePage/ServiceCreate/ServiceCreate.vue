@@ -40,7 +40,7 @@ export default {
         platform: null,
         volumes: '',
         ports: '',
-        variables: []
+        envs: []
       }
     }
   },

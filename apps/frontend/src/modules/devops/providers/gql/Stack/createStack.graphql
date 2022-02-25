@@ -1,0 +1,7 @@
+mutation createStack($input: StackInput){
+    createStack(input: $input){
+        id
+        name
+    }
+}
+

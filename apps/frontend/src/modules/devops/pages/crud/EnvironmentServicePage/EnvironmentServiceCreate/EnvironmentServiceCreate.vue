@@ -38,9 +38,12 @@ export default {
         environment: null,
         service: null,
         stack: '',
+        image: '',
+        replicas: 1,
         volumes: [],
         ports: [],
-        variables: []
+        envs: [],
+        labels: []
       }
     }
   },

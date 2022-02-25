@@ -5,21 +5,23 @@ class DockerProvider {
     findServiceTag(id) {
         return graphqlClient.query({
             query: require('./gql/Docker/findDockerServiceTag.graphql'),
-            variables: {id:id}
+            variables: {id:id},
+            fetchPolicy: "network-only"
         })
     }
 
     findDockerService(id) {
         return graphqlClient.query({
             query: require('./gql/Docker/findDockerService.graphql'),
-            variables: {id:id}
+            variables: {id:id},
+            fetchPolicy: "network-only"
         })
     }
 
-    createDockerService({serviceId, name, image, replicas = 1, volumes = [], ports = [], envs = [], labels = []}) {
+    createDockerService(id) {
         return graphqlClient.mutate({
             mutation: require('./gql/Docker/createDockerService.graphql'),
-            variables: {input: {serviceId, name, image, replicas, volumes, ports, envs, labels}}
+            variables: {id}
         })
     }
 }

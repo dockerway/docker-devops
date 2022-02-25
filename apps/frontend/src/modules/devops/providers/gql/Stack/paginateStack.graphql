@@ -1,0 +1,10 @@
+query paginateStack( $pageNumber: Int, $itemsPerPage:Int, $search: String, $filters: [FilterInput], $orderBy: String, $orderDesc: Boolean){
+    paginateStack( pageNumber: $pageNumber, itemsPerPage: $itemsPerPage, search: $search, filters: $filters, orderBy: $orderBy, orderDesc: $orderDesc){
+        totalItems
+        page
+        items{
+          id
+          name
+        }
+    }
+}

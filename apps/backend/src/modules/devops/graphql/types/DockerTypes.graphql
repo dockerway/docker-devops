@@ -69,17 +69,7 @@ input LabelInput{
     value: String
 }
 
-input DockerServiceInput {
-    serviceId: String!
-    name: String!
-    image: String!
-    replicas: Int
-    ports: [PortInput]
-    volumes: [VolumeInput]
-    envs: [EnvInput]
-    labels: [LabelInput]
-}
 
 type Mutation {
-    createDockerService(input: DockerServiceInput!): DockerService
+    createDockerService(id: ID!): DockerService
 }

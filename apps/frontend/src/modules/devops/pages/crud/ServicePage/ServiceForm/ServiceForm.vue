@@ -76,7 +76,8 @@
                   <v-text-field
                       icon="connecting_airports"
                       name="ports"
-                      v-model="form.ports[index]"
+                      type="number"
+                      v-model.number="form.ports[index]"
                       :label="$t('devops.service.labels.port')"
                       :placeholder="$t('devops.service.labels.port')"
                       :error="hasInputErrors('ports')"
@@ -137,11 +138,11 @@
           <v-row>
             <v-col cols="12" sm="12" md="12">
               <form-list
-                  v-model="form.variables"
+                  v-model="form.envs"
                   :new-item="{name:'',defaultValue:''}"
               >
                 <template v-slot:default="{item,index}">
-                  <variable-service-form v-model="form.variables[index]"></variable-service-form>
+                  <variable-service-form v-model="form.envs[index]"></variable-service-form>
                 </template>
               </form-list>
 

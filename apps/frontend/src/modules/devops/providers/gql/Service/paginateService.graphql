@@ -12,7 +12,7 @@ query paginateService( $pageNumber: Int, $itemsPerPage:Int, $search: String, $fi
             }
             volumes
             ports
-            variables{
+            envs{
                 name
                 defaultValue
             }

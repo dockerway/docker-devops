@@ -1,7 +1,13 @@
-type VariableEnvService{
+type EnvService{
     name: String!
     value: String
 }
+
+type LabelService{
+    name: String!
+    value: String
+}
+
 
 type PortEnvService{
     hostPort: Int!
@@ -20,10 +26,13 @@ type EnvironmentService{
     id: ID!
     environment: Environment!
     service: Service!
-    stack: String!
-    variables: [VariableEnvService]
+    stack: Stack!
+    image: String
+    replicas: Int
+    envs: [EnvService]
     ports: [PortEnvService]
     volumes: [VolumeEnvService]
+    labels: [LabelService]
 }
 
 type EnvironmentServicePaginated{
@@ -39,7 +48,12 @@ type Query {
 }
 
 
-input VariableEnvServiceInput{
+input EnvServiceInput{
+    name: String!
+    value: String
+}
+
+input LabelServiceInput{
     name: String!
     value: String
 }
@@ -58,10 +72,13 @@ input VolumeEnvServiceInput{
 input EnvironmentServiceInput{
     environment: ID!
     service: ID!
-    stack: String!
-    variables: [VariableEnvServiceInput]
+    stack:  ID!
+    image: String
+    replicas: Int
+    envs: [EnvServiceInput]
     ports: [PortEnvServiceInput]
     volumes: [VolumeEnvServiceInput]
+    labels: [LabelServiceInput]
 }
 
 type EnvironmentServiceDelete{

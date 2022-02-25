@@ -43,7 +43,7 @@ export default {
         platform: this.item.platform ? this.item.platform.id : null,
         volumes: this.item.volumes,
         ports: this.item.ports,
-        variables: this.item.variables ? this.item.variables : []
+        envs: this.item.envs ? this.item.envs : []
       }
     }
   },

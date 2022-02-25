@@ -39,10 +39,13 @@ export default {
       form: {
         environment: this.item.environment ? this.item.environment.id : null,
         service: this.item.service ? this.item.service.id : null,
-        stack: this.item.stack,
+        stack: this.item.stack ? this.item.stack.id : null,
+        image: this.item.image,
+        replicas: this.item.replicas,
         volumes: this.item.volumes ? this.item.volumes : [],
         ports: this.item.ports ? this.item.ports : [],
-        variables: this.item.variables ? this.item.variables : []
+        envs: this.item.envs ? this.item.envs : [],
+        labels: this.item.labels ? this.item.labels : [],
       }
     }
   },

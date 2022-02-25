@@ -9,7 +9,7 @@ mutation updateService($id: ID!, $input: ServiceInput){
         }
         volumes
         ports
-        variables{
+        envs{
             name
             defaultValue
         }

@@ -1,0 +1,6 @@
+query findStack($id:ID!){
+    findStack(id:$id){
+        id
+        name
+    }
+}

@@ -1,0 +1,7 @@
+mutation deleteStack($id: ID!){
+    deleteStack(id: $id){
+        id
+        success
+    }
+}
+

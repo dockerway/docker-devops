@@ -12,6 +12,13 @@ import {
     PLATFORM_UPDATE
 } from '../../modules/devops/permissions/Platform'
 
+import {
+    STACK_CREATE,
+    STACK_DELETE,
+    STACK_MENU,
+    STACK_SHOW,
+    STACK_UPDATE
+} from '../../modules/devops/permissions/Stack'
 
 import {
     SERVICE_CREATE,
@@ -59,5 +66,10 @@ export default [
     ENVIRONMENTSERVICE_DELETE,
     ENVIRONMENTSERVICE_MENU,
     ENVIRONMENTSERVICE_SHOW,
-    ENVIRONMENTSERVICE_UPDATE
+    ENVIRONMENTSERVICE_UPDATE,
+    STACK_CREATE,
+    STACK_DELETE,
+    STACK_MENU,
+    STACK_SHOW,
+    STACK_UPDATE
 ]

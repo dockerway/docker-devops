@@ -13,15 +13,34 @@
 
 
       <v-col cols="12" sm="4">
+        <stack-combobox v-model="form.stack" :input-errors="inputErrors" ></stack-combobox>
+      </v-col>
+
+      <v-col cols="12" sm="9">
         <v-text-field
 
-            prepend-icon="table_rows"
-            name="stack"
-            v-model="form.stack"
-            :label="$t('devops.environmentService.labels.stack')"
-            :placeholder="$t('devops.environmentService.labels.stack')"
-            :error="hasInputErrors('stack')"
-            :error-messages="getInputErrors('stack')"
+            prepend-icon="image"
+            name="image"
+            v-model="form.image"
+            :label="$t('devops.environmentService.labels.image')"
+            :placeholder="$t('devops.environmentService.labels.image')"
+            :error="hasInputErrors('image')"
+            :error-messages="getInputErrors('image')"
+            color="secondary"
+            :rules="required"
+        ></v-text-field>
+      </v-col>
+
+      <v-col cols="12" sm="3">
+        <v-text-field
+
+            prepend-icon="double_arrow"
+            name="replicas"
+            v-model="form.replicas"
+            :label="$t('devops.environmentService.labels.replicas')"
+            :placeholder="$t('devops.environmentService.labels.replicas')"
+            :error="hasInputErrors('replicas')"
+            :error-messages="getInputErrors('replicas')"
             color="secondary"
             :rules="required"
         ></v-text-field>
@@ -31,7 +50,7 @@
 
     <v-card outlined>
 
-      <v-card-actions class="py-1 my-0">
+      <v-card-actions v-if="id" class="py-1 my-0">
         <v-spacer></v-spacer>
         <v-btn x-small color="blue" @click="getFromService">GET FROM SERVICE</v-btn>
         <v-btn x-small color="green" @click="getFromEnvironment">GET FROM ENVIRONMENT</v-btn>
@@ -95,16 +114,16 @@
 
           <!--VARIABLES-->
           <v-tab-item
-              key="Variables"
+              key="Envs"
           >
             <v-row>
               <v-col cols="12">
                 <form-list
-                    v-model="form.variables"
+                    v-model="form.envs"
                     :new-item="{name:'',value:''}"
                 >
                   <template v-slot:default="{item,index}">
-                    <variable-env-service-form v-model="form.variables[index]"></variable-env-service-form>
+                    <variable-env-service-form v-model="form.envs[index]"></variable-env-service-form>
                   </template>
                 </form-list>
 
@@ -112,6 +131,24 @@
             </v-row>
           </v-tab-item>
 
+          <!--LABELS-->
+          <v-tab-item
+              key="Labels"
+          >
+            <v-row>
+              <v-col cols="12">
+                <form-list
+                    v-model="form.labels"
+                    :new-item="{name:'',value:''}"
+                >
+                  <template v-slot:default="{item,index}">
+                    <label-env-service-form v-model="form.labels[index]"></label-env-service-form>
+                  </template>
+                </form-list>
+
+              </v-col>
+            </v-row>
+          </v-tab-item>
 
         </v-tabs-items>
       </v-card-text>
@@ -132,12 +169,16 @@ import PortEnvServiceForm from "@/modules/devops/components/PortEnvServiceForm";
 import VolumeEnvServiceForm from "@/modules/devops/components/VolumeEnvServiceForm";
 import ServiceProvider from "@/modules/devops/providers/ServiceProvider";
 import DockerProvider from "@/modules/devops/providers/DockerProvider";
+import StackCombobox from "@/modules/devops/components/StackCombobox/StackCombobox";
+import LabelEnvServiceForm from "@/modules/devops/components/LabelEnvServiceForm/LabelEnvServiceForm";
 
 
 export default {
   name: "EnvironmentServiceForm",
   mixins: [InputErrorsByProps, RequiredRule],
   components: {
+    LabelEnvServiceForm,
+    StackCombobox,
     VolumeEnvServiceForm,
     PortEnvServiceForm,
     FormList,
@@ -173,16 +214,16 @@ export default {
     },
     async getFromEnvironment() {
       let service = await this.findDockerService()
-      this.form.variables = service.envs.map(v => ({name: v.name, value: v.value}))
-      this.form.ports = service.ports.map(p => ({hostPort: p.hostPort, containerPort: p.containerPort}))
-      this.form.volumes = service.volumes.map(v => ({hostVolume: v.hostVolume, containerVolume: v.containerVolume}))
+      this.form.envs = service.envs ? service.envs.map(v => ({name: v.name, value: v.value})) : []
+      this.form.ports = service.ports ? service.ports.map(p => ({hostPort: p.hostPort, containerPort: p.containerPort})) : []
+      this.form.volumes = service.volumes ? service.volumes.map(v => ({hostVolume: v.hostVolume, containerVolume: v.containerVolume})) : []
 
     },
     async getFromService() {
       let service = await this.findService()
-      this.form.variables = service.variables.map(v => ({name: v.name, value: v.defaultValue}))
-      this.form.ports = service.ports.map(p => ({hostPort: p, containerPort: ''}))
-      this.form.volumes = service.volumes.map(v => ({hostVolume: v, containerVolume: ''}))
+      this.form.envs = service.envs ? service.envs.map(v => ({name: v.name, value: v.defaultValue})) : []
+      this.form.ports = service.ports ? service.ports.map(p => ({hostPort: p, containerPort: ''})) : []
+      this.form.volumes = service.volumes ? service.volumes.map(v => ({hostVolume: v, containerVolume: ''})) : []
     },
     findService() {
       return new Promise((resolve, reject) => {
@@ -204,21 +245,10 @@ export default {
     },
 
     async createDockerService() {
-      let service = await this.findService()
 
       return new Promise( (resolve, reject) => {
 
-
-
-        let data = {
-          serviceId: this.id,
-          name: this.form.stack+"_"+service.name ,
-          image: "httpd:alpine",
-          ports: this.form.ports,
-          volumes: this.form.volumes,
-          envs: this.form.envs,
-        }
-        DockerProvider.createDockerService(data)
+        DockerProvider.createDockerService(this.id)
             .then(r => {
               resolve(r.data.createDockerService)
             })
@@ -229,7 +259,7 @@ export default {
   data() {
     return {
       tab: 0,
-      items: ['Puertos', 'Volumenes', 'Variables']
+      items: ['Puertos', 'Volumenes', 'Envs', 'Labels']
     }
   }
 }

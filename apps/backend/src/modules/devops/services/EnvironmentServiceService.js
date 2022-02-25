@@ -3,7 +3,7 @@ import {UserInputError} from 'apollo-server-express'
 
 export const findEnvironmentService = async function (id) {
     return new Promise((resolve, reject) => {
-        EnvironmentService.findOne({_id: id}).populate('environment').populate('service').exec((err, res) => (
+        EnvironmentService.findOne({_id: id}).populate('environment').populate('service').populate('stack').exec((err, res) => (
             err ? reject(err) : resolve(res)
         ));
     })
@@ -11,7 +11,7 @@ export const findEnvironmentService = async function (id) {
 
 export const fetchEnvironmentService = async function () {
     return new Promise((resolve, reject) => {
-        EnvironmentService.find({}).populate('environment').populate('service').exec((err, res) => (
+        EnvironmentService.find({}).populate('environment').populate('service').populate('stack').exec((err, res) => (
             err ? reject(err) : resolve(res)
         ));
     })
@@ -76,7 +76,7 @@ export const paginateEnvironmentService = function ( pageNumber = 1, itemsPerPag
     }
 
     let query = qs(search, filters)
-    let populate = ['environment','service']
+    let populate = ['environment','service','stack']
     let sort = getSort(orderBy, orderDesc)
     let params = {page: pageNumber, limit: itemsPerPage, populate, sort}
 
@@ -92,10 +92,10 @@ export const paginateEnvironmentService = function ( pageNumber = 1, itemsPerPag
 
 
 
-export const createEnvironmentService = async function (authUser, {environment, service, stack, variables, ports, volumes}) {
+export const createEnvironmentService = async function (authUser, {environment, service, stack, image, replicas, labels, envs, ports, volumes}) {
 
     const doc = new EnvironmentService({
-        environment, service, stack, variables, ports, volumes
+        environment, service, stack, image, replicas, labels, envs, ports, volumes
     })
     doc.id = doc._id;
     return new Promise((resolve, rejects) => {
@@ -108,15 +108,15 @@ export const createEnvironmentService = async function (authUser, {environment, 
                 return rejects(error)
             }
 
-            doc.populate('environment').populate('service').execPopulate(() => resolve(doc))
+            doc.populate('environment').populate('service').populate('stack').execPopulate(() => resolve(doc))
         }))
     })
 }
 
-export const updateEnvironmentService = async function (authUser, id, {environment, service, stack, variables, ports, volumes}) {
+export const updateEnvironmentService = async function (authUser, id, {environment, service, stack, image, replicas, labels, envs, ports, volumes}) {
     return new Promise((resolve, rejects) => {
         EnvironmentService.findOneAndUpdate({_id: id},
-        {environment, service, stack, variables, ports, volumes},
+        {environment, service, stack, image, replicas, labels, envs, ports, volumes},
         {new: true, runValidators: true, context: 'query'},
         (error,doc) => {
 
@@ -129,7 +129,7 @@ export const updateEnvironmentService = async function (authUser, id, {environme
 
             }
 
-            doc.populate('environment').populate('service').execPopulate(() => resolve(doc))
+            doc.populate('environment').populate('service').populate('stack').execPopulate(() => resolve(doc))
         })
     })
 }

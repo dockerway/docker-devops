@@ -1,5 +1,5 @@
-mutation createDockerService($input: DockerServiceInput!){
-    createDockerService(input: $input){
+mutation createDockerService($id: ID!){
+    createDockerService(id: $id){
         id
         name
         stack

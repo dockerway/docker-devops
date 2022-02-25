@@ -1,0 +1,37 @@
+
+        
+        
+type Stack{
+id: ID!
+ name: String!
+}
+
+type StackPaginated{
+    totalItems: Int!
+    page: Int!
+    items: [Stack!]
+}
+
+type Query {
+    findStack(id:ID!): Stack
+    fetchStack: [Stack]
+    paginateStack( pageNumber: Int, itemsPerPage: Int, search: String, filters: [FilterInput],orderBy: String, orderDesc: Boolean): StackPaginated  
+    
+    
+}
+
+input StackInput{
+    name: String!
+}
+
+type StackDelete{
+    id: ID!
+    success: Boolean!
+}
+
+
+type Mutation {
+    createStack(input: StackInput): Stack
+    updateStack(id: ID!, input: StackInput): Stack
+    deleteStack(id: ID!): StackDelete!
+}

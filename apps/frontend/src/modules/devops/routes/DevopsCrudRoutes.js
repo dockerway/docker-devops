@@ -2,6 +2,7 @@ import PlatformPage from '../pages/crud/PlatformPage'
 import ServicePage from '../pages/crud/ServicePage'
 import EnvironmentPage from '../pages/crud/EnvironmentPage'
 import EnvironmentServicePage from '../pages/crud/EnvironmentServicePage'
+import StackPage from '../pages/crud/StackPage'
 
 const routes = [
        
@@ -42,6 +43,16 @@ const routes = [
         meta: {
             requiresAuth: true,
             permission: "ENVIRONMENTSERVICE_SHOW"
+        }
+     },
+   
+     {
+        name: 'StackPage', 
+        path: '/crud/stack', 
+        component: StackPage,  
+        meta: {
+            requiresAuth: true,
+            permission: "STACK_SHOW"
         }
      }
 ]

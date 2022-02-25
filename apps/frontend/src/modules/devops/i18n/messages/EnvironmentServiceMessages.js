@@ -26,7 +26,9 @@ const messages = {
                 variable: {
                     name: "Name",
                     value: "Value"
-                }
+                },
+                image: "Image",
+                replicas: "Replicas"
             },
 
           }
@@ -58,7 +60,9 @@ const messages = {
                 variable: {
                     name: "Nombre",
                     value: "Valor"
-                }
+                },
+                image: "Imagen",
+                replicas: "Replicas"
             },
 
           }
@@ -90,7 +94,9 @@ const messages = {
                 variable: {
                     name: "Name",
                     value: "Value"
-                }
+                },
+                image: "Image",
+                replicas: "Replicas"
             },
 
           }

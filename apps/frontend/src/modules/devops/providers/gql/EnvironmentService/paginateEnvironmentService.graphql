@@ -12,7 +12,12 @@ query paginateEnvironmentService( $pageNumber: Int, $itemsPerPage:Int, $search: 
                 id
                 name
             }
-            stack
+            stack{
+                id
+                name
+            }
+            image
+            replicas
             ports{
                 hostPort
                 containerPort
@@ -21,7 +26,11 @@ query paginateEnvironmentService( $pageNumber: Int, $itemsPerPage:Int, $search: 
                 hostVolume
                 containerVolume
             }
-            variables{
+            envs{
+                name
+                value
+            }
+            labels{
                 name
                 value
             }

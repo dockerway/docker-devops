@@ -6,23 +6,26 @@ export const findDockerServiceTag = function (id) {
         try {
 
 
-           let environmentService = await findEnvironmentService(id)
+            let environmentService = await findEnvironmentService(id)
 
             let dockerApiUrl = environmentService.environment.dockerApiUrl
 
-            let serviceName = environmentService.stack + "_" + environmentService.service.name
+            let serviceName = environmentService.stack.name + "_" + environmentService.service.name
 
-            let path = '/api/docker/service/'+serviceName+'/tag'
+            let path = '/api/docker/service/' + serviceName + '/tag'
             const URL = dockerApiUrl + path
 
             console.log("URL FINAL", URL)
 
             let response = await axios.get(URL)
 
-            if(response.status = 200){
+            console.log(response)
+            if (response.status = 200) {
 
                 console.log("findServiceTag Response ", response.data)
                 resolve(response.data)
+            } else {
+                reject(response.status)
             }
 
 
@@ -43,18 +46,21 @@ export const findDockerService = function (id) {
 
             let dockerApiUrl = environmentService.environment.dockerApiUrl
 
-            let serviceName = environmentService.stack + "_" + environmentService.service.name
+            let serviceName = environmentService.stack.name + "_" + environmentService.service.name
 
-            let path = '/api/docker/service/'+serviceName
+            let path = '/api/docker/service/' + serviceName
             const URL = dockerApiUrl + path
 
+            console.log("URL FINAL", URL)
 
             let response = await axios.get(URL)
 
-            if(response.status = 200){
+            if (response.status = 200) {
 
                 console.log("findServiceTag Response ", response.data)
                 resolve(response.data)
+            } else {
+                reject(response.status)
             }
 
 
@@ -66,25 +72,36 @@ export const findDockerService = function (id) {
 }
 
 
-export const createDockerService = function ({serviceId, name, image, replicas = 1, volumes = [], ports = [], envs = [], labels = []}) {
+export const createDockerService = function (id) {
     return new Promise(async (resolve, reject) => {
         try {
 
 
-            let environmentService = await findEnvironmentService(serviceId)
+            let environmentService = await findEnvironmentService(id)
 
             let dockerApiUrl = environmentService.environment.dockerApiUrl
-
-            let serviceName = environmentService.stack + "_" + environmentService.service.name
 
             let path = '/api/docker/service'
             const URL = dockerApiUrl + path
 
-            let data = {name, image, replicas, volumes, ports, envs, labels}
+            let serviceName = environmentService.stack.name + "_" + environmentService.service.name
 
-            let response = await axios.post(URL,data)
 
-            if(response.status = 200){
+            let data = {
+                name: serviceName,
+                image: environmentService.image,
+                replicas: environmentService.replicas,
+                volumes: environmentService.volumes ? environmentService.volumes: [] ,
+                ports: environmentService.ports ? environmentService.ports : [],
+                envs: environmentService.envs ? environmentService.envs : [],
+                labels: environmentService.labels ? environmentService.labels : []
+            }
+
+            console.log(data)
+
+            let response = await axios.post(URL, data)
+
+            if (response.status = 200) {
 
                 console.log("findServiceTag Response ", response.data)
                 resolve(response.data)

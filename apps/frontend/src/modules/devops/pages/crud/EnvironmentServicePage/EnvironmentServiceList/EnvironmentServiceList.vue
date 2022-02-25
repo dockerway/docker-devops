@@ -43,6 +43,10 @@
           {{ item.service ? item.service.name : '' }}
         </template>
 
+        <template v-slot:item.stack="{ item }">
+          {{ item.stack ? item.stack.name : '' }}
+        </template>
+
         <template v-slot:item.version="{ item }">
           {{item.version ? item.version : ''}}
         </template>
@@ -105,7 +109,8 @@ export default {
         {text: this.$t('devops.environmentService.labels.environment'), value: 'environment'},
         {text: this.$t('devops.environmentService.labels.service'), value: 'service'},
         {text: this.$t('devops.environmentService.labels.stack'), value: 'stack'},
-        {text: "version", value: 'version'},
+        {text: this.$t('devops.environmentService.labels.image'), value: 'image'},
+        {text: this.$t('devops.environmentService.labels.replicas'), value: 'replicas'},
         //Actions
         {text: this.$t('common.actions'), value: 'action', sortable: false},
       ]

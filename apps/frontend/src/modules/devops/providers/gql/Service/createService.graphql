@@ -9,7 +9,7 @@ mutation createService($input: ServiceInput){
             }
         volumes
         ports
-        variables{
+        envs{
             name
             defaultValue
         }

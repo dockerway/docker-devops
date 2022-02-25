@@ -5,7 +5,7 @@ const uniqueValidator = require('mongoose-unique-validator');
 const Schema = mongoose.Schema;
 
 
-const variableSchema = new Schema({
+const EnvSchema = new Schema({
  name: {type: String, required: true, index: false},
  defaultValue: {type: String, required: false, index: false},
 })
@@ -17,7 +17,7 @@ const ServiceSchema = new Schema({
  platform: {type: mongoose.Schema.Types.ObjectId, ref: "Platform", required: true, unique: false, index: false},
  volumes: [{type: String, required: false}],
  ports: [{type: String, required: false}],
- variables: [variableSchema]
+ envs: [EnvSchema]
 
 }, { timestamps: true });
 

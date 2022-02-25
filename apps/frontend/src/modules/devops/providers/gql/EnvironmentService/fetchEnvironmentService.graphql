@@ -2,14 +2,19 @@ query fetchEnvironmentService{
     fetchEnvironmentService{
         id
         environment{
-                id
-                name
-            }
+            id
+            name
+        }
         service{
-                id
-                name
-            }
-        stack
+            id
+            name
+        }
+        stack{
+            id
+            name
+        }
+        image
+        replicas
         ports{
             hostPort
             containerPort
@@ -18,7 +23,11 @@ query fetchEnvironmentService{
             hostVolume
             containerVolume
         }
-        variables{
+        envs{
+            name
+            value
+        }
+        labels{
             name
             value
         }

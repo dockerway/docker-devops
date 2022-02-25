@@ -9,7 +9,7 @@ query findService($id:ID!){
         }
         volumes
         ports
-        variables{
+        envs{
             name
             defaultValue
         }

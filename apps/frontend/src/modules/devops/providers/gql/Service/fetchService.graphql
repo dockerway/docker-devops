@@ -9,7 +9,7 @@ query fetchService{
         }
         volumes
         ports
-        variables{
+        envs{
             name
             defaultValue
         }
