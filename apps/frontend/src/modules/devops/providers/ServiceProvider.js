@@ -10,9 +10,12 @@ class ServiceProvider {
     }
 
     fetchService() {
-        return graphqlClient.query({query: require('./gql/Service/fetchService.graphql')})
+        return graphqlClient.query({
+            query: require('./gql/Service/fetchService.graphql'),
+            fetchPolicy: "network-only"
+        })
     }
-    
+
     paginateService(pageNumber, itemsPerPage, search = null, filters = null,  orderBy = null, orderDesc = false) {
         return graphqlClient.query({
             query: require('./gql/Service/paginateService.graphql'),
@@ -20,8 +23,8 @@ class ServiceProvider {
             fetchPolicy: "network-only"
         })
     }
-    
-    
+
+
 
     createService(input) {
         return graphqlClient.mutate({
@@ -29,14 +32,14 @@ class ServiceProvider {
             variables: {input}
         })
     }
-    
+
     updateService(id,input) {
         return graphqlClient.mutate({
             mutation: require('./gql/Service/updateService.graphql'),
             variables: {id, input}
         })
     }
-    
+
      deleteService(id) {
         return graphqlClient.mutate({
             mutation: require('./gql/Service/deleteService.graphql'),

@@ -1,3 +1,0 @@
-query findServiceTag($id: ID!){
-    findServiceTag(id: $id)
-}

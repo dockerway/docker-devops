@@ -10,9 +10,12 @@ class EnvironmentProvider {
     }
 
     fetchEnvironment() {
-        return graphqlClient.query({query: require('./gql/Environment/fetchEnvironment.graphql')})
+        return graphqlClient.query({
+            query: require('./gql/Environment/fetchEnvironment.graphql'),
+            fetchPolicy: "network-only"
+        })
     }
-    
+
     paginateEnvironment(pageNumber, itemsPerPage, search = null, filters = null,  orderBy = null, orderDesc = false) {
         return graphqlClient.query({
             query: require('./gql/Environment/paginateEnvironment.graphql'),
@@ -20,8 +23,8 @@ class EnvironmentProvider {
             fetchPolicy: "network-only"
         })
     }
-    
-    
+
+
 
     createEnvironment(input) {
         return graphqlClient.mutate({
@@ -29,14 +32,14 @@ class EnvironmentProvider {
             variables: {input}
         })
     }
-    
+
     updateEnvironment(id,input) {
         return graphqlClient.mutate({
             mutation: require('./gql/Environment/updateEnvironment.graphql'),
             variables: {id, input}
         })
     }
-    
+
      deleteEnvironment(id) {
         return graphqlClient.mutate({
             mutation: require('./gql/Environment/deleteEnvironment.graphql'),

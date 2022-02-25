@@ -10,9 +10,12 @@ class PlatformProvider {
     }
 
     fetchPlatform() {
-        return graphqlClient.query({query: require('./gql/Platform/fetchPlatform.graphql')})
+        return graphqlClient.query({
+            query: require('./gql/Platform/fetchPlatform.graphql'),
+            fetchPolicy: "network-only"
+        })
     }
-    
+
     paginatePlatform(pageNumber, itemsPerPage, search = null, filters = null,  orderBy = null, orderDesc = false) {
         return graphqlClient.query({
             query: require('./gql/Platform/paginatePlatform.graphql'),
@@ -20,8 +23,8 @@ class PlatformProvider {
             fetchPolicy: "network-only"
         })
     }
-    
-    
+
+
 
     createPlatform(input) {
         return graphqlClient.mutate({
@@ -29,14 +32,14 @@ class PlatformProvider {
             variables: {input}
         })
     }
-    
+
     updatePlatform(id,input) {
         return graphqlClient.mutate({
             mutation: require('./gql/Platform/updatePlatform.graphql'),
             variables: {id, input}
         })
     }
-    
+
      deletePlatform(id) {
         return graphqlClient.mutate({
             mutation: require('./gql/Platform/deletePlatform.graphql'),

@@ -1,0 +1,3 @@
+query findDockerServiceTag($id: ID!){
+    findDockerServiceTag(id: $id)
+}

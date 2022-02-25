@@ -4,7 +4,8 @@
                :title="title"
                :errorMessage="errorMessage"
                @update="update"
-               @close="$emit('close')"
+               @close="$emit('close')" fullscreen
+
   >
     <service-form ref="form" v-model="form" :input-errors="inputErrors"/>
   </crud-update>

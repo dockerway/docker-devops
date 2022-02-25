@@ -16,7 +16,9 @@ const messages = {
                 description: 'Description',
                 platform: 'Platform',
                 volumes: 'Volumes',
+                volume: 'Volume',
                 ports: 'Ports',
+                port: 'Port',
                 variable: {
                     name: "Name",
                     defaultValue: "Default value"
@@ -42,7 +44,9 @@ const messages = {
                 description: 'Descripción',
                 platform: 'Plataforma',
                 volumes: 'Volúmenes',
+                volume: 'Volúmen',
                 ports: 'Puertos',
+                port: 'Puerto',
                 variable: {
                     name: "Nombre",
                     defaultValue: "Valor por defecto"
@@ -68,7 +72,9 @@ const messages = {
                 description: 'Descrição',
                 platform: 'Plataforma',
                 volumes: 'Volumes',
+                volume: 'Volume',
                 ports: 'Ports',
+                port: 'Port',
                 variable: {
                     name: "Name",
                     defaultValue: "Default value"

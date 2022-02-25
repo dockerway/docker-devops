@@ -24,13 +24,13 @@ export const paginateEnvironmentService = function ( pageNumber = 1, itemsPerPag
         if (search) {
             qs = {
                 $or: [
-                    
+
                 ]
             }
         }
-        
+
         if(filters){
-        
+
             filters.forEach(filter => {
                 switch(filter.operator){
                     case '=':
@@ -44,29 +44,29 @@ export const paginateEnvironmentService = function ( pageNumber = 1, itemsPerPag
                     case '>':
                     case 'gt':
                         qs[filter.field] = {...qs[filter.field], $gt: filter.value}
-                        break;    
+                        break;
                     case '<':
                     case 'lt':
                         qs[filter.field] = {...qs[filter.field], $lt: filter.value}
-                        break;    
+                        break;
                     case '>=':
                     case 'gte':
                         qs[filter.field] = {...qs[filter.field], $gte: filter.value}
-                        break;    
+                        break;
                     case '<=':
                     case 'lte':
                         qs[filter.field] = {...qs[filter.field], $lte: filter.value}
-                        break;          
+                        break;
                     default:
                         qs[filter.field] = {...qs[filter.field], $eq: filter.value}
                 }
             })
-        
+
         }
-        
+
         return qs
     }
-    
+
      function getSort(orderBy, orderDesc) {
         if (orderBy) {
             return (orderDesc ? '-' : '') + orderBy
@@ -92,43 +92,43 @@ export const paginateEnvironmentService = function ( pageNumber = 1, itemsPerPag
 
 
 
-export const createEnvironmentService = async function (authUser, {environment, service, stack}) {
-    
+export const createEnvironmentService = async function (authUser, {environment, service, stack, variables, ports, volumes}) {
+
     const doc = new EnvironmentService({
-        environment, service, stack
+        environment, service, stack, variables, ports, volumes
     })
     doc.id = doc._id;
     return new Promise((resolve, rejects) => {
         doc.save((error => {
-        
+
             if (error) {
                 if (error.name == "ValidationError") {
                     return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
                 }
                 return rejects(error)
-            }    
-        
+            }
+
             doc.populate('environment').populate('service').execPopulate(() => resolve(doc))
         }))
     })
 }
 
-export const updateEnvironmentService = async function (authUser, id, {environment, service, stack}) {
+export const updateEnvironmentService = async function (authUser, id, {environment, service, stack, variables, ports, volumes}) {
     return new Promise((resolve, rejects) => {
         EnvironmentService.findOneAndUpdate({_id: id},
-        {environment, service, stack}, 
+        {environment, service, stack, variables, ports, volumes},
         {new: true, runValidators: true, context: 'query'},
         (error,doc) => {
-            
+
             if (error) {
                 if (error.name == "ValidationError") {
                  return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
-                
+
                 }
                 return rejects(error)
-                
-            } 
-        
+
+            }
+
             doc.populate('environment').populate('service').execPopulate(() => resolve(doc))
         })
     })

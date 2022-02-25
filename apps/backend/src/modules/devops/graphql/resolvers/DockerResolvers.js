@@ -7,16 +7,20 @@ import {
 
 } from "../../permissions/EnvironmentService";
 
-import {findServiceTag} from "../../services/DockerService";
+import {findDockerService, findDockerServiceTag} from "../../services/DockerService";
 
 export default {
     Query: {
-        findServiceTag: (_, {id}, {user,rbac}) => {
+        findDockerServiceTag: (_, {id}, {user,rbac}) => {
             if (!user) throw new AuthenticationError("Unauthenticated")
             if(!rbac.isAllowed(user.id, ENVIRONMENTSERVICE_SHOW)) throw new ForbiddenError("Not Authorized")
-            return findServiceTag(id)
+            return findDockerServiceTag(id)
         },
-
+        findDockerService: (_, {id}, {user,rbac}) => {
+            if (!user) throw new AuthenticationError("Unauthenticated")
+            if(!rbac.isAllowed(user.id, ENVIRONMENTSERVICE_SHOW)) throw new ForbiddenError("Not Authorized")
+            return findDockerService(id)
+        },
     },
     Mutation: {
 

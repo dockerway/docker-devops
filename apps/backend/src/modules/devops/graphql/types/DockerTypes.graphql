@@ -1,3 +1,48 @@
+type DockerImage{
+    name: String
+    namespace: String
+    domain: String
+    fullname: String
+    tag: String
+}
+
+type Port{
+    protocol: String
+    containerPort: Int
+    hostPort: Int
+}
+
+type Volume{
+    type: String
+    containerVolume: String
+    hostVolume: String
+}
+
+type Env{
+    name: String
+    value: String
+}
+
+type Label{
+    name: String
+    value: String
+}
+
+type DockerService {
+    id: String
+    name: String
+    stack: String
+    image: DockerImage
+    createdAt: String
+    updatedAt: String
+    ports: [Port]
+    volumes: [Volume]
+    envs: [Env]
+    labels: [Label]
+}
+
+
 type Query {
-    findServiceTag(id: ID!): String
+    findDockerServiceTag(id: ID!): String
+    findDockerService(id: ID!): DockerService
 }

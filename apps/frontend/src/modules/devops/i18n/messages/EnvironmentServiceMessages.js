@@ -2,7 +2,7 @@
 const messages = {
     en: {
        devops: {
-          environmentService: { 
+          environmentService: {
             name: 'EnvironmentService',
             title: 'EnvironmentService management',
             subtitle: 'View, search, create, edit and delete EnvironmentService',
@@ -14,15 +14,27 @@ const messages = {
             labels: {
                 environment: 'Environment',
                 service: 'Service',
-                stack: 'Stack'
+                stack: 'Stack',
+                volumes: 'Volumes',
+                volume: 'Volume',
+                ports: 'Ports',
+                port: 'Port',
+                hostPort: "Host port",
+                containerPort: "Container port",
+                hostVolume: "Host volume",
+                containerVolume: "Container volume",
+                variable: {
+                    name: "Name",
+                    value: "Value"
+                }
             },
-          
+
           }
        }
     },
     es: {
        devops: {
-          environmentService: { 
+          environmentService: {
             name: 'EnvironmentService',
             title: 'Administración de EnvironmentService',
             subtitle: 'Ver, buscar, crear, editar, y borrar EnvironmentService',
@@ -34,15 +46,27 @@ const messages = {
             labels: {
                 environment: 'Entorno',
                 service: 'Servicio',
-                stack: 'Stack'
+                stack: 'Stack',
+                volumes: 'Volúmenes',
+                volume: 'Volúmen',
+                ports: 'Puertos',
+                port: 'Puerto',
+                hostPort: "Host port",
+                containerPort: "Container port",
+                hostVolume: "Host volume",
+                containerVolume: "Container volume",
+                variable: {
+                    name: "Nombre",
+                    value: "Valor"
+                }
             },
-          
+
           }
        }
     },
     pt: {
        devops: {
-          environmentService: { 
+          environmentService: {
             name: 'EnvironmentService',
             title: 'Administração de EnvironmentService',
             subtitle: 'Ver, buscar, criar, editar e usar EnvironmentService',
@@ -54,13 +78,24 @@ const messages = {
             labels: {
                 environment: 'Environment',
                 service: 'Service',
-                stack: 'Stack'
+                stack: 'Stack',
+                volumes: 'Volúmenes',
+                volume: 'Volúmen',
+                ports: 'Puertos',
+                port: 'Puerto',
+                hostPort: "Host port",
+                containerPort: "Container port",
+                hostVolume: "Host volume",
+                containerVolume: "Container volume",
+                variable: {
+                    name: "Name",
+                    value: "Value"
+                }
             },
-          
+
           }
        }
     }
 }
 
 export default messages
-    

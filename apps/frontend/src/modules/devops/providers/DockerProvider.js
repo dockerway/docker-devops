@@ -4,11 +4,17 @@ class DockerProvider {
 
     findServiceTag(id) {
         return graphqlClient.query({
-            query: require('./gql/Docker/findServiceTag.graphql'),
+            query: require('./gql/Docker/findDockerServiceTag.graphql'),
             variables: {id:id}
         })
     }
 
+    findDockerService(id) {
+        return graphqlClient.query({
+            query: require('./gql/Docker/findDockerService.graphql'),
+            variables: {id:id}
+        })
+    }
 
 }
 
