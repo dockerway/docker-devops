@@ -5,7 +5,8 @@ class EnvironmentServiceProvider {
     findEnvironmentService(id) {
         return graphqlClient.query({
             query: require('./gql/EnvironmentService/findEnvironmentService.graphql'),
-            variables: {id:id}
+            variables: {id:id},
+            fetchPolicy: "network-only"
         })
     }
 

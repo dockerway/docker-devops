@@ -14,11 +14,11 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "@dracul/common-frontend": "^1.2.30",
-    "@dracul/customize-frontend": "^1.4.0",
-    "@dracul/notification-frontend": "^1.4.0",
-    "@dracul/user-frontend": "^1.4.0",
-    "@dracul/settings-frontend": "^1.2.30",
+    "@dracul/common-frontend": "^1.4.12",
+    "@dracul/customize-frontend": "^1.4.12",
+    "@dracul/notification-frontend": "^1.4.12",
+    "@dracul/user-frontend": "^1.4.12",
+    "@dracul/settings-frontend": "^1.4.12",
     "apollo-cache-inmemory": "^1.6.6",
     "apollo-client": "^2.6.10",
     "apollo-link": "^1.2.14",

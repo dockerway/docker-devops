@@ -24,6 +24,13 @@ class DockerProvider {
             variables: {id}
         })
     }
+
+    updateDockerService(id) {
+        return graphqlClient.mutate({
+            mutation: require('./gql/Docker/updateDockerService.graphql'),
+            variables: {id}
+        })
+    }
 }
 
 export default new DockerProvider()

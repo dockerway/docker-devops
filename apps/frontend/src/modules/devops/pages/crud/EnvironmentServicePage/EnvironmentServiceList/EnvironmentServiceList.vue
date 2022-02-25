@@ -64,7 +64,7 @@
           <v-btn
               color="purple" class="white--text"
               x-small
-              @click="serviceToCreate = item.id"
+              @click="openDeploy(item.id)"
           >
             Deploy
           </v-btn>
@@ -81,9 +81,10 @@
     </v-col>
 
     <environment-service-docker-create
-        v-if="serviceToCreate"
+        v-if="deploy"
+        v-model="deploy"
         :service-id="serviceToCreate"
-        @close="serviceToCreate = null"
+        @close="closeDeploy"
     ></environment-service-docker-create>
 
   </v-row>
@@ -122,6 +123,7 @@ export default {
             value: ''
         }*/
       ],
+      deploy: false,
       serviceToCreate: null
     }
   },
@@ -150,6 +152,14 @@ export default {
     this.fetch()
   },
   methods: {
+    openDeploy(serviceId){
+      this.serviceToCreate = serviceId
+      this.deploy = true
+    },
+    closeDeploy(){
+      this.serviceToCreate = null
+      this.deploy = false
+    },
     performSearch() {
       this.pageNumber = 1
       this.fetch()

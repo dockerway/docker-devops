@@ -89,6 +89,7 @@ export const createDockerService = function (id) {
 
             let data = {
                 name: serviceName,
+                stack: environmentService.stack.name,
                 image: environmentService.image,
                 replicas: environmentService.replicas,
                 volumes: environmentService.volumes ? environmentService.volumes: [] ,
@@ -103,13 +104,71 @@ export const createDockerService = function (id) {
 
             if (response.status = 200) {
 
-                console.log("findServiceTag Response ", response.data)
+                console.log("createDockerService Response ", response.data)
                 resolve(response.data)
+            }else{
+                reject(response)
             }
 
 
         } catch (e) {
-            reject(e)
+            console.log(e)
+            let message = e.message +". " +(e.response.data ? e.response.data : '')
+            reject(message)
+        }
+
+    })
+}
+
+
+export const updateDockerService = function (id) {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+
+            let environmentService = await findEnvironmentService(id)
+            let dockerService = await findDockerService(id)
+
+            if(!dockerService){
+                reject("DockerService not found. ID:"+id )
+            }
+
+            let dockerApiUrl = environmentService.environment.dockerApiUrl
+
+            let path = '/api/docker/service/'+ dockerService.id
+            const URL = dockerApiUrl + path
+
+            let serviceName = environmentService.stack.name + "_" + environmentService.service.name
+
+
+            let data = {
+                name: serviceName,
+                stack: environmentService.stack.name,
+                image: environmentService.image,
+                replicas: environmentService.replicas,
+                volumes: environmentService.volumes ? environmentService.volumes: [] ,
+                ports: environmentService.ports ? environmentService.ports : [],
+                envs: environmentService.envs ? environmentService.envs : [],
+                labels: environmentService.labels ? environmentService.labels : []
+            }
+
+            console.log(data)
+
+            let response = await axios.put(URL, data)
+
+            if (response.status = 200) {
+
+                console.log("updateDockerService Response ", response.data)
+                resolve(response.data)
+            }else{
+                reject(response)
+            }
+
+
+        } catch (e) {
+            console.log(e)
+            let message = e.message +". " +(e.response.data ? e.response.data : '')
+            reject(message)
         }
 
     })

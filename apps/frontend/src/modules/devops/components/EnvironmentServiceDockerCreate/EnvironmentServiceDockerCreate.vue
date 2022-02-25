@@ -1,6 +1,6 @@
 <template>
   <simple-dialog
-      v-model="dialog" @close="$emit('close')"
+      v-model="value" @close="$emit('close')"
       title="Docker Deploy"
   >
 
@@ -10,14 +10,25 @@
 
     </v-card-text>
 
-    <v-card-text v-if="created">
+    <v-card-text class="pa-0">
+      <v-alert type="error" v-for="(error,index) in errors" :key="index">
+        {{ error }}
+      </v-alert>
+    </v-card-text>
+
+    <v-card-text v-if="created" class="pa-0">
       <v-alert type="success">
         Service deployed with id: {{ envServiceCreated.id }}
       </v-alert>
 
     </v-card-text>
 
-    <v-card-actions v-else class="justify-center">
+    <v-card-actions v-if="created && !updated" class="justify-center">
+      <v-btn :loading="loading" class="teal white--text" @click="updateDockerService">UPDATE</v-btn>
+    </v-card-actions>
+
+
+    <v-card-actions v-else-if="!created" class="justify-center">
       <v-btn :loading="loading" class="teal white--text" @click="createDockerService">DEPLOY</v-btn>
     </v-card-actions>
 
@@ -38,18 +49,21 @@ export default {
   name: "EnvironmentServiceDockerCreate",
   components: {EnvironmentServiceShowData, SimpleDialog},
   props: {
-    serviceId: {type: String}
+    serviceId: {type: String},
+    value: {type: Boolean}
   },
   data() {
     return {
-      dialog: true,
       loading: false,
       envService: null,
       created: false,
-      envServiceCreated: null
+      updated: false,
+      envServiceCreated: null,
+      errors: []
     }
   },
   created() {
+    console.log("Created")
     this.findEnvironmentService()
     this.findDockerService()
   },
@@ -63,10 +77,12 @@ export default {
           .finally(() => this.loading = false)
     },
     findDockerService() {
+      console.log("findDockerService",this.serviceId)
       return new Promise((resolve, reject) => {
         this.loading = true
         DockerProvider.findDockerService(this.serviceId)
             .then(r => {
+              console.log("findDockerService then",this.serviceId)
               let dockerService = r.data.findDockerService
               if (dockerService && dockerService.id) {
                 this.created = true
@@ -79,8 +95,8 @@ export default {
       })
     },
     async createDockerService() {
-
       return new Promise((resolve, reject) => {
+        this.errors = []
         this.loading = true
         DockerProvider.createDockerService(this.serviceId)
             .then(r => {
@@ -90,7 +106,29 @@ export default {
               resolve(r.data.createDockerService)
 
             })
-            .catch(err => reject(err))
+            .catch(e => {
+              this.errors = e.graphQLErrors.map(i => i.message)
+              reject(e)
+            })
+            .finally(() => this.loading = false)
+      })
+    },
+    async updateDockerService() {
+      return new Promise((resolve, reject) => {
+        this.errors = []
+        this.loading = true
+        DockerProvider.updateDockerService(this.serviceId)
+            .then(r => {
+              this.updated = true
+              this.envServiceCreated = r.data.updateDockerService
+              console.log(r.data.updateDockerService)
+              resolve(r.data.updateDockerService)
+
+            })
+            .catch(e => {
+              this.errors = e.graphQLErrors.map(i => i.message)
+              reject(e)
+            })
             .finally(() => this.loading = false)
       })
     }
