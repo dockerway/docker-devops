@@ -1,6 +1,7 @@
 query findEnvironmentService($id:ID!){
     findEnvironmentService(id:$id){
         id
+        name
         environment{
             id
             name

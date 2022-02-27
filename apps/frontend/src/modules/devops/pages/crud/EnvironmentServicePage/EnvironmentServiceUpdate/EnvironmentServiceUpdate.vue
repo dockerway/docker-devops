@@ -41,6 +41,7 @@ export default {
         service: this.item.service ? this.item.service.id : null,
         stack: this.item.stack ? this.item.stack.id : null,
         image: this.item.image,
+        name: this.item.name,
         replicas: this.item.replicas,
         volumes: this.item.volumes ? this.item.volumes : [],
         ports: this.item.ports ? this.item.ports : [],

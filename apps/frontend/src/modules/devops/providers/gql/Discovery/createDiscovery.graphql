@@ -1,0 +1,32 @@
+mutation createDiscovery($input: [ServiceDiscoveredInput!]){
+    createDiscovery(input: $input){
+    platformsCreated{
+        id
+        name
+    }
+    servicesCreated{
+        id
+        name
+    }
+    stacksCreated{
+        id
+        name
+    }
+    environmentServicesCreated{
+        id
+        name
+        environment{
+            id
+            name
+        }
+        stack{
+            id
+            name
+        }
+        service{
+            id
+            name
+        }
+    }
+    }
+}

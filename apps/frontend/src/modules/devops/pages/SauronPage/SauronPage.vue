@@ -99,6 +99,7 @@ export default {
       }).finally(() => this.loading = false)
     },
     findServiceTag(item) {
+      console.log("findServiceTag",item)
       DockerProvider.findServiceTag(item.id)
           .then(r => {
             //item.version = r.data.findServiceTag

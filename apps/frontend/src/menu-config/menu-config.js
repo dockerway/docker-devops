@@ -13,6 +13,13 @@ export default [
         permission: 'ENVIRONMENTSERVICE_MENU'
     },
     {
+        icon: 'travel_explore',
+        text: 'menu.discovery',
+        link: {name: "DiscoveryPage"},
+        panel: false,
+        permission: 'ENVIRONMENTSERVICE_MENU'
+    },
+    {
         icon: 'list_alt',
         text: 'menu.cruds',
         panel: false,

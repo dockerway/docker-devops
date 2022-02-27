@@ -9,6 +9,22 @@ export const findService = async function (id) {
     })
 }
 
+export const findServiceByName = async function (name) {
+    return new Promise((resolve, reject) => {
+        Service.findOne({name: name}).populate('platform').exec((err, res) => (
+            err ? reject(err) : resolve(res)
+        ));
+    })
+}
+
+export const findServiceByNameAndPlatform = async function (name, platform) {
+    return new Promise((resolve, reject) => {
+        Service.findOne({name: name, platform: platform}).populate('platform').exec((err, res) => (
+            err ? reject(err) : resolve(res)
+        ));
+    })
+}
+
 export const fetchService = async function () {
     return new Promise((resolve, reject) => {
         Service.find({}).populate('platform').exec((err, res) => (

@@ -1,6 +1,7 @@
 mutation updateEnvironmentService($id: ID!, $input: EnvironmentServiceInput){
     updateEnvironmentService(id: $id, input: $input){
         id
+        name
         environment{
             id
             name

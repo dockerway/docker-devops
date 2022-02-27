@@ -28,7 +28,8 @@ const messages = {
                     value: "Value"
                 },
                 image: "Image",
-                replicas: "Replicas"
+                replicas: "Replicas",
+                name: "Name"
             },
 
           }
@@ -62,7 +63,8 @@ const messages = {
                     value: "Valor"
                 },
                 image: "Imagen",
-                replicas: "Replicas"
+                replicas: "Replicas",
+                name: "Nombre"
             },
 
           }
@@ -96,7 +98,8 @@ const messages = {
                     value: "Value"
                 },
                 image: "Image",
-                replicas: "Replicas"
+                replicas: "Replicas",
+                name: "Name"
             },
 
           }

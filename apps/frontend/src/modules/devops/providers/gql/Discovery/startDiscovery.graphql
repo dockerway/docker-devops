@@ -1,10 +1,14 @@
-query paginateEnvironmentService( $pageNumber: Int, $itemsPerPage:Int, $search: String, $filters: [FilterInput], $orderBy: String, $orderDesc: Boolean){
-    paginateEnvironmentService( pageNumber: $pageNumber, itemsPerPage: $itemsPerPage, search: $search, filters: $filters, orderBy: $orderBy, orderDesc: $orderDesc){
-        totalItems
-        page
-        items{
-            id
+query startDiscovery($environmentId: ID){
+    startDiscovery(environmentId: $environmentId){
+        servicesDiscovered{
             name
+            namespace
+            stack
+            environment
+            image
+        }
+        envServices{
+            id
             environment{
                 id
                 name
@@ -36,5 +40,6 @@ query paginateEnvironmentService( $pageNumber: Int, $itemsPerPage:Int, $search: 
                 value
             }
         }
+
     }
 }

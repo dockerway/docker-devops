@@ -29,6 +29,7 @@ type EnvironmentService{
     stack: Stack!
     image: String
     replicas: Int
+    name: String
     envs: [EnvService]
     ports: [PortEnvService]
     volumes: [VolumeEnvService]
@@ -75,6 +76,7 @@ input EnvironmentServiceInput{
     stack:  ID!
     image: String
     replicas: Int
+    name: String
     envs: [EnvServiceInput]
     ports: [PortEnvServiceInput]
     volumes: [VolumeEnvServiceInput]

@@ -6,17 +6,18 @@
         <environment-combobox v-model="form.environment" :input-errors="inputErrors"/>
       </v-col>
 
+      <v-col cols="12" sm="4">
+        <stack-combobox v-model="form.stack" :input-errors="inputErrors" ></stack-combobox>
+      </v-col>
 
       <v-col cols="12" sm="4">
         <service-combobox v-model="form.service" :input-errors="inputErrors"/>
       </v-col>
 
 
-      <v-col cols="12" sm="4">
-        <stack-combobox v-model="form.stack" :input-errors="inputErrors" ></stack-combobox>
-      </v-col>
 
-      <v-col cols="12" sm="9">
+
+      <v-col cols="12" sm="6">
         <v-text-field
 
             prepend-icon="image"
@@ -41,6 +42,20 @@
             :placeholder="$t('devops.environmentService.labels.replicas')"
             :error="hasInputErrors('replicas')"
             :error-messages="getInputErrors('replicas')"
+            color="secondary"
+            :rules="required"
+        ></v-text-field>
+      </v-col>
+
+      <v-col cols="12" sm="3">
+        <v-text-field
+            prepend-icon="title"
+            name="name"
+            v-model="form.name"
+            :label="$t('devops.environmentService.labels.name')"
+            :placeholder="$t('devops.environmentService.labels.name')"
+            :error="hasInputErrors('name')"
+            :error-messages="getInputErrors('name')"
             color="secondary"
             :rules="required"
         ></v-text-field>

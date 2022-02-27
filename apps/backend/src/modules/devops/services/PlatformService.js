@@ -9,6 +9,15 @@ export const findPlatform = async function (id) {
     })
 }
 
+export const findPlatformByName = async function (name) {
+    return new Promise((resolve, reject) => {
+        Platform.findOne({name: name}).exec((err, res) => (
+            err ? reject(err) : resolve(res)
+        ));
+    })
+}
+
+
 export const fetchPlatform = async function () {
     return new Promise((resolve, reject) => {
         Platform.find({}).exec((err, res) => (
@@ -28,9 +37,9 @@ export const paginatePlatform = function ( pageNumber = 1, itemsPerPage = 5, sea
                 ]
             }
         }
-        
+
         if(filters){
-        
+
             filters.forEach(filter => {
                 switch(filter.operator){
                     case '=':
@@ -44,29 +53,29 @@ export const paginatePlatform = function ( pageNumber = 1, itemsPerPage = 5, sea
                     case '>':
                     case 'gt':
                         qs[filter.field] = {...qs[filter.field], $gt: filter.value}
-                        break;    
+                        break;
                     case '<':
                     case 'lt':
                         qs[filter.field] = {...qs[filter.field], $lt: filter.value}
-                        break;    
+                        break;
                     case '>=':
                     case 'gte':
                         qs[filter.field] = {...qs[filter.field], $gte: filter.value}
-                        break;    
+                        break;
                     case '<=':
                     case 'lte':
                         qs[filter.field] = {...qs[filter.field], $lte: filter.value}
-                        break;          
+                        break;
                     default:
                         qs[filter.field] = {...qs[filter.field], $eq: filter.value}
                 }
             })
-        
+
         }
-        
+
         return qs
     }
-    
+
      function getSort(orderBy, orderDesc) {
         if (orderBy) {
             return (orderDesc ? '-' : '') + orderBy
@@ -93,21 +102,21 @@ export const paginatePlatform = function ( pageNumber = 1, itemsPerPage = 5, sea
 
 
 export const createPlatform = async function (authUser, {name}) {
-    
+
     const doc = new Platform({
         name
     })
     doc.id = doc._id;
     return new Promise((resolve, rejects) => {
         doc.save((error => {
-        
+
             if (error) {
                 if (error.name == "ValidationError") {
                     return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
                 }
                 return rejects(error)
-            }    
-        
+            }
+
             resolve(doc)
         }))
     })
@@ -116,19 +125,19 @@ export const createPlatform = async function (authUser, {name}) {
 export const updatePlatform = async function (authUser, id, {name}) {
     return new Promise((resolve, rejects) => {
         Platform.findOneAndUpdate({_id: id},
-        {name}, 
+        {name},
         {new: true, runValidators: true, context: 'query'},
         (error,doc) => {
-            
+
             if (error) {
                 if (error.name == "ValidationError") {
                  return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
-                
+
                 }
                 return rejects(error)
-                
-            } 
-        
+
+            }
+
             resolve(doc)
         })
     })

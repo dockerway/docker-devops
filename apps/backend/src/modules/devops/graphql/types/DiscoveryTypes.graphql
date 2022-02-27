@@ -1,0 +1,36 @@
+type ServiceDiscovered{
+    name: String
+    namespace: String
+    stack: String
+    environment: ID
+    image: String
+}
+
+type Discovery{
+    servicesDiscovered: [ServiceDiscovered]
+    envServices: [EnvironmentService]
+}
+
+type Query {
+    startDiscovery(environmentId: ID): Discovery
+}
+
+
+input ServiceDiscoveredInput{
+    name: String!
+    namespace: String!
+    stack: String!
+    environment: ID!
+    image: String!
+}
+
+type CreateDiscoveryResult{
+    platformsCreated: [Platform]
+    servicesCreated: [Service]
+    stacksCreated: [Stack]
+    environmentServicesCreated: [EnvironmentService]
+}
+
+type Mutation {
+    createDiscovery(input: [ServiceDiscoveredInput!]): CreateDiscoveryResult
+}

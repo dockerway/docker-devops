@@ -39,11 +39,14 @@ export default {
         service: null,
         stack: '',
         image: '',
+        name: '',
         replicas: 1,
         volumes: [],
         ports: [],
         envs: [],
-        labels: []
+        labels: [],
+
+
       }
     }
   },

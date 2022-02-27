@@ -9,6 +9,18 @@ export const findEnvironmentService = async function (id) {
     })
 }
 
+export const findEnvironmentServiceByEnvironmentStackService = async function ({environment, stack, service}) {
+    return new Promise((resolve, reject) => {
+        EnvironmentService.findOne({
+            environment: environment,
+            stack: stack,
+            service: service
+        }).populate('environment').populate('service').populate('stack').exec((err, res) => (
+            err ? reject(err) : resolve(res)
+        ));
+    })
+}
+
 export const fetchEnvironmentService = async function () {
     return new Promise((resolve, reject) => {
         EnvironmentService.find({}).populate('environment').populate('service').populate('stack').exec((err, res) => (
@@ -17,22 +29,20 @@ export const fetchEnvironmentService = async function () {
     })
 }
 
-export const paginateEnvironmentService = function ( pageNumber = 1, itemsPerPage = 5, search = null, filters = null, orderBy = null, orderDesc = false) {
+export const paginateEnvironmentService = function (pageNumber = 1, itemsPerPage = 5, search = null, filters = null, orderBy = null, orderDesc = false) {
 
     function qs(search, filters) {
         let qs = {}
         if (search) {
             qs = {
-                $or: [
-
-                ]
+                $or: []
             }
         }
 
-        if(filters){
+        if (filters) {
 
             filters.forEach(filter => {
-                switch(filter.operator){
+                switch (filter.operator) {
                     case '=':
                     case 'eq':
                         qs[filter.field] = {...qs[filter.field], $eq: filter.value}
@@ -67,7 +77,7 @@ export const paginateEnvironmentService = function ( pageNumber = 1, itemsPerPag
         return qs
     }
 
-     function getSort(orderBy, orderDesc) {
+    function getSort(orderBy, orderDesc) {
         if (orderBy) {
             return (orderDesc ? '-' : '') + orderBy
         } else {
@@ -76,7 +86,7 @@ export const paginateEnvironmentService = function ( pageNumber = 1, itemsPerPag
     }
 
     let query = qs(search, filters)
-    let populate = ['environment','service','stack']
+    let populate = ['environment', 'service', 'stack']
     let sort = getSort(orderBy, orderDesc)
     let params = {page: pageNumber, limit: itemsPerPage, populate, sort}
 
@@ -89,13 +99,10 @@ export const paginateEnvironmentService = function ( pageNumber = 1, itemsPerPag
 }
 
 
-
-
-
-export const createEnvironmentService = async function (authUser, {environment, service, stack, image, replicas, labels, envs, ports, volumes}) {
+export const createEnvironmentService = async function (authUser, {environment, service, stack, image, name, replicas, labels, envs, ports, volumes}) {
 
     const doc = new EnvironmentService({
-        environment, service, stack, image, replicas, labels, envs, ports, volumes
+        environment, service, stack, image, name, replicas, labels, envs, ports, volumes
     })
     doc.id = doc._id;
     return new Promise((resolve, rejects) => {
@@ -113,24 +120,24 @@ export const createEnvironmentService = async function (authUser, {environment, 
     })
 }
 
-export const updateEnvironmentService = async function (authUser, id, {environment, service, stack, image, replicas, labels, envs, ports, volumes}) {
+export const updateEnvironmentService = async function (authUser, id, {environment, service, stack, image, name, replicas, labels, envs, ports, volumes}) {
     return new Promise((resolve, rejects) => {
         EnvironmentService.findOneAndUpdate({_id: id},
-        {environment, service, stack, image, replicas, labels, envs, ports, volumes},
-        {new: true, runValidators: true, context: 'query'},
-        (error,doc) => {
+            {environment, service, stack, image, name, replicas, labels, envs, ports, volumes},
+            {new: true, runValidators: true, context: 'query'},
+            (error, doc) => {
 
-            if (error) {
-                if (error.name == "ValidationError") {
-                 return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
+                if (error) {
+                    if (error.name == "ValidationError") {
+                        return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
+
+                    }
+                    return rejects(error)
 
                 }
-                return rejects(error)
 
-            }
-
-            doc.populate('environment').populate('service').populate('stack').execPopulate(() => resolve(doc))
-        })
+                doc.populate('environment').populate('service').populate('stack').execPopulate(() => resolve(doc))
+            })
     })
 }
 

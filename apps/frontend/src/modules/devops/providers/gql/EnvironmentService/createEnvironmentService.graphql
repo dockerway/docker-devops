@@ -1,6 +1,7 @@
 mutation createEnvironmentService($input: EnvironmentServiceInput){
     createEnvironmentService(input: $input){
         id
+        name
         environment{
                 id
                 name

@@ -1,5 +1,6 @@
 import {findEnvironmentService} from "./EnvironmentServiceService";
 import axios from 'axios'
+import {findEnvironment} from "./EnvironmentService";
 
 export const findDockerServiceTag = function (id) {
     return new Promise(async (resolve, reject) => {
@@ -10,9 +11,10 @@ export const findDockerServiceTag = function (id) {
 
             let dockerApiUrl = environmentService.environment.dockerApiUrl
 
-            let serviceName = environmentService.stack.name + "_" + environmentService.service.name
+            let serviceName = environmentService.name ? environmentService.name :  environmentService.service.name
+            let fullServiceName = environmentService.stack.name + "_" + serviceName
 
-            let path = '/api/docker/service/' + serviceName + '/tag'
+            let path = '/api/docker/service/' + fullServiceName + '/tag'
             const URL = dockerApiUrl + path
 
             console.log("URL FINAL", URL)
@@ -46,9 +48,11 @@ export const findDockerService = function (id) {
 
             let dockerApiUrl = environmentService.environment.dockerApiUrl
 
-            let serviceName = environmentService.stack.name + "_" + environmentService.service.name
 
-            let path = '/api/docker/service/' + serviceName
+            let serviceName = environmentService.name ? environmentService.name :  environmentService.service.name
+            let fullServiceName = environmentService.stack.name + "_" + serviceName
+
+            let path = '/api/docker/service/' + fullServiceName
             const URL = dockerApiUrl + path
 
             console.log("URL FINAL", URL)
@@ -71,6 +75,37 @@ export const findDockerService = function (id) {
     })
 }
 
+export const  fetchDockerService = function (environmentId) {
+
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            let environment = await findEnvironment(environmentId)
+            let dockerApiUrl = environment.dockerApiUrl
+
+
+            let path = '/api/docker/service'
+            const URL = dockerApiUrl + path
+
+            console.log("URL FINAL", URL)
+
+            let response = await axios.get(URL)
+
+            if (response.status = 200) {
+
+                //console.log("fetchDockerService Response ", response.data)
+                resolve(response.data)
+            } else {
+                reject(response.status)
+            }
+
+
+        } catch (e) {
+            reject(e)
+        }
+
+    })
+}
 
 export const createDockerService = function (id) {
     return new Promise(async (resolve, reject) => {
@@ -84,11 +119,11 @@ export const createDockerService = function (id) {
             let path = '/api/docker/service'
             const URL = dockerApiUrl + path
 
-            let serviceName = environmentService.stack.name + "_" + environmentService.service.name
-
+            let serviceName = environmentService.name ? environmentService.name :  environmentService.service.name
+            let fullServiceName = environmentService.stack.name + "_" + serviceName
 
             let data = {
-                name: serviceName,
+                name: fullServiceName,
                 stack: environmentService.stack.name,
                 image: environmentService.image,
                 replicas: environmentService.replicas,
@@ -138,11 +173,13 @@ export const updateDockerService = function (id) {
             let path = '/api/docker/service/'+ dockerService.id
             const URL = dockerApiUrl + path
 
-            let serviceName = environmentService.stack.name + "_" + environmentService.service.name
+
+            let serviceName = environmentService.name ? environmentService.name :  environmentService.service.name
+            let fullServiceName = environmentService.stack.name + "_" + serviceName
 
 
             let data = {
-                name: serviceName,
+                name: fullServiceName,
                 stack: environmentService.stack.name,
                 image: environmentService.image,
                 replicas: environmentService.replicas,

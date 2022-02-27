@@ -1,6 +1,7 @@
 query fetchEnvironmentService{
     fetchEnvironmentService{
         id
+        name
         environment{
             id
             name

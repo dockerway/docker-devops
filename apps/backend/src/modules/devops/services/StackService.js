@@ -9,6 +9,14 @@ export const findStack = async function (id) {
     })
 }
 
+export const findStackByName = async function (name) {
+    return new Promise((resolve, reject) => {
+        Stack.findOne({name: name}).exec((err, res) => (
+            err ? reject(err) : resolve(res)
+        ));
+    })
+}
+
 export const fetchStack = async function () {
     return new Promise((resolve, reject) => {
         Stack.find({}).exec((err, res) => (
@@ -28,9 +36,9 @@ export const paginateStack = function ( pageNumber = 1, itemsPerPage = 5, search
                 ]
             }
         }
-        
+
         if(filters){
-        
+
             filters.forEach(filter => {
                 switch(filter.operator){
                     case '=':
@@ -44,29 +52,29 @@ export const paginateStack = function ( pageNumber = 1, itemsPerPage = 5, search
                     case '>':
                     case 'gt':
                         qs[filter.field] = {...qs[filter.field], $gt: filter.value}
-                        break;    
+                        break;
                     case '<':
                     case 'lt':
                         qs[filter.field] = {...qs[filter.field], $lt: filter.value}
-                        break;    
+                        break;
                     case '>=':
                     case 'gte':
                         qs[filter.field] = {...qs[filter.field], $gte: filter.value}
-                        break;    
+                        break;
                     case '<=':
                     case 'lte':
                         qs[filter.field] = {...qs[filter.field], $lte: filter.value}
-                        break;          
+                        break;
                     default:
                         qs[filter.field] = {...qs[filter.field], $eq: filter.value}
                 }
             })
-        
+
         }
-        
+
         return qs
     }
-    
+
      function getSort(orderBy, orderDesc) {
         if (orderBy) {
             return (orderDesc ? '-' : '') + orderBy
@@ -93,21 +101,21 @@ export const paginateStack = function ( pageNumber = 1, itemsPerPage = 5, search
 
 
 export const createStack = async function (authUser, {name}) {
-    
+
     const doc = new Stack({
         name
     })
     doc.id = doc._id;
     return new Promise((resolve, rejects) => {
         doc.save((error => {
-        
+
             if (error) {
                 if (error.name == "ValidationError") {
                     return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
                 }
                 return rejects(error)
-            }    
-        
+            }
+
             resolve(doc)
         }))
     })
@@ -116,19 +124,19 @@ export const createStack = async function (authUser, {name}) {
 export const updateStack = async function (authUser, id, {name}) {
     return new Promise((resolve, rejects) => {
         Stack.findOneAndUpdate({_id: id},
-        {name}, 
+        {name},
         {new: true, runValidators: true, context: 'query'},
         (error,doc) => {
-            
+
             if (error) {
                 if (error.name == "ValidationError") {
                  return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
-                
+
                 }
                 return rejects(error)
-                
-            } 
-        
+
+            }
+
             resolve(doc)
         })
     })

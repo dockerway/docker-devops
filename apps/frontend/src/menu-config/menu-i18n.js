@@ -11,7 +11,8 @@ const messages = {
             environmentService: "EnvironmentService",
             cruds: "Cruds",
             sauron: "Sauron",
-            stack: "Stack"
+            stack: "Stack",
+            discovery: "Discovery"
         }
     },
     es: {
@@ -25,7 +26,8 @@ const messages = {
             environmentService: "Entorno Servicio",
             cruds: "ABM",
             sauron: "Sauron",
-            stack: "Stack"
+            stack: "Stack",
+            discovery: "Discovery"
         }
     },
     pt: {
@@ -39,7 +41,8 @@ const messages = {
             environmentService: "EnvironmentService",
             cruds: "Cruds",
             sauron: "Sauron",
-            stack: "Stack"
+            stack: "Stack",
+            discovery: "Discovery"
         }
     }
 }
