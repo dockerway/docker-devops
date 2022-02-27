@@ -60,8 +60,68 @@
 
       </v-col>
 
-      <v-col cols="12">
-        {{created}}
+      <v-col cols="12" v-if="created">
+        <v-row>
+          <v-col cols="12" md="4">
+            <v-card>
+              <v-card-title>
+                Platforms created
+              </v-card-title>
+              <v-card-text>
+                <h4 class="text-h4">
+                  {{created.platformsCreated.length}}
+                </h4>
+              </v-card-text>
+            </v-card>
+          </v-col>
+
+          <v-col cols="12" md="4">
+            <v-card>
+              <v-card-title>
+                Stacks created
+              </v-card-title>
+              <v-card-text>
+                <h4 class="text-h4">
+                  {{created.stacksCreated.length}}
+                </h4>
+              </v-card-text>
+            </v-card>
+          </v-col>
+
+          <v-col cols="12" md="4">
+            <v-card>
+              <v-card-title>
+                Services created
+              </v-card-title>
+              <v-card-text>
+                <h4 class="text-h4">
+                  {{created.servicesCreated.length}}
+                </h4>
+              </v-card-text>
+            </v-card>
+          </v-col>
+
+          <v-col cols="12" md="4">
+            <v-card>
+              <v-card-title>
+                EnvironmentService created
+              </v-card-title>
+              <v-card-text>
+                <h4 class="text-h4">
+                  {{created.environmentServicesCreated.length}}
+                </h4>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+
+
+
+
+
+
+
+
       </v-col>
 
     </v-row>
@@ -83,7 +143,7 @@ export default {
       environment: null,
       disconvery: [],
       selectedServicesDiscovered: [],
-      created: []
+      created: null
     }
   },
   computed: {
@@ -102,23 +162,22 @@ export default {
   },
   methods: {
     createDiscovery(){
-      this.loading = true
-      DiscoveryProvider.createDiscovery(this.getSelectedWithPlatform)
-          .then(r => {
-            this.created = r.data.createDiscovery
-          })
-          .finally(() => this.loading = false)
+      if(this.getSelectedWithPlatform.length > 0){
+        this.loading = true
+        DiscoveryProvider.createDiscovery(this.getSelectedWithPlatform)
+            .then(r => {
+              this.created = r.data.createDiscovery
+            })
+            .finally(() => this.loading = false)
+      }
     },
     startDiscovery() {
-      if(this.environment){
         this.loading = true
         DiscoveryProvider.startDiscovery(this.environment)
             .then(r => {
               this.disconvery = r.data.startDiscovery
             })
             .finally(() => this.loading = false)
-      }
-
     }
   }
 

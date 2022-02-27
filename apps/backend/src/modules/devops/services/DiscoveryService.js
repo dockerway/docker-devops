@@ -7,7 +7,7 @@ import {
     findEnvironmentServiceByEnvironmentStackService,
 
 } from "./EnvironmentServiceService";
-import {createStack, findStackByName} from "./StackService";
+import {createStack, findStackByName, updateStack} from "./StackService";
 
 export const startDiscovery = function (environmentId) {
     return new Promise(async (resolve, reject) => {
@@ -54,9 +54,10 @@ export const startDiscovery = function (environmentId) {
                 for (let dockerService of dockerServices) {
 
                     let name
-                    if(dockerService.name.includes("_")){
-                        let nameSplited = dockerService.name.split("_")
-                        name = nameSplited[nameSplited.length-1]
+                    if(dockerService.stack){
+                        name = dockerService.name.replace(dockerService.stack, "")
+                        if(name[0] === "_")
+                            name = name.substring(1)
                     }else{
                         name = dockerService.name
                     }
@@ -66,7 +67,7 @@ export const startDiscovery = function (environmentId) {
                         imageName: dockerService?.image?.name,
                         namespace: dockerService?.image?.namespace,
                         stack: dockerService?.stack,
-                        environment: environmentId,
+                        environment: env.id,
                         image: dockerService?.image?.fullname
                     }
 
@@ -138,7 +139,7 @@ export const createDiscovery = function (servicesDiscovered) {
             let platformsCreated = []
             let servicesCreated = []
             let stacksCreated = []
-            let environmentServiceCreated = []
+            let environmentServicesCreated = []
 
             for (let serviceDiscovered of servicesDiscovered) {
 
@@ -175,9 +176,18 @@ export const createDiscovery = function (servicesDiscovered) {
 
                 if (!stack) {
                     console.log("STACK NEW:", serviceDiscovered)
-                    stack = await createStack(null, {name: serviceDiscovered.stack})
+                    stack = await createStack(null,
+                        {
+                            name: serviceDiscovered.stack,
+                            platform: platform.id,
+                            environments: [serviceDiscovered.environment]
+                        })
                     stacksCreated.push(stack)
                 }else{
+                    if(!stack.environments.some( e=> e.id === serviceDiscovered.environment)){
+                       stack.environments.push(serviceDiscovered.environment)
+                        await stack.save()
+                    }
                     console.log("STACK OLD:", serviceDiscovered)
                 }
 
@@ -194,7 +204,7 @@ export const createDiscovery = function (servicesDiscovered) {
                 if(!environmentService){
                     console.log("ENV_SERVICE NEW:", serviceDiscovered, environmentService)
                     environmentService = await createEnvironmentService(null, environmentServiceObj)
-                    environmentServiceCreated.push(environmentService)
+                    environmentServicesCreated.push(environmentService)
                 }else{
                     console.log("ENV_SERVICE OLD:", serviceDiscovered,environmentService)
                 }
@@ -205,7 +215,7 @@ export const createDiscovery = function (servicesDiscovered) {
                 platformsCreated,
                 servicesCreated,
                 stacksCreated,
-                environmentServiceCreated
+                environmentServicesCreated
 
             }
 

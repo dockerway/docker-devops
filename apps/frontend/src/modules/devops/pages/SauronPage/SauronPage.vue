@@ -67,7 +67,7 @@ export default {
   components: {StackCombobox, PlatformCombobox},
   data() {
     return {
-      items: [],
+      envServices: [],
       environments: [],
       services: [],
       platform: null,
@@ -85,23 +85,27 @@ export default {
     },
     getTag() {
       return (environment, stack, service) => {
-        let environmentService = this.items.find(
+        let environmentService = this.envServices.find(
             item => (
                 item.environment.id === environment.id &&
                 item.stack.id === stack.id &&
                 item.service.id === service.id
             )
         )
-        return environmentService ? environmentService.tag : ''
+        return environmentService ? environmentService.tag : '---'
       }
     },
     getServices() {
       return this.platform ? this.services.filter(s => this.platform.includes(s.platform.id)) : this.services
+    },
+    getEnvServices() {
+      return this.platform ? this.envServices.filter(es => this.getServices.some( s=> s.id === es.service.id)) : this.envServices
     }
   },
   methods: {
     setPlatformStacks(val) {
       this.$refs.stackCombo.setPlatformStacks(val)
+      this.$nextTick(() =>  this.findAllTags())
     },
     performSearch() {
       this.pageNumber = 1
@@ -124,29 +128,31 @@ export default {
     fetchEnvironmentService() {
       this.loading = true
       EnvironmentServiceProvider.fetchEnvironmentService().then(r => {
-        this.items = r.data.fetchEnvironmentService
-
-         this.findAllTags()
+        this.envServices = r.data.fetchEnvironmentService
 
       }).catch(err => {
         console.error(err)
       }).finally(() => this.loading = false)
     },
     async findAllTags() {
-      for (let item of this.items) {
+      for (let item of this.getEnvServices) {
+        //console.log("findAllTags", item.name, item.stack)
         await this.findServiceTag(item)
       }
     },
     findServiceTag(item) {
       return new Promise((resolve) => {
+        console.log("findServiceTag", item.name, item.stack)
         DockerProvider.findDockerServiceTag(item.id)
             .then(r => {
               this.$set(item, 'tag', r.data.findDockerServiceTag)
               resolve()
             })
             .catch(e => {
-              console.error("findServiceTag error:", e)
-              this.$set(item, 'tag', 'error')
+              console.error("findServiceTag error:", e.graphQLErrors)
+              let m = (e.graphQLErrors && e.graphQLErrors.length > 0) ? e.graphQLErrors.reduce((a,v) => a+v.message.replace("Unexpected error value:",""),'') : 'ERROR'
+              console.log("mensaje error",m)
+              this.$set(item, 'tag', m)
               resolve()
             })
       })

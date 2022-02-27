@@ -4,6 +4,7 @@ import {findEnvironment} from "./EnvironmentService";
 
 export const findDockerServiceTag = function (id) {
     return new Promise(async (resolve, reject) => {
+        let URL
         try {
 
 
@@ -11,13 +12,13 @@ export const findDockerServiceTag = function (id) {
 
             let dockerApiUrl = environmentService.environment.dockerApiUrl
 
-            let serviceName = environmentService.name ? environmentService.name :  environmentService.service.name
+            let serviceName = environmentService.name ? environmentService.name : environmentService.service.name
             let fullServiceName = environmentService.stack.name + "_" + serviceName
 
             let path = '/api/docker/service/' + fullServiceName + '/tag'
-            const URL = dockerApiUrl + path
+            URL = dockerApiUrl + path
 
-            console.log("URL FINAL", URL)
+            //console.log("URL FINAL", URL)
 
             let response = await axios.get(URL)
 
@@ -26,12 +27,21 @@ export const findDockerServiceTag = function (id) {
                 //console.log("findServiceTag Response ", response.data)
                 resolve(response.data)
             } else {
+                console.log("error tag data", response.data)
+                console.log("error tag status", response.status)
                 reject(response.status)
             }
 
 
         } catch (e) {
-            reject(e)
+            //console.log("error tag", e)
+            console.log("URL ERROR", URL)
+            let message = e.message
+            if(e.response && e.response.status && e.response.data){
+                //console.log("Status e",e.response.status)
+                message = e.response.status + ":" + e.response.data
+            }
+            reject(message)
         }
 
     })
@@ -48,7 +58,7 @@ export const findDockerService = function (id) {
             let dockerApiUrl = environmentService.environment.dockerApiUrl
 
 
-            let serviceName = environmentService.name ? environmentService.name :  environmentService.service.name
+            let serviceName = environmentService.name ? environmentService.name : environmentService.service.name
             let fullServiceName = environmentService.stack.name + "_" + serviceName
 
             let path = '/api/docker/service/' + fullServiceName
@@ -74,7 +84,7 @@ export const findDockerService = function (id) {
     })
 }
 
-export const  fetchDockerService = function (environmentId) {
+export const fetchDockerService = function (environmentId) {
 
     return new Promise(async (resolve, reject) => {
         try {
@@ -118,7 +128,7 @@ export const createDockerService = function (id) {
             let path = '/api/docker/service'
             const URL = dockerApiUrl + path
 
-            let serviceName = environmentService.name ? environmentService.name :  environmentService.service.name
+            let serviceName = environmentService.name ? environmentService.name : environmentService.service.name
             let fullServiceName = environmentService.stack.name + "_" + serviceName
 
             let data = {
@@ -126,7 +136,7 @@ export const createDockerService = function (id) {
                 stack: environmentService.stack.name,
                 image: environmentService.image,
                 replicas: environmentService.replicas,
-                volumes: environmentService.volumes ? environmentService.volumes: [] ,
+                volumes: environmentService.volumes ? environmentService.volumes : [],
                 ports: environmentService.ports ? environmentService.ports : [],
                 envs: environmentService.envs ? environmentService.envs : [],
                 labels: environmentService.labels ? environmentService.labels : []
@@ -140,14 +150,14 @@ export const createDockerService = function (id) {
 
                 console.log("createDockerService Response ", response.data)
                 resolve(response.data)
-            }else{
+            } else {
                 reject(response)
             }
 
 
         } catch (e) {
             console.log(e)
-            let message = e.message +". " +(e.response.data ? e.response.data : '')
+            let message = e.message + ". " + (e.response.data ? e.response.data : '')
             reject(message)
         }
 
@@ -163,17 +173,17 @@ export const updateDockerService = function (id) {
             let environmentService = await findEnvironmentService(id)
             let dockerService = await findDockerService(id)
 
-            if(!dockerService){
-                reject("DockerService not found. ID:"+id )
+            if (!dockerService) {
+                reject("DockerService not found. ID:" + id)
             }
 
             let dockerApiUrl = environmentService.environment.dockerApiUrl
 
-            let path = '/api/docker/service/'+ dockerService.id
+            let path = '/api/docker/service/' + dockerService.id
             const URL = dockerApiUrl + path
 
 
-            let serviceName = environmentService.name ? environmentService.name :  environmentService.service.name
+            let serviceName = environmentService.name ? environmentService.name : environmentService.service.name
             let fullServiceName = environmentService.stack.name + "_" + serviceName
 
 
@@ -182,7 +192,7 @@ export const updateDockerService = function (id) {
                 stack: environmentService.stack.name,
                 image: environmentService.image,
                 replicas: environmentService.replicas,
-                volumes: environmentService.volumes ? environmentService.volumes: [] ,
+                volumes: environmentService.volumes ? environmentService.volumes : [],
                 ports: environmentService.ports ? environmentService.ports : [],
                 envs: environmentService.envs ? environmentService.envs : [],
                 labels: environmentService.labels ? environmentService.labels : []
@@ -196,14 +206,14 @@ export const updateDockerService = function (id) {
 
                 console.log("updateDockerService Response ", response.data)
                 resolve(response.data)
-            }else{
+            } else {
                 reject(response)
             }
 
 
         } catch (e) {
             console.log(e)
-            let message = e.message +". " +(e.response.data ? e.response.data : '')
+            let message = e.message + ". " + (e.response.data ? e.response.data : '')
             reject(message)
         }
 

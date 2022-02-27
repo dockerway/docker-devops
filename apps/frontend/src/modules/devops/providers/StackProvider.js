@@ -10,9 +10,12 @@ class StackProvider {
     }
 
     fetchStack() {
-        return graphqlClient.query({query: require('./gql/Stack/fetchStack.graphql')})
+        return graphqlClient.query({
+            query: require('./gql/Stack/fetchStack.graphql'),
+            fetchPolicy: "network-only"
+        })
     }
-    
+
     paginateStack(pageNumber, itemsPerPage, search = null, filters = null,  orderBy = null, orderDesc = false) {
         return graphqlClient.query({
             query: require('./gql/Stack/paginateStack.graphql'),
@@ -20,8 +23,8 @@ class StackProvider {
             fetchPolicy: "network-only"
         })
     }
-    
-    
+
+
 
     createStack(input) {
         return graphqlClient.mutate({
@@ -29,14 +32,14 @@ class StackProvider {
             variables: {input}
         })
     }
-    
+
     updateStack(id,input) {
         return graphqlClient.mutate({
             mutation: require('./gql/Stack/updateStack.graphql'),
             variables: {id, input}
         })
     }
-    
+
      deleteStack(id) {
         return graphqlClient.mutate({
             mutation: require('./gql/Stack/deleteStack.graphql'),
