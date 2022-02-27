@@ -1,5 +1,6 @@
 type ServiceDiscovered{
     name: String
+    imageName: String
     namespace: String
     stack: String
     environment: ID
@@ -18,8 +19,9 @@ type Query {
 
 input ServiceDiscoveredInput{
     name: String!
+    imageName: String!
     namespace: String!
-    stack: String!
+    stack: String
     environment: ID!
     image: String!
 }

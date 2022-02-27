@@ -89,6 +89,7 @@ export default {
     discoveredHeaders(){
       return [
         {text: this.$t('devops.service.labels.name'), value:'name'},
+        {text: this.$t('devops.service.labels.image'), value:'imageName'},
         {text: this.$t('devops.service.labels.platform'), value:'namespace'},
         {text: this.$t('devops.environmentService.labels.stack'), value:'stack'},
       ]

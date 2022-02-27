@@ -2,7 +2,7 @@ import graphqlClient from "../../../apollo";
 
 class DockerProvider {
 
-    findServiceTag(id) {
+    findDockerServiceTag(id) {
         return graphqlClient.query({
             query: require('./gql/Docker/findDockerServiceTag.graphql'),
             variables: {id:id},

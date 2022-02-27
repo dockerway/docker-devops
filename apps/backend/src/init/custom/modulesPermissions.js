@@ -45,6 +45,10 @@ import {
     ENVIRONMENTSERVICE_UPDATE
 } from '../../modules/devops/permissions/EnvironmentService'
 
+import {
+    RESTORE_SYSTEM
+} from '../../modules/devops/permissions/Restore'
+
 export default [
     BASE_SHOW,
     PLATFORM_CREATE,
@@ -71,5 +75,6 @@ export default [
     STACK_DELETE,
     STACK_MENU,
     STACK_SHOW,
-    STACK_UPDATE
+    STACK_UPDATE,
+    RESTORE_SYSTEM
 ]

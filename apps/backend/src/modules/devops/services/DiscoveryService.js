@@ -39,7 +39,8 @@ export const startDiscovery = function (environmentId) {
                 for (let dockerService of dockerServices) {
 
                     let serviceDiscovered = {
-                        name: dockerService?.image?.name,
+                        name: (dockerService.name.includes("_")) ? dockerService.name.split("_")[1] : dockerService.name,
+                        imageName: dockerService?.image?.name,
                         namespace: dockerService?.image?.namespace,
                         stack: dockerService?.stack,
                         environment: environmentId,
@@ -87,22 +88,26 @@ export const createDiscovery = function (servicesDiscovered) {
 
             for (let serviceDiscovered of servicesDiscovered) {
 
-                let platform = await findPlatformByName(serviceDiscovered.name)
+                let platform = await findPlatformByName(serviceDiscovered.namespace)
 
                 if (!platform) {
                     platform = await createPlatform(null, {name: serviceDiscovered.namespace})
                     platformsCreated.push(platform)
                 }
 
-                let service = await findServiceByNameAndPlatform(serviceDiscovered.name, platform.id)
+                let service = await findServiceByNameAndPlatform(serviceDiscovered.imageName, platform.id)
 
                 if (!service) {
                     service = await createService(null, {
-                        name: serviceDiscovered.name,
+                        name: serviceDiscovered.imageName,
                         platform: platform.id
                     })
 
                     servicesCreated.push(service)
+                }
+
+                if(!serviceDiscovered.stack){
+                    serviceDiscovered.stack = "-"
                 }
 
                 let stack = await findStackByName(serviceDiscovered.stack)
@@ -113,7 +118,7 @@ export const createDiscovery = function (servicesDiscovered) {
                 }
 
                 let environmentServiceObj = {
-                    name: service.name,
+                    name: serviceDiscovered.name,
                     environment: serviceDiscovered.environment,
                     service: service.id,
                     stack: stack.id,

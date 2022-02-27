@@ -1,11 +1,18 @@
 <template>
-  <v-container>
-    <h4>Sauron</h4>
-    <v-divider></v-divider>
+  <v-container fluid>
 
     <v-card>
+      <v-toolbar  tile elevation="1" >
+        <h4>Sauron</h4>
+        <v-spacer></v-spacer>
+        <platform-combobox
+            v-model="platform" hide-details clearable
+            width="250px"
+        ></platform-combobox>
+      </v-toolbar>
+
       <v-card-text>
-        <v-simple-table>
+        <v-simple-table dense>
           <thead>
           <tr>
             <th>Servicio</th>
@@ -17,7 +24,7 @@
 
           <tbody>
 
-          <tr v-for="service in services" :key="service.id">
+          <tr v-for="service in getServices" :key="service.id">
             <td>{{service.name}}</td>
 
             <td v-for="environment in environments" :key="environment.id">
@@ -43,14 +50,17 @@ import EnvironmentServiceProvider from "@/modules/devops/providers/EnvironmentSe
 import DockerProvider from "@/modules/devops/providers/DockerProvider";
 import EnvironmentProvider from "@/modules/devops/providers/EnvironmentProvider";
 import ServiceProvider from "@/modules/devops/providers/ServiceProvider";
+import PlatformCombobox from "@/modules/devops/components/PlatformCombobox/PlatformCombobox";
 
 export default {
   name: "SauronPage",
+  components: {PlatformCombobox},
   data() {
     return {
       items: [],
       environments: [],
-      services: []
+      services: [],
+      platform: null,
     }
   },
   created() {
@@ -64,6 +74,9 @@ export default {
         let environmentService = this.items.find(item => (item.environment.id === environment.id && item.service.id === service.id))
         return environmentService ? environmentService.tag : ''
       }
+    },
+    getServices(){
+      return this.platform ? this.services.filter(s => s.platform.id == this.platform) : this.services
     }
   },
   methods: {
@@ -99,11 +112,9 @@ export default {
       }).finally(() => this.loading = false)
     },
     findServiceTag(item) {
-      console.log("findServiceTag",item)
-      DockerProvider.findServiceTag(item.id)
+      DockerProvider.findDockerServiceTag(item.id)
           .then(r => {
-            //item.version = r.data.findServiceTag
-            this.$set(item, 'tag', r.data.findServiceTag)
+            this.$set(item, 'tag', r.data.findDockerServiceTag)
           })
     }
   }

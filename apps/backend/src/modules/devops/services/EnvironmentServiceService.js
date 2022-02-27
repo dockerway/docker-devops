@@ -35,7 +35,9 @@ export const paginateEnvironmentService = function (pageNumber = 1, itemsPerPage
         let qs = {}
         if (search) {
             qs = {
-                $or: []
+                $or: [
+                    {name: {$regex: search, $options: 'i'}}
+                ]
             }
         }
 

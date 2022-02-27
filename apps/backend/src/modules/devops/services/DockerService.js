@@ -24,7 +24,7 @@ export const findDockerServiceTag = function (id) {
             console.log(response)
             if (response.status = 200) {
 
-                console.log("findServiceTag Response ", response.data)
+                //console.log("findServiceTag Response ", response.data)
                 resolve(response.data)
             } else {
                 reject(response.status)
@@ -61,7 +61,7 @@ export const findDockerService = function (id) {
 
             if (response.status = 200) {
 
-                console.log("findServiceTag Response ", response.data)
+                //console.log("findServiceTag Response ", response.data)
                 resolve(response.data)
             } else {
                 reject(response.status)

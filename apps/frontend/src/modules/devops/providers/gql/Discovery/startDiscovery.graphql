@@ -2,6 +2,7 @@ query startDiscovery($environmentId: ID){
     startDiscovery(environmentId: $environmentId){
         servicesDiscovered{
             name
+            imageName
             namespace
             stack
             environment

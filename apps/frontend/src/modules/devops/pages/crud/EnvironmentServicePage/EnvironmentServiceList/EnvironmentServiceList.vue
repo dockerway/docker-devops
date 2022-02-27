@@ -132,10 +132,11 @@ export default {
       return [
         //Entity Headers
         {text: this.$t('devops.environmentService.labels.environment'), value: 'environment'},
-        {text: this.$t('devops.environmentService.labels.service'), value: 'service'},
         {text: this.$t('devops.environmentService.labels.stack'), value: 'stack'},
+        {text: this.$t('devops.environmentService.labels.name'), value: 'name'},
+      //  {text: this.$t('devops.environmentService.labels.service'), value: 'service'},
         {text: this.$t('devops.environmentService.labels.image'), value: 'image'},
-        {text: this.$t('devops.environmentService.labels.replicas'), value: 'replicas'},
+        //{text: this.$t('devops.environmentService.labels.replicas'), value: 'replicas'},
         //Actions
         {text: 'deploy', value: 'deploy', sortable: false},
         {text: this.$t('common.actions'), value: 'action', sortable: false},

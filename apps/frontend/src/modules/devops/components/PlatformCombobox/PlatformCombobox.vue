@@ -18,7 +18,8 @@
       :disabled="disabled"
       :readonly="readonly"
       :clearable="clearable"
-
+      :hide-details="hideDetails"
+      :style="{width: width, maxWidth: width}"
   ></v-autocomplete>
 
 </template>
@@ -42,7 +43,9 @@ export default {
     disabled: {type: Boolean, default: false},
     isRequired: {type: Boolean, default: true},
     clearable: {type: Boolean, default: false},
+    hideDetails: {type: Boolean, default: false},
     itemValue: {type: String, default: 'id'},
+    width: {type: String, default: null},
   },
   data() {
     return {
