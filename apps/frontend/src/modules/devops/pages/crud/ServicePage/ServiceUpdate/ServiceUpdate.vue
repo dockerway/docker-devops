@@ -40,6 +40,8 @@ export default {
       form: {
         name: this.item.name,
         description: this.item.description,
+        image: this.item.image,
+        repository: this.item.repository,
         platform: this.item.platform ? this.item.platform.id : null,
         volumes: this.item.volumes,
         ports: this.item.ports,

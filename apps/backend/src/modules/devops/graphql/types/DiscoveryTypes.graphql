@@ -5,6 +5,7 @@ type ServiceDiscovered{
     stack: String
     environment: ID
     image: String
+    keyName: String
 }
 
 type Discovery{
@@ -24,6 +25,7 @@ input ServiceDiscoveredInput{
     stack: String
     environment: ID!
     image: String!
+    keyName: String
 }
 
 type CreateDiscoveryResult{

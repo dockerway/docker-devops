@@ -25,6 +25,14 @@ export const findServiceByNameAndPlatform = async function (name, platform) {
     })
 }
 
+export const findServiceByNameStackPlatform = async function (name, stack, platform) {
+    return new Promise((resolve, reject) => {
+        Service.findOne({name: name, platform: platform, stack: stack}).populate('platform').exec((err, res) => (
+            err ? reject(err) : resolve(res)
+        ));
+    })
+}
+
 export const fetchService = async function () {
     return new Promise((resolve, reject) => {
         Service.find({}).populate('platform').exec((err, res) => (
@@ -47,7 +55,11 @@ export const paginateService = function ( pageNumber = 1, itemsPerPage = 5, sear
 
         if(filters){
 
-            filters.forEach(filter => {
+            for(let filter of filters){
+                if(!filter.value){
+                    continue
+                }
+
                 switch(filter.operator){
                     case '=':
                     case 'eq':
@@ -76,7 +88,7 @@ export const paginateService = function ( pageNumber = 1, itemsPerPage = 5, sear
                     default:
                         qs[filter.field] = {...qs[filter.field], $eq: filter.value}
                 }
-            })
+            }
 
         }
 
@@ -108,10 +120,10 @@ export const paginateService = function ( pageNumber = 1, itemsPerPage = 5, sear
 
 
 
-export const createService = async function (authUser, {name, description, platform, volumes, ports, envs}) {
+export const createService = async function (authUser, {name, description, platform, image, repository, volumes, ports, envs}) {
 
     const doc = new Service({
-        name, description, platform, volumes, ports, envs
+        name, description, platform, image, repository, volumes, ports, envs
     })
     doc.id = doc._id;
     return new Promise((resolve, rejects) => {
@@ -129,10 +141,10 @@ export const createService = async function (authUser, {name, description, platf
     })
 }
 
-export const updateService = async function (authUser, id, {name, description, platform, volumes, ports, envs}) {
+export const updateService = async function (authUser, id, {name, description, platform, image, repository, volumes, ports, envs}) {
     return new Promise((resolve, rejects) => {
         Service.findOneAndUpdate({_id: id},
-        {name, description, platform, volumes, ports, envs},
+        {name, description, platform, image, repository, volumes, ports, envs},
         {new: true, runValidators: true, context: 'query'},
         (error,doc) => {
 

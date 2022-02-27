@@ -3,6 +3,8 @@ query findService($id:ID!){
         id
         name
         description
+        image
+        repository
         platform{
             id
             name

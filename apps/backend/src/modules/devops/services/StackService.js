@@ -3,7 +3,7 @@ import {UserInputError} from 'apollo-server-express'
 
 export const findStack = async function (id) {
     return new Promise((resolve, reject) => {
-        Stack.findOne({_id: id}).exec((err, res) => (
+        Stack.findOne({_id: id}).populate('platform').populate('environments').exec((err, res) => (
             err ? reject(err) : resolve(res)
         ));
     })
@@ -11,7 +11,7 @@ export const findStack = async function (id) {
 
 export const findStackByName = async function (name) {
     return new Promise((resolve, reject) => {
-        Stack.findOne({name: name}).exec((err, res) => (
+        Stack.findOne({name: name}).populate('platform').populate('environments').exec((err, res) => (
             err ? reject(err) : resolve(res)
         ));
     })
@@ -19,7 +19,7 @@ export const findStackByName = async function (name) {
 
 export const fetchStack = async function () {
     return new Promise((resolve, reject) => {
-        Stack.find({}).exec((err, res) => (
+        Stack.find({}).populate('platform').populate('environments').exec((err, res) => (
             err ? reject(err) : resolve(res)
         ));
     })
@@ -39,7 +39,12 @@ export const paginateStack = function ( pageNumber = 1, itemsPerPage = 5, search
 
         if(filters){
 
-            filters.forEach(filter => {
+           for(let filter of filters){
+
+                if(!filter.value){
+                    continue
+                }
+
                 switch(filter.operator){
                     case '=':
                     case 'eq':
@@ -68,7 +73,7 @@ export const paginateStack = function ( pageNumber = 1, itemsPerPage = 5, search
                     default:
                         qs[filter.field] = {...qs[filter.field], $eq: filter.value}
                 }
-            })
+            }
 
         }
 
@@ -84,7 +89,7 @@ export const paginateStack = function ( pageNumber = 1, itemsPerPage = 5, search
     }
 
     let query = qs(search, filters)
-    let populate = null
+    let populate = ['platform','environments']
     let sort = getSort(orderBy, orderDesc)
     let params = {page: pageNumber, limit: itemsPerPage, populate, sort}
 
@@ -100,10 +105,10 @@ export const paginateStack = function ( pageNumber = 1, itemsPerPage = 5, search
 
 
 
-export const createStack = async function (authUser, {name}) {
+export const createStack = async function (authUser, {name, platform, environments}) {
 
     const doc = new Stack({
-        name
+        name, platform, environments
     })
     doc.id = doc._id;
     return new Promise((resolve, rejects) => {
@@ -116,15 +121,15 @@ export const createStack = async function (authUser, {name}) {
                 return rejects(error)
             }
 
-            resolve(doc)
+            doc.populate('platform').populate('environments').execPopulate(() => resolve(doc))
         }))
     })
 }
 
-export const updateStack = async function (authUser, id, {name}) {
+export const updateStack = async function (authUser, id, {name, platform, environments}) {
     return new Promise((resolve, rejects) => {
         Stack.findOneAndUpdate({_id: id},
-        {name},
+        {name, platform, environments},
         {new: true, runValidators: true, context: 'query'},
         (error,doc) => {
 
@@ -137,7 +142,7 @@ export const updateStack = async function (authUser, id, {name}) {
 
             }
 
-            resolve(doc)
+            doc.populate('platform').populate('environments').execPopulate(() => resolve(doc))
         })
     })
 }

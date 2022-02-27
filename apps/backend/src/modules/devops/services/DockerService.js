@@ -21,7 +21,6 @@ export const findDockerServiceTag = function (id) {
 
             let response = await axios.get(URL)
 
-            console.log(response)
             if (response.status = 200) {
 
                 //console.log("findServiceTag Response ", response.data)

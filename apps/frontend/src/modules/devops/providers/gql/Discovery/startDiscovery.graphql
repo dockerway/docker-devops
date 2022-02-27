@@ -7,6 +7,7 @@ query startDiscovery($environmentId: ID){
             stack
             environment
             image
+            keyName
         }
         envServices{
             id

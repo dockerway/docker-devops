@@ -5,6 +5,28 @@
       <v-row justify="space-between">
         <v-col cols="12" sm="6" md="8">
           <!-- FILTERS HERE -->
+          <v-row>
+            <v-col cols="12" md="4">
+              <environment-combobox
+                  v-model="filters[0].value"
+                  @input="fetch"
+                  clearable
+              />
+            </v-col>
+
+            <v-col cols="12" md="5">
+              <stack-combobox
+                  v-model="filters[1].value"
+                  @input="fetch"
+                  clearable
+              />
+            </v-col>
+
+            <v-col cols="12" md="4">
+
+            </v-col>
+          </v-row>
+
         </v-col>
         <v-col cols="12" sm="6" md="4">
           <search-input @search="performSearch" v-model="search"/>
@@ -97,11 +119,15 @@ import {DeleteButton, EditButton, ShowButton, SearchInput} from "@dracul/common-
 import DockerProvider from "@/modules/devops/providers/DockerProvider";
 import EnvironmentServiceDockerCreate
   from "@/modules/devops/components/EnvironmentServiceDockerCreate/EnvironmentServiceDockerCreate";
+import StackCombobox from "@/modules/devops/components/StackCombobox/StackCombobox";
+import EnvironmentCombobox from "@/modules/devops/components/EnvironmentCombobox/EnvironmentCombobox";
 
 
 export default {
   name: "EnvironmentServiceList",
   components: {
+    EnvironmentCombobox,
+    StackCombobox,
     EnvironmentServiceDockerCreate,
     DeleteButton, EditButton, ShowButton, SearchInput
   },
@@ -117,11 +143,16 @@ export default {
       pageNumber: 1,
       search: '',
       filters: [
-        /*{
-            field: '',
-            operator: 'eq', //(eq|contain|regex|gt|lt|lte|gte)
-            value: ''
-        }*/
+        {
+          field: 'environment',
+          operator: 'eq', //(eq|contain|regex|gt|lt|lte|gte)
+          value: null
+        },
+        {
+          field: 'stack',
+          operator: 'eq', //(eq|contain|regex|gt|lt|lte|gte)
+          value: null
+        }
       ],
       deploy: false,
       serviceToCreate: null
@@ -134,7 +165,7 @@ export default {
         {text: this.$t('devops.environmentService.labels.environment'), value: 'environment'},
         {text: this.$t('devops.environmentService.labels.stack'), value: 'stack'},
         {text: this.$t('devops.environmentService.labels.name'), value: 'name'},
-      //  {text: this.$t('devops.environmentService.labels.service'), value: 'service'},
+        //  {text: this.$t('devops.environmentService.labels.service'), value: 'service'},
         {text: this.$t('devops.environmentService.labels.image'), value: 'image'},
         //{text: this.$t('devops.environmentService.labels.replicas'), value: 'replicas'},
         //Actions
@@ -153,11 +184,11 @@ export default {
     this.fetch()
   },
   methods: {
-    openDeploy(serviceId){
+    openDeploy(serviceId) {
       this.serviceToCreate = serviceId
       this.deploy = true
     },
-    closeDeploy(){
+    closeDeploy() {
       this.serviceToCreate = null
       this.deploy = false
     },

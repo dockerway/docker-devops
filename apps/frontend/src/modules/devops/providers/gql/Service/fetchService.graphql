@@ -3,6 +3,8 @@ query fetchService{
         id
         name
         description
+        image
+        repository
         platform{
             id
             name

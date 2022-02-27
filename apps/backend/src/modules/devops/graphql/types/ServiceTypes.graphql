@@ -7,6 +7,8 @@ type Service{
     id: ID!
     name: String!
     description: String
+    image: String
+    repository: String
     platform: Platform!
     volumes: [String]
     ports: [Int]
@@ -36,6 +38,8 @@ input ServiceInput{
     name: String!
     description: String
     platform: ID!
+    image: String
+    repository: String
     volumes: [String]
     ports: [String]
     envs: [EnvServiceInput]

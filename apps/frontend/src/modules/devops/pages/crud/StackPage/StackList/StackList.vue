@@ -34,6 +34,14 @@
         >
 
             
+         <template v-slot:item.environments="{ item }">
+            {{item.environments ? item.environments.map(e=> e.name).join(", ") : '' }}
+         </template>
+        
+         <template v-slot:item.platform="{ item }">
+            {{ item.platform ? item.platform.name : '' }}
+         </template>
+        
             
             
             
@@ -90,6 +98,8 @@
             return [
                     //Entity Headers
                     {text: this.$t('devops.stack.labels.name'), value: 'name'},
+                    {text: this.$t('devops.stack.labels.platform'), value: 'platform'},
+                    {text: this.$t('devops.stack.labels.environments'), value: 'environments'},
                     //Actions
                     {text: this.$t('common.actions'), value: 'action', sortable: false},
                 ]

@@ -37,6 +37,8 @@ export default {
       form: {
         name: '',
         description: '',
+        image: '',
+        repository: '',
         platform: null,
         volumes: '',
         ports: '',

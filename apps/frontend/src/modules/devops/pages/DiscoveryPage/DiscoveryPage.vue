@@ -30,7 +30,8 @@
             <v-data-table
                 :items="disconvery.servicesDiscovered"
                 :headers="discoveredHeaders"
-                show-select v-model="selectedServicesDiscovered" item-key="name"
+                show-select v-model="selectedServicesDiscovered"
+                item-key="keyName"
             >
 
               <template v-slot:item.namespace="{item}">
@@ -88,6 +89,7 @@ export default {
   computed: {
     discoveredHeaders(){
       return [
+        {text: 'keyName', value:'keyName'},
         {text: this.$t('devops.service.labels.name'), value:'name'},
         {text: this.$t('devops.service.labels.image'), value:'imageName'},
         {text: this.$t('devops.service.labels.platform'), value:'namespace'},

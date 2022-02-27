@@ -3,6 +3,8 @@ mutation updateService($id: ID!, $input: ServiceInput){
         id
         name
         description
+        image
+        repository
         platform{
             id
             name

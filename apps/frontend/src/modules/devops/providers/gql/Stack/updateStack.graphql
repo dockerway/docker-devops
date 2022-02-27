@@ -2,6 +2,14 @@ mutation updateStack($id: ID!, $input: StackInput){
     updateStack(id: $id, input: $input){
         id
         name
+        platform{
+                id
+                name
+            }
+        environments{
+                id
+                name
+            }
     }
 }
 

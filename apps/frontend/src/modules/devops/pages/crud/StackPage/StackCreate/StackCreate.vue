@@ -37,7 +37,9 @@
                 inputErrors: {},
                 loading: false,
                 form: {
-                    name: ''
+                    name: '',
+                    platform: null,
+                    environments: []
                 }
             }
         },

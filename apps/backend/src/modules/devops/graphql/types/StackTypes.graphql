@@ -4,6 +4,8 @@
 type Stack{
 id: ID!
  name: String!
+ platform: Platform
+ environments: [Environment]
 }
 
 type StackPaginated{
@@ -22,6 +24,8 @@ type Query {
 
 input StackInput{
     name: String!
+ platform: ID
+ environments: [ID]
 }
 
 type StackDelete{

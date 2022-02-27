@@ -2,5 +2,13 @@ query findStack($id:ID!){
     findStack(id:$id){
         id
         name
+        platform{
+                id
+                name
+            }
+        environments{
+                id
+                name
+            }
     }
 }

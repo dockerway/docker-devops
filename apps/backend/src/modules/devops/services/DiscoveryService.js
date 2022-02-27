@@ -18,7 +18,7 @@ export const startDiscovery = function (environmentId) {
             let servicesDiscovered = []
 
             function addServiceDisconvered(sd) {
-                let index = servicesDiscovered.findIndex(i => i.name == sd.name && i.namespace == sd.namespace)
+                let index = servicesDiscovered.findIndex(i => i.name == sd.name && i.stack == sd.stack && i.environment == sd.environment)
                 if (index == -1) {
                     servicesDiscovered.push(sd)
                 }
@@ -36,10 +36,33 @@ export const startDiscovery = function (environmentId) {
 
                 let dockerServices = await fetchDockerService(env.id)
 
+                console.log("dockerServices found",dockerServices.length)
+                /*
+                let summary = {}
+                for(let dockerService of dockerServices){
+                    if(summary[dockerService.stack]){
+                        summary[dockerService.stack]++
+                    }else{
+                        summary[dockerService.stack] = 1
+                    }
+                }
+                 console.log("dockerServices summary",summary)
+                */
+
+
+
                 for (let dockerService of dockerServices) {
 
+                    let name
+                    if(dockerService.name.includes("_")){
+                        let nameSplited = dockerService.name.split("_")
+                        name = nameSplited[nameSplited.length-1]
+                    }else{
+                        name = dockerService.name
+                    }
+
                     let serviceDiscovered = {
-                        name: (dockerService.name.includes("_")) ? dockerService.name.split("_")[1] : dockerService.name,
+                        name: name,
                         imageName: dockerService?.image?.name,
                         namespace: dockerService?.image?.namespace,
                         stack: dockerService?.stack,
@@ -47,16 +70,46 @@ export const startDiscovery = function (environmentId) {
                         image: dockerService?.image?.fullname
                     }
 
-                    let platform = await findPlatformByName(serviceDiscovered.name)
+                 /*   if(serviceDiscovered.stack != "multichanne_multic_prepro"){
+                        continue
+                    }*/
+
+
+                    serviceDiscovered.keyName = env.name + "_" + serviceDiscovered.stack + "_"+serviceDiscovered.name
+
+                    let platform = await findPlatformByName(serviceDiscovered.namespace)
 
                     if (!platform) {
+                        console.log("PLATFORM NEW:",serviceDiscovered)
                         addServiceDisconvered(serviceDiscovered)
                     } else {
 
-                        let service = await findServiceByNameAndPlatform(serviceDiscovered.name, platform.id)
+                        let service = await findServiceByNameAndPlatform(serviceDiscovered.imageName, platform.id)
 
                         if (!service) {
+                            console.log("SERVICE NEW:",serviceDiscovered)
                             addServiceDisconvered(serviceDiscovered)
+                        }else{
+                            let stack = await findStackByName(serviceDiscovered.stack)
+
+                            if (!stack) {
+                                console.log("STACK NEW:",serviceDiscovered)
+                                addServiceDisconvered(serviceDiscovered)
+                            }else{
+
+                                let environmentServiceObj = {
+                                    environment: env.id,
+                                    service: service.id,
+                                    stack: stack.id,
+                                }
+
+                                let environmentService = await findEnvironmentServiceByEnvironmentStackService(environmentServiceObj)
+
+                                if(!environmentService){
+                                    console.log("ENVIRONMENT_SERVICE NEW:",serviceDiscovered)
+                                    addServiceDisconvered(serviceDiscovered)
+                                }
+                            }
                         }
 
                     }
@@ -68,6 +121,7 @@ export const startDiscovery = function (environmentId) {
                 //envServices.push(envService)
             }
 
+            //console.log("servicesDiscovered",servicesDiscovered)
             resolve({servicesDiscovered, envServices})
         } catch (e) {
             reject(e)
@@ -91,19 +145,26 @@ export const createDiscovery = function (servicesDiscovered) {
                 let platform = await findPlatformByName(serviceDiscovered.namespace)
 
                 if (!platform) {
+                    console.log("PLATFORM NEW:",serviceDiscovered)
                     platform = await createPlatform(null, {name: serviceDiscovered.namespace})
                     platformsCreated.push(platform)
+                }else{
+                    console.log("PLATFORM OLD:",serviceDiscovered)
                 }
+
 
                 let service = await findServiceByNameAndPlatform(serviceDiscovered.imageName, platform.id)
 
                 if (!service) {
+                    console.log("SERVICE NEW:",platform, serviceDiscovered)
                     service = await createService(null, {
                         name: serviceDiscovered.imageName,
                         platform: platform.id
                     })
 
                     servicesCreated.push(service)
+                }else{
+                    console.log("SERVICE OLD:",platform, serviceDiscovered)
                 }
 
                 if(!serviceDiscovered.stack){
@@ -113,8 +174,11 @@ export const createDiscovery = function (servicesDiscovered) {
                 let stack = await findStackByName(serviceDiscovered.stack)
 
                 if (!stack) {
+                    console.log("STACK NEW:", serviceDiscovered)
                     stack = await createStack(null, {name: serviceDiscovered.stack})
                     stacksCreated.push(stack)
+                }else{
+                    console.log("STACK OLD:", serviceDiscovered)
                 }
 
                 let environmentServiceObj = {
@@ -128,8 +192,11 @@ export const createDiscovery = function (servicesDiscovered) {
                 let environmentService = await findEnvironmentServiceByEnvironmentStackService(environmentServiceObj)
 
                 if(!environmentService){
+                    console.log("ENV_SERVICE NEW:", serviceDiscovered, environmentService)
                     environmentService = await createEnvironmentService(null, environmentServiceObj)
                     environmentServiceCreated.push(environmentService)
+                }else{
+                    console.log("ENV_SERVICE OLD:", serviceDiscovered,environmentService)
                 }
 
             }

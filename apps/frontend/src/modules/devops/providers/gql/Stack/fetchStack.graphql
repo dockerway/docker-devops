@@ -2,6 +2,14 @@ query fetchStack{
     fetchStack{
         id
         name
+        platform{
+                id
+                name
+            }
+        environments{
+                id
+                name
+            }
     }
 }
 

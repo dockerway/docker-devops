@@ -12,9 +12,13 @@ const EnvSchema = new Schema({
 
 const ServiceSchema = new Schema({
 
- name: {type: String, required: true, unique: true, index: true},
+ name: {type: String, required: true, unique: false, index: false},
  description: {type: String, required: false, unique: false, index: false},
  platform: {type: mongoose.Schema.Types.ObjectId, ref: "Platform", required: true, unique: false, index: false},
+
+ image: {type: String, required: false, unique: false, index: false},
+ repository: {type: String, required: false, unique: false, index: false},
+
  volumes: [{type: String, required: false}],
  ports: [{type: String, required: false}],
  envs: [EnvSchema]
@@ -22,7 +26,7 @@ const ServiceSchema = new Schema({
 }, { timestamps: true });
 
 
-
+ServiceSchema.index({ name: 1, platform: 1}, { unique: true });
 
 ServiceSchema.plugin(mongoosePaginate);
 ServiceSchema.plugin(uniqueValidator, {message: 'validation.unique'});

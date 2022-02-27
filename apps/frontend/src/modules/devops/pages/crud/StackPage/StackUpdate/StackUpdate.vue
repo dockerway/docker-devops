@@ -38,7 +38,9 @@
                 loading: false,
                 id: this.item.id,
                 form: {
-                    name: this.item.name
+                    name: this.item.name,
+                    platform: this.item.platform ? this.item.platform.id : null,
+                    environments: this.item.environments ? this.item.environments.map(i=> i.id?i.id:i) : null
                 }
             }
         },

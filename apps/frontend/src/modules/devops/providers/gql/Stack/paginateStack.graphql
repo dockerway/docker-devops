@@ -5,6 +5,14 @@ query paginateStack( $pageNumber: Int, $itemsPerPage:Int, $search: String, $filt
         items{
           id
           name
+        platform{
+                id
+                name
+            }
+        environments{
+                id
+                name
+            }
         }
     }
 }

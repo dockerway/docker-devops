@@ -12,7 +12,9 @@ const messages = {
             showing: 'Showing Stack',
             menu: 'Stack',
             labels: {
-                name: 'Name'
+                name: 'Name',
+                platform: 'Platform',
+                environments: 'Environments'
             },
           
           }
@@ -30,7 +32,9 @@ const messages = {
             showing: 'Detalles de Stack',
             menu: 'Stack',
             labels: {
-                name: 'Nombre'
+                name: 'Nombre',
+                platform: 'Plataforma',
+                environments: 'Entornos'
             },
           
           }
@@ -48,7 +52,9 @@ const messages = {
             showing: 'Detalhes do Stack',
             menu: 'Stack',
             labels: {
-                name: 'Nome'
+                name: 'Nome',
+                platform: 'Platform',
+                environments: 'Environments'
             },
           
           }

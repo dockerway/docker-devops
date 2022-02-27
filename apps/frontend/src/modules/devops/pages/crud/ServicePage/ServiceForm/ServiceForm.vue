@@ -40,6 +40,35 @@
       </v-col>
 
 
+      <v-col cols="12" sm="6">
+        <v-text-field
+
+            prepend-icon="album"
+            name="image"
+            v-model="form.image"
+            :label="$t('devops.service.labels.image')"
+            :placeholder="$t('devops.service.labels.image')"
+            :error="hasInputErrors('image')"
+            :error-messages="getInputErrors('image')"
+            color="secondary"
+
+        ></v-text-field>
+      </v-col>
+
+      <v-col cols="12" sm="6">
+        <v-text-field
+
+            prepend-icon="source"
+            name="repository"
+            v-model="form.repository"
+            :label="$t('devops.service.labels.repository')"
+            :placeholder="$t('devops.service.labels.repository')"
+            :error="hasInputErrors('repository')"
+            :error-messages="getInputErrors('repository')"
+            color="secondary"
+
+        ></v-text-field>
+      </v-col>
 
     </v-row>
 

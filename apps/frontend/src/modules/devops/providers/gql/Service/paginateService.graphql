@@ -6,6 +6,8 @@ query paginateService( $pageNumber: Int, $itemsPerPage:Int, $search: String, $fi
             id
             name
             description
+            image
+            repository
             platform{
                 id
                 name
