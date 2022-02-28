@@ -23,9 +23,11 @@
       </v-col>
 
 
-
       <v-col cols="12" v-if="disconvery && disconvery.servicesDiscovered">
         <v-card>
+          <v-card-actions>
+            <v-btn @click="selectAll" class="teal white--text">select all</v-btn>
+          </v-card-actions>
           <v-card-text>
             <v-data-table
                 :items="disconvery.servicesDiscovered"
@@ -36,7 +38,7 @@
 
               <template v-slot:item.namespace="{item}">
 
-                <span v-if="item.namespace">{{item.namespace}}</span>
+                <span v-if="item.namespace">{{ item.namespace }}</span>
 
                 <platform-combobox v-else :item-value="'name'" v-model="item.namespace"></platform-combobox>
 
@@ -69,7 +71,7 @@
               </v-card-title>
               <v-card-text>
                 <h4 class="text-h4">
-                  {{created.platformsCreated.length}}
+                  {{ created.platformsCreated.length }}
                 </h4>
               </v-card-text>
             </v-card>
@@ -82,7 +84,7 @@
               </v-card-title>
               <v-card-text>
                 <h4 class="text-h4">
-                  {{created.stacksCreated.length}}
+                  {{ created.stacksCreated.length }}
                 </h4>
               </v-card-text>
             </v-card>
@@ -95,7 +97,7 @@
               </v-card-title>
               <v-card-text>
                 <h4 class="text-h4">
-                  {{created.servicesCreated.length}}
+                  {{ created.servicesCreated.length }}
                 </h4>
               </v-card-text>
             </v-card>
@@ -108,18 +110,12 @@
               </v-card-title>
               <v-card-text>
                 <h4 class="text-h4">
-                  {{created.environmentServicesCreated.length}}
+                  {{ created.environmentServicesCreated.length }}
                 </h4>
               </v-card-text>
             </v-card>
           </v-col>
         </v-row>
-
-
-
-
-
-
 
 
       </v-col>
@@ -147,22 +143,28 @@ export default {
     }
   },
   computed: {
-    discoveredHeaders(){
+    discoveredHeaders() {
       return [
-        {text: 'keyName', value:'keyName'},
-        {text: this.$t('devops.service.labels.name'), value:'name'},
-        {text: this.$t('devops.service.labels.image'), value:'imageName'},
-        {text: this.$t('devops.service.labels.platform'), value:'namespace'},
-        {text: this.$t('devops.environmentService.labels.stack'), value:'stack'},
+        {text: 'keyName', value: 'keyName'},
+        {text: this.$t('devops.service.labels.name'), value: 'name'},
+        {text: this.$t('devops.service.labels.image'), value: 'imageName'},
+        {text: this.$t('devops.service.labels.platform'), value: 'namespace'},
+        {text: this.$t('devops.environmentService.labels.stack'), value: 'stack'},
       ]
     },
-    getSelectedWithPlatform(){
+    getSelectedWithPlatform() {
       return this.selectedServicesDiscovered.filter(i => i.namespace)
     }
   },
   methods: {
-    createDiscovery(){
-      if(this.getSelectedWithPlatform.length > 0){
+    selectAll() {
+      if (this.disconvery && this.disconvery.servicesDiscovered) {
+        this.selectedServicesDiscovered = this.disconvery.servicesDiscovered
+      }
+
+    },
+    createDiscovery() {
+      if (this.getSelectedWithPlatform.length > 0) {
         this.loading = true
         DiscoveryProvider.createDiscovery(this.getSelectedWithPlatform)
             .then(r => {
@@ -172,12 +174,12 @@ export default {
       }
     },
     startDiscovery() {
-        this.loading = true
-        DiscoveryProvider.startDiscovery(this.environment)
-            .then(r => {
-              this.disconvery = r.data.startDiscovery
-            })
-            .finally(() => this.loading = false)
+      this.loading = true
+      DiscoveryProvider.startDiscovery(this.environment)
+          .then(r => {
+            this.disconvery = r.data.startDiscovery
+          })
+          .finally(() => this.loading = false)
     }
   }
 

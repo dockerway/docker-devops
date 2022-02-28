@@ -6,6 +6,7 @@ type ServiceDiscovered{
     environment: ID
     image: String
     keyName: String
+    dockerId: String
 }
 
 type Discovery{
@@ -26,6 +27,7 @@ input ServiceDiscoveredInput{
     environment: ID!
     image: String!
     keyName: String
+    dockerId: String
 }
 
 type CreateDiscoveryResult{

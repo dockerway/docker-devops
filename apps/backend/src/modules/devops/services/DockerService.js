@@ -165,7 +165,7 @@ export const createDockerService = function (id) {
 }
 
 
-export const updateDockerService = function (id) {
+export const updateDockerService = function (id, targetImage = null) {
     return new Promise(async (resolve, reject) => {
         try {
 
@@ -190,7 +190,7 @@ export const updateDockerService = function (id) {
             let data = {
                 name: fullServiceName,
                 stack: environmentService.stack.name,
-                image: environmentService.image,
+                image: targetImage ? targetImage : environmentService.image,
                 replicas: environmentService.replicas,
                 volumes: environmentService.volumes ? environmentService.volumes : [],
                 ports: environmentService.ports ? environmentService.ports : [],
@@ -205,6 +205,12 @@ export const updateDockerService = function (id) {
             if (response.status = 200) {
 
                 console.log("updateDockerService Response ", response.data)
+
+                if(response?.data?.image?.fullname){
+                    environmentService.image = response?.data?.image?.fullname
+                    await environmentService.save()
+                }
+
                 resolve(response.data)
             } else {
                 reject(response)

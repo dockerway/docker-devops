@@ -1,0 +1,11 @@
+
+type RegistryImage{
+    name: String
+    tags: [String]
+}
+
+
+type Query {
+    fetchImage(rows: Int): [RegistryImage]
+    imageTags(name: String!): RegistryImage
+}

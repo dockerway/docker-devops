@@ -12,6 +12,7 @@ query paginateEnvironmentService( $pageNumber: Int, $itemsPerPage:Int, $search: 
             service{
                 id
                 name
+                image
             }
             stack{
                 id

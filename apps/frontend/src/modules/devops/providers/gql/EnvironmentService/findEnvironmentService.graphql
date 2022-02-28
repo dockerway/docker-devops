@@ -9,6 +9,7 @@ query findEnvironmentService($id:ID!){
         service{
             id
             name
+            image
         }
         stack{
             id

@@ -4,6 +4,7 @@ import merge from 'deepmerge'
 
 import baseMessages from '../modules/base/i18n/messages'
 import devopsMessages from '../modules/devops/i18n'
+import registryMessages from '../modules/registry/i18n'
 import menuMessages from '../menu-config/menu-i18n'
 import {i18nMessages as i18nMessagesCommon} from '@dracul/common-frontend'
 import {i18nMessages as i18nMessagesUser} from '@dracul/user-frontend'
@@ -19,7 +20,8 @@ const messages = merge.all([
     i18nMessagesCustom,
     i18nMessagesNotification,
     i18nMessagesSettings,
-    devopsMessages
+    devopsMessages,
+    registryMessages
 ])
 
 Vue.use(VueI18n)

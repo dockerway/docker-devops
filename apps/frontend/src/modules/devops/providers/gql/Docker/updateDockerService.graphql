@@ -1,5 +1,5 @@
-mutation updateDockerService($id: ID!){
-    updateDockerService(id: $id){
+mutation updateDockerService($id: ID!, $targetImage: String){
+    updateDockerService(id: $id, targetImage: $targetImage){
         id
         name
         stack

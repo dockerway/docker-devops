@@ -8,6 +8,7 @@ query startDiscovery($environmentId: ID){
             environment
             image
             keyName
+            dockerId
         }
         envServices{
             id

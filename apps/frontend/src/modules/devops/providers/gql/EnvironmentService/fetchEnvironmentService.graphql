@@ -9,6 +9,7 @@ query fetchEnvironmentService{
         service{
             id
             name
+            image
         }
         stack{
             id
