@@ -62,6 +62,27 @@ export default [
         ]
     },
 
+    {
+        icon: 'disc_full',
+        text: 'menu.registry',
+        panel: false,
+        children: [
+            {
+                icon: 'devices_fold',
+                text: 'menu.registry',
+                link: {name: "RegistryPage"},
+                panel: false,
+                permission: 'REGISTRY_MENU'
+            },
+            {
+                icon: 'album',
+                text: 'menu.image',
+                link: {name: "ImagesPage"},
+                panel: false,
+                permission: 'REGISTRY_MENU'
+            },
+        ]
+    },
 
     {
         icon: 'person',

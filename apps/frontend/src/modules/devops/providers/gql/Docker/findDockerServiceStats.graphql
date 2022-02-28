@@ -1,0 +1,16 @@
+query findDockerServiceStats($id: ID!){
+    findDockerServiceStats(id: $id){
+        task{
+            id
+            nodeId
+            serviceId
+            containerId
+            state
+        }
+        stats{
+            cpu
+            memoryLimit
+            memoryUsage
+        }
+    }
+}

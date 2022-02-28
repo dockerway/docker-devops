@@ -49,6 +49,14 @@ import {
     RESTORE_SYSTEM
 } from '../../modules/devops/permissions/Restore'
 
+import {
+    REGISTRY_CREATE,
+    REGISTRY_DELETE,
+    REGISTRY_MENU,
+    REGISTRY_SHOW,
+    REGISTRY_UPDATE
+} from '../../modules/registry/permissions/Registry'
+
 export default [
     BASE_SHOW,
     PLATFORM_CREATE,
@@ -76,5 +84,12 @@ export default [
     STACK_MENU,
     STACK_SHOW,
     STACK_UPDATE,
-    RESTORE_SYSTEM
+
+    RESTORE_SYSTEM,
+
+    REGISTRY_CREATE,
+    REGISTRY_DELETE,
+    REGISTRY_MENU,
+    REGISTRY_SHOW,
+    REGISTRY_UPDATE
 ]

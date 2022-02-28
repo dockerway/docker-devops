@@ -12,7 +12,9 @@ const messages = {
             cruds: "Cruds",
             sauron: "Sauron",
             stack: "Stack",
-            discovery: "Discovery"
+            discovery: "Discovery",
+            registry: "Registry",
+            image: "Image"
         }
     },
     es: {
@@ -27,7 +29,9 @@ const messages = {
             cruds: "ABM",
             sauron: "Sauron",
             stack: "Stack",
-            discovery: "Discovery"
+            discovery: "Discovery",
+            registry: "Registry",
+            image: "Image"
         }
     },
     pt: {
@@ -42,7 +46,9 @@ const messages = {
             cruds: "Cruds",
             sauron: "Sauron",
             stack: "Stack",
-            discovery: "Discovery"
+            discovery: "Discovery",
+            registry: "Registry",
+            image: "Image"
         }
     }
 }

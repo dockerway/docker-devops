@@ -1,0 +1,11 @@
+mutation updateRegistry($id: ID!, $input: RegistryInput){
+    updateRegistry(id: $id, input: $input){
+        id
+        name
+        url
+        auth
+        username
+        password
+    }
+}
+

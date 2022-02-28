@@ -10,6 +10,14 @@ class DockerProvider {
         })
     }
 
+    findDockerServiceStats(id) {
+        return graphqlClient.query({
+            query: require('./gql/Docker/findDockerServiceStats.graphql'),
+            variables: {id:id},
+            fetchPolicy: "network-only"
+        })
+    }
+
     findDockerService(id) {
         return graphqlClient.query({
             query: require('./gql/Docker/findDockerService.graphql'),

@@ -1,0 +1,7 @@
+mutation deleteRegistry($id: ID!){
+    deleteRegistry(id: $id){
+        id
+        success
+    }
+}
+

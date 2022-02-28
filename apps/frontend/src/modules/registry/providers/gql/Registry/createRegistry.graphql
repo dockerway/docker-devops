@@ -1,0 +1,11 @@
+mutation createRegistry($input: RegistryInput){
+    createRegistry(input: $input){
+        id
+        name
+        url
+        auth
+        username
+        password
+    }
+}
+

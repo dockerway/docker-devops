@@ -1,0 +1,6 @@
+query imageTagsByFullname($fullname: String!){
+    imageTagsByFullname(fullname: $fullname){
+        name
+        tags
+    }
+}

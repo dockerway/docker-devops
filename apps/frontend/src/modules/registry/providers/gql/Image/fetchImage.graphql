@@ -1,5 +1,5 @@
-query fetchImage($rows: Int){
-    fetchImage(rows: $rows){
+query fetchImage($registry: ID!, $rows: Int){
+    fetchImage(registry: $registry, rows: $rows){
         name
         tags
     }

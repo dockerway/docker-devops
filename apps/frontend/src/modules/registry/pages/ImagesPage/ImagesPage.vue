@@ -2,6 +2,12 @@
   <v-container>
     <h3>Images</h3>
 
+    <registry-combobox
+        v-model="registry"
+        width="300px"
+        @input="fetch"
+    />
+
     <v-data-table
         :items="images"
         :loading="loading"
@@ -11,11 +17,11 @@
     >
 
       <template v-slot:item.tags="{item}">
-        <image-tag-chips :name="item.name"></image-tag-chips>
+        <image-tag-chips :registry="registry" :name="item.name"></image-tag-chips>
       </template>
 
       <template v-slot:item.tagscombo="{item}">
-        <image-tag-combobox :name="item.name" hide-details ></image-tag-combobox>
+        <image-tag-combobox :registry="registry" :name="item.name" hide-details></image-tag-combobox>
       </template>
 
     </v-data-table>
@@ -23,41 +29,40 @@
 </template>
 
 <script>
-import RegistryProvider from "../../providers/RegistryProvider";
+import ImageProvider from "../../providers/ImageProvider";
 import ImageTagChips from "@/modules/registry/components/ImageTagChips/ImageTagChips";
 import ImageTagCombobox from "@/modules/registry/components/ImageTagCombobox/ImageTagCombobox";
+import RegistryCombobox from "@/modules/registry/components/RegistryCombobox/RegistryCombobox";
 
 export default {
   name: "ImagePage",
-  components: {ImageTagCombobox, ImageTagChips},
+  components: {RegistryCombobox, ImageTagCombobox, ImageTagChips},
   data() {
     return {
       loading: false,
-      itemsPerPage: 3,
+      itemsPerPage: 5,
       pageNumber: 1,
       totalItems: null,
+      registry: null,
       images: []
     }
   },
   computed: {
     headers() {
       return [
-        {text: 'name',value:'name', width: '180px'},
-        {text: 'tags',value:'tags'},
-        {text: 'tagscombo',value:'tagscombo', width: '150px'},
+        {text: 'name', value: 'name', width: '180px'},
+        {text: 'tags', value: 'tags'},
+        {text: 'tagscombo', value: 'tagscombo', width: '150px'},
       ]
     }
-  },
-  created() {
-    this.fetch()
   },
   methods: {
     fetch() {
       this.loading = true
-      RegistryProvider.fetchImage()
+      ImageProvider.fetchImage(this.registry)
           .then(r => {
             this.images = r.data.fetchImage
-         //   this.totalItems = r.data.fetchProject.length
+            //   this.totalItems = r.data.fetchProject.length
           })
           .finally(() => this.loading = false)
 

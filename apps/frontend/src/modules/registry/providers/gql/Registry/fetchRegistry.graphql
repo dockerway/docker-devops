@@ -1,0 +1,11 @@
+query fetchRegistry{
+    fetchRegistry{
+        id
+        name
+        url
+        auth
+        username
+        password
+    }
+}
+

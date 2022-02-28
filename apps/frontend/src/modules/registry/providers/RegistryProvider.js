@@ -1,33 +1,51 @@
-import apolloClient from '../../../apollo'
+import graphqlClient from "../../../apollo";
 
 class RegistryProvider {
 
-    constructor() {
-        this.gqlc = null
-    }
-
-    setGqlc(gqlc) {
-        this.gqlc = gqlc
-    }
-
-    fetchImage(rows = null) {
-        return this.gqlc.query({
-            query: require('./gql/Image/fetchImage.graphql'),
-            variables: {rows},
-            fetchPolicy: "network-only"
+    findRegistry(id) {
+        return graphqlClient.query({
+            query: require('./gql/Registry/findRegistry.graphql'),
+            variables: {id:id}
         })
     }
 
-    imageTags(name) {
-        return this.gqlc.query({
-            query: require('./gql/Image/imageTags.graphql'),
-            variables: {name},
+    fetchRegistry() {
+        return graphqlClient.query({query: require('./gql/Registry/fetchRegistry.graphql')})
+    }
+    
+    paginateRegistry(pageNumber, itemsPerPage, search = null, filters = null,  orderBy = null, orderDesc = false) {
+        return graphqlClient.query({
+            query: require('./gql/Registry/paginateRegistry.graphql'),
+            variables: {pageNumber, itemsPerPage, search, filters, orderBy, orderDesc},
             fetchPolicy: "network-only"
+        })
+    }
+    
+    
+
+    createRegistry(input) {
+        return graphqlClient.mutate({
+            mutation: require('./gql/Registry/createRegistry.graphql'),
+            variables: {input}
+        })
+    }
+    
+    updateRegistry(id,input) {
+        return graphqlClient.mutate({
+            mutation: require('./gql/Registry/updateRegistry.graphql'),
+            variables: {id, input}
+        })
+    }
+    
+     deleteRegistry(id) {
+        return graphqlClient.mutate({
+            mutation: require('./gql/Registry/deleteRegistry.graphql'),
+            variables: {id}
         })
     }
 
 }
 
-const registryProvider = new RegistryProvider()
-registryProvider.setGqlc(apolloClient)
-export default registryProvider
+export default new RegistryProvider()
+
+

@@ -1,5 +1,5 @@
-query imageTags($name: String!){
-    imageTags(name: $name){
+query imageTags($registry: ID!,$name: String!){
+    imageTags(registry:$registry, name: $name){
         name
         tags
     }

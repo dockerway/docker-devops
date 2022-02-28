@@ -41,8 +41,31 @@ type DockerService {
     labels: [Label]
 }
 
+type DockerTask {
+    id: String
+    nodeId: String
+    serviceId: String
+    containerId: String
+    image: DockerImage
+    createdAt: String
+    updatedAt: String
+    state: String,
+    message: String
+}
+
+type DockerStats{
+    cpu: String
+    memoryLimit: String
+    memoryUsage: String
+}
+
+type DockerTaskStats{
+    task: DockerTask
+    stats: DockerStats
+}
 
 type Query {
+    findDockerServiceStats(id: ID!): [DockerTaskStats]
     findDockerServiceTag(id: ID!): String
     findDockerService(id: ID!): DockerService
 }

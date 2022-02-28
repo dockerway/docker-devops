@@ -1,0 +1,14 @@
+query paginateRegistry( $pageNumber: Int, $itemsPerPage:Int, $search: String, $filters: [FilterInput], $orderBy: String, $orderDesc: Boolean){
+    paginateRegistry( pageNumber: $pageNumber, itemsPerPage: $itemsPerPage, search: $search, filters: $filters, orderBy: $orderBy, orderDesc: $orderDesc){
+        totalItems
+        page
+        items{
+          id
+          name
+        url
+        auth
+        username
+        password
+        }
+    }
+}

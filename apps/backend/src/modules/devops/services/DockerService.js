@@ -27,26 +27,50 @@ export const findDockerServiceTag = function (id) {
                 //console.log("findServiceTag Response ", response.data)
                 resolve(response.data)
             } else {
-                console.log("error tag data", response.data)
-                console.log("error tag status", response.status)
-                reject(response.status)
+                reject(response)
             }
 
 
         } catch (e) {
-            //console.log("error tag", e)
-            console.log("URL ERROR", URL)
-            let message = e.message
-            if(e.response && e.response.status && e.response.data){
-                //console.log("Status e",e.response.status)
-                message = e.response.status + ":" + e.response.data
-            }
+            let message = e.message + ". " + (e.response.data ? e.response.data : '')
             reject(message)
         }
 
     })
 }
 
+export const findDockerServiceStats = function (id) {
+    return new Promise(async (resolve, reject) => {
+        let URL
+        try {
+            let environmentService = await findEnvironmentService(id)
+
+            let dockerApiUrl = environmentService.environment.dockerApiUrl
+
+            let serviceName = environmentService.name ? environmentService.name : environmentService.service.name
+            let fullServiceName = environmentService.stack.name + "_" + serviceName
+
+            let path = '/api/docker/service/' + fullServiceName + '/stats'
+            URL = dockerApiUrl + path
+
+            console.log("URL Stats FINAL", URL)
+
+            let response = await axios.get(URL)
+
+            if (response.status = 200) {
+                resolve(response.data)
+            } else {
+                reject(response)
+            }
+
+
+        } catch (e) {
+            let message = e.message + ". " + (e.response.data ? e.response.data : '')
+            reject(message)
+        }
+
+    })
+}
 
 export const findDockerService = function (id) {
     return new Promise(async (resolve, reject) => {
@@ -73,12 +97,13 @@ export const findDockerService = function (id) {
                 //console.log("findServiceTag Response ", response.data)
                 resolve(response.data)
             } else {
-                reject(response.status)
+                reject(response)
             }
 
 
         } catch (e) {
-            reject(e)
+            let message = e.message + ". " + (e.response.data ? e.response.data : '')
+            reject(message)
         }
 
     })
@@ -105,12 +130,13 @@ export const fetchDockerService = function (environmentId) {
                 //console.log("fetchDockerService Response ", response.data)
                 resolve(response.data)
             } else {
-                reject(response.status)
+                reject(response)
             }
 
 
         } catch (e) {
-            reject(e)
+            let message = e.message + ". " + (e.response.data ? e.response.data : '')
+            reject(message)
         }
 
     })
@@ -156,7 +182,6 @@ export const createDockerService = function (id) {
 
 
         } catch (e) {
-            console.log(e)
             let message = e.message + ". " + (e.response.data ? e.response.data : '')
             reject(message)
         }
@@ -218,7 +243,6 @@ export const updateDockerService = function (id, targetImage = null) {
 
 
         } catch (e) {
-            console.log(e)
             let message = e.message + ". " + (e.response.data ? e.response.data : '')
             reject(message)
         }

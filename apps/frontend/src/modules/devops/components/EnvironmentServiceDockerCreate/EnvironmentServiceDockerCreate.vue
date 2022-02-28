@@ -24,7 +24,7 @@
     </v-card-text>
 
     <v-card-actions v-if="created && !updated" class="justify-center">
-      <image-tag-combobox :name="getBaseImage" v-model="targetImage"></image-tag-combobox>
+      <image-tag-combobox show-name :name="getBaseImage" v-model="targetImage"></image-tag-combobox>
       <v-spacer></v-spacer>
       <v-btn :loading="loading" class="teal white--text" @click="updateDockerService">UPDATE</v-btn>
     </v-card-actions>
@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     getBaseImage() {
-      return this.envService.service.image.replace("sndregistry.sondeosglobal.com/", '')
+      return this.envService.service.image
     },
     getTargetImage(){
       return this.targetImage ? this.envService.service.image + ":" +this.targetImage : null

@@ -116,7 +116,6 @@
 import EnvironmentServiceProvider from "../../../../providers/EnvironmentServiceProvider";
 
 import {DeleteButton, EditButton, ShowButton, SearchInput} from "@dracul/common-frontend"
-import DockerProvider from "@/modules/devops/providers/DockerProvider";
 import EnvironmentServiceDockerCreate
   from "@/modules/devops/components/EnvironmentServiceDockerCreate/EnvironmentServiceDockerCreate";
 import StackCombobox from "@/modules/devops/components/StackCombobox/StackCombobox";
@@ -209,21 +208,11 @@ export default {
         this.items = r.data.paginateEnvironmentService.items
         this.totalItems = r.data.paginateEnvironmentService.totalItems
 
-        for (let item of this.items) {
-          this.findServiceTag(item)
-        }
-
       }).catch(err => {
         console.error(err)
       }).finally(() => this.loading = false)
     },
-    findServiceTag(item) {
-      DockerProvider.findServiceTag(item.id)
-          .then(r => {
-            //item.version = r.data.findServiceTag
-            this.$set(item, 'version', r.data.findServiceTag)
-          })
-    }
+
   }
 
 }

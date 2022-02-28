@@ -1,7 +1,7 @@
 <template>
   <v-chip-group column >
-    <v-chip v-for="item in items" :key="item" small>
-      <span>{{item}}</span>
+    <v-chip v-for="item in getItems" :key="item.value" small>
+      <span>{{item.value}}</span>
     </v-chip>
   </v-chip-group>
 
@@ -12,13 +12,15 @@
 import {InputErrorsByProps, RequiredRule} from '@dracul/common-frontend'
 
 
-import RegistryProvider from "../../providers/RegistryProvider"
+import ImageProvider from "../../providers/ImageProvider"
 
 export default {
   name: "ImageTagChips",
   mixins: [InputErrorsByProps, RequiredRule],
   props:{
     name: {type: String, required: true},
+    registry: {type: String, required: true},
+    showName: {type: Boolean, default: false},
     value: {type: [String, Array]},
     multiple: {type:Boolean, default: false },
     solo: {type:Boolean, default: false},
@@ -30,11 +32,21 @@ export default {
   },
   data() {
     return {
-      items: [],
+      data: {
+        name: null,
+        tags: []
+      },
       loading: false
     }
   },
   computed: {
+    getItems(){
+      if(this.showName){
+        return this.data.tags ? this.data.tags.map(tag => ({text:this.data.name+":"+tag, value: tag})).sort((a, b) => b.value.localeCompare(a.value)) : []
+      }else{
+        return this.data.tags ? this.data.tags.map(tag => ({text:tag, value: tag})).sort((a, b) => b.value.localeCompare(a.value)) : []
+      }
+    },
     item: {
       get() { return this.value },
       set(val) {this.$emit('input', val)}
@@ -47,12 +59,26 @@ export default {
     validate(){
       return this.$refs.form.validate()
     },
-    fetch(){
-      this.loading= true
-      RegistryProvider.imageTags(this.name).then(r => {
-        this.items = r.data.imageTags.tags
+    fetch() {
+      if (this.registry) {
+        this.fetchImageTags()
+      } else {
+        this.fetchImageTagsByFullname()
+      }
+    },
+    fetchImageTags() {
+      this.loading = true
+      ImageProvider.imageTags(this.registry, this.name).then(r => {
+        this.data = r.data.imageTags
       }).catch(err => console.error(err))
-          .finally(()=> this.loading = false)
+          .finally(() => this.loading = false)
+    },
+    fetchImageTagsByFullname() {
+      this.loading = true
+      ImageProvider.imageTagsByFullname(this.name).then(r => {
+        this.data = r.data.imageTagsByFullname
+      }).catch(err => console.error(err))
+          .finally(() => this.loading = false)
     }
 
   }

@@ -5,6 +5,9 @@
       <v-toolbar tile elevation="1">
         <h4>Sauron</h4>
         <v-spacer></v-spacer>
+        <v-select v-model="mode" label="mode" hide-details :items="['tag','state','stats']" />
+
+        <v-spacer></v-spacer>
 
         <platform-combobox
             v-model="platform" hide-details clearable
@@ -36,7 +39,22 @@
 
             <template v-for="environment in environments">
               <td v-for="stack in getEnvStacks(environment)" :key="environment.id+stack.id" class="text-center">
-                {{ getTag(environment,stack, service) }}
+
+                <template v-if="mode==='tag'">
+                  {{ getTag(environment,stack, service) }}
+                </template>
+
+                <template v-if="mode==='state'">
+                  {{getState(environment,stack, service)}}
+                </template>
+
+                <template v-if="mode==='stats'">
+                  {{getStats(environment,stack, service)}}
+                </template>
+
+
+
+
               </td>
             </template>
 
@@ -71,7 +89,8 @@ export default {
       environments: [],
       services: [],
       platform: null,
-      stacks: []
+      stacks: [],
+      mode: 'state'
     }
   },
   created() {
@@ -83,16 +102,37 @@ export default {
     getEnvStacks(){
       return environment => this.stacks.filter(s => s.environments.some( e => e.id === environment.id))
     },
-    getTag() {
+    getEnvironmentService(){
       return (environment, stack, service) => {
-        let environmentService = this.envServices.find(
+        return this.envServices.find(
             item => (
                 item.environment.id === environment.id &&
                 item.stack.id === stack.id &&
                 item.service.id === service.id
             )
         )
+      }
+    },
+    getTag() {
+      return (environment, stack, service) => {
+        let environmentService = this.getEnvironmentService(environment, stack, service)
         return environmentService ? environmentService.tag : '---'
+      }
+    },
+    getState() {
+      return (environment, stack, service) => {
+        let environmentService = this.getEnvironmentService(environment, stack, service)
+        return environmentService ? environmentService.state.state : 'DOWN'
+      }
+    },
+    getStats() {
+      return (environment, stack, service) => {
+        let environmentService = this.getEnvironmentService(environment, stack, service)
+        if(environmentService && environmentService.state && environmentService.state.stats){
+          return "c:"+environmentService.state.stats.cpu+" m:"+environmentService.stats.memoryUsage
+        }else{
+          return '***'
+        }
       }
     },
     getServices() {
@@ -105,7 +145,8 @@ export default {
   methods: {
     setPlatformStacks(val) {
       this.$refs.stackCombo.setPlatformStacks(val)
-      this.$nextTick(() =>  this.findAllTags())
+     // this.$nextTick(() =>  this.findAllTags())
+      this.$nextTick(() =>  this.findAllStats())
     },
     performSearch() {
       this.pageNumber = 1
@@ -136,8 +177,12 @@ export default {
     },
     async findAllTags() {
       for (let item of this.getEnvServices) {
-        //console.log("findAllTags", item.name, item.stack)
         await this.findServiceTag(item)
+      }
+    },
+    async findAllStats() {
+      for (let item of this.getEnvServices) {
+        await this.findServiceStats(item)
       }
     },
     findServiceTag(item) {
@@ -156,7 +201,22 @@ export default {
               resolve()
             })
       })
-
+    },
+    findServiceStats(item) {
+      return new Promise((resolve) => {
+        console.log("findServiceStat", item.name, item.stack)
+        DockerProvider.findDockerServiceStats(item.id)
+            .then(r => {
+              this.$set(item, 'state', r.data.findDockerServiceStats)
+              resolve()
+            })
+            .catch(e => {
+              console.error("findServiceStat error:", e.graphQLErrors)
+              let m = (e.graphQLErrors && e.graphQLErrors.length > 0) ? e.graphQLErrors.reduce((a,v) => a+v.message.replace("Unexpected error value:",""),'') : 'ERROR'
+              this.$set(item, 'state', m)
+              resolve()
+            })
+      })
     }
   }
 }

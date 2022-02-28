@@ -1,0 +1,45 @@
+
+        
+        
+type Registry{
+id: ID!
+ name: String!
+ url: String!
+ auth: Boolean
+ username: String
+ password: String
+}
+
+type RegistryPaginated{
+    totalItems: Int!
+    page: Int!
+    items: [Registry!]
+}
+
+type Query {
+    findRegistry(id:ID!): Registry
+    fetchRegistry: [Registry]
+    paginateRegistry( pageNumber: Int, itemsPerPage: Int, search: String, filters: [FilterInput],orderBy: String, orderDesc: Boolean): RegistryPaginated  
+    
+    
+}
+
+input RegistryInput{
+    name: String!
+ url: String!
+ auth: Boolean
+ username: String
+ password: String
+}
+
+type RegistryDelete{
+    id: ID!
+    success: Boolean!
+}
+
+
+type Mutation {
+    createRegistry(input: RegistryInput): Registry
+    updateRegistry(id: ID!, input: RegistryInput): Registry
+    deleteRegistry(id: ID!): RegistryDelete!
+}

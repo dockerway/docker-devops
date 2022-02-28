@@ -1,19 +1,22 @@
 import {AuthenticationError} from "apollo-server-errors";
-import {fetchImage, imageTags} from "../../services/ImageService";
+import {fetchImage, imageTags, imageTagsByFullname} from "../../services/ImageService";
 
 
 export default {
     Query: {
-        fetchImage: (_,{rows},{user}) => {
+        fetchImage: (_,{registry, rows},{user}) => {
             if(!user)  throw new AuthenticationError("Usted no esta autenticado")
 
-            return fetchImage(rows)
+            return fetchImage(registry, rows)
         },
-        imageTags: (_,{name},{user}) => {
+        imageTags: (_,{registry, name},{user}) => {
             if(!user)  throw new AuthenticationError("Usted no esta autenticado")
 
-            return imageTags(name)
+            return imageTags(registry, name)
         },
-
+        imageTagsByFullname: (_,{fullname},{user}) => {
+            if(!user)  throw new AuthenticationError("Usted no esta autenticado")
+            return imageTagsByFullname(fullname)
+        },
     }
 }

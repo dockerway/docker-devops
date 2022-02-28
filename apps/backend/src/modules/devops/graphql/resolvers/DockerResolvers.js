@@ -10,7 +10,7 @@ import {
 
 import {
     createDockerService,
-    findDockerService,
+    findDockerService, findDockerServiceStats,
     findDockerServiceTag,
     updateDockerService
 } from "../../services/DockerService";
@@ -21,6 +21,11 @@ export default {
             if (!user) throw new AuthenticationError("Unauthenticated")
             if(!rbac.isAllowed(user.id, ENVIRONMENTSERVICE_SHOW)) throw new ForbiddenError("Not Authorized")
             return findDockerServiceTag(id)
+        },
+        findDockerServiceStats: (_, {id}, {user,rbac}) => {
+            if (!user) throw new AuthenticationError("Unauthenticated")
+            if(!rbac.isAllowed(user.id, ENVIRONMENTSERVICE_SHOW)) throw new ForbiddenError("Not Authorized")
+            return findDockerServiceStats(id)
         },
         findDockerService: (_, {id}, {user,rbac}) => {
             if (!user) throw new AuthenticationError("Unauthenticated")
