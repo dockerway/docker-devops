@@ -94,7 +94,7 @@ export default {
       services: [],
       platform: null,
       stacks: [],
-      mode: 'cpu'
+      mode: 'tag'
     }
   },
   created() {
@@ -238,15 +238,15 @@ export default {
       })
     },
     setServiceState(item, stats) {
-      let state = stats.map(i => i?.task?.state).join(",")
+      let state = stats.map(i => i?.task?.state).join(" | ")
       this.$set(item, 'state', state)
     },
     setServiceCpu(item, stats) {
-      let state = stats.map(i => i?.stats?.cpu).join(",")
+      let state = stats.map(i => i?.stats?.cpu).join(" | ")
       this.$set(item, 'cpu', state)
     },
     setServiceMemory(item, stats) {
-      let state = stats.map(i => i?.stats?.memoryUsage).join(",")
+      let state = stats.map(i => i?.stats?.memoryUsage).join(" | ")
       this.$set(item, 'memory', state)
     }
   }
