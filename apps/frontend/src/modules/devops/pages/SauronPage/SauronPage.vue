@@ -3,9 +3,7 @@
 
     <v-card>
       <v-toolbar tile elevation="1">
-        <h4>Sauron</h4>
-        <v-spacer></v-spacer>
-        <v-select v-model="mode" label="mode" hide-details :items="['tag','state','stats']" />
+        <v-select v-model="mode" label="mode" hide-details :items="['tag','state','cpu','memory']"/>
 
         <v-spacer></v-spacer>
 
@@ -19,7 +17,7 @@
         ></stack-combobox>
       </v-toolbar>
       <v-card-text>
-        <v-simple-table dense v-if="platform && stacks && stacks.length > 0" >
+        <v-simple-table dense v-if="platform && stacks && stacks.length > 0">
           <thead>
           <tr>
             <th></th>
@@ -41,18 +39,24 @@
               <td v-for="stack in getEnvStacks(environment)" :key="environment.id+stack.id" class="text-center">
 
                 <template v-if="mode==='tag'">
-                  {{ getTag(environment,stack, service) }}
+                  {{ getTag(environment, stack, service) }}
                 </template>
 
                 <template v-if="mode==='state'">
-                  {{getState(environment,stack, service)}}
+                  {{ getState(environment, stack, service) }}
+                </template>
+
+                <template v-if="mode==='cpu'">
+                  {{ getCpu(environment, stack, service) }}
+                </template>
+
+                <template v-if="mode==='memory'">
+                  {{ getMemory(environment, stack, service) }}
                 </template>
 
                 <template v-if="mode==='stats'">
-                  {{getStats(environment,stack, service)}}
+                  {{ getStats(environment, stack, service) }}
                 </template>
-
-
 
 
               </td>
@@ -90,7 +94,7 @@ export default {
       services: [],
       platform: null,
       stacks: [],
-      mode: 'state'
+      mode: 'cpu'
     }
   },
   created() {
@@ -99,10 +103,10 @@ export default {
     this.fetchEnvironmentService()
   },
   computed: {
-    getEnvStacks(){
-      return environment => this.stacks.filter(s => s.environments.some( e => e.id === environment.id))
+    getEnvStacks() {
+      return environment => this.stacks.filter(s => s.environments.some(e => e.id === environment.id))
     },
-    getEnvironmentService(){
+    getEnvironmentService() {
       return (environment, stack, service) => {
         return this.envServices.find(
             item => (
@@ -122,31 +126,39 @@ export default {
     getState() {
       return (environment, stack, service) => {
         let environmentService = this.getEnvironmentService(environment, stack, service)
-        return environmentService ? environmentService.state.state : 'DOWN'
+        return environmentService ? environmentService.state : 'DOWN'
+      }
+    },
+    getCpu() {
+      return (environment, stack, service) => {
+        let environmentService = this.getEnvironmentService(environment, stack, service)
+        return environmentService ? environmentService.cpu : '***'
+      }
+    },
+    getMemory() {
+      return (environment, stack, service) => {
+        let environmentService = this.getEnvironmentService(environment, stack, service)
+        return environmentService ? environmentService.memory : '***'
       }
     },
     getStats() {
       return (environment, stack, service) => {
         let environmentService = this.getEnvironmentService(environment, stack, service)
-        if(environmentService && environmentService.state && environmentService.state.stats){
-          return "c:"+environmentService.state.stats.cpu+" m:"+environmentService.stats.memoryUsage
-        }else{
-          return '***'
-        }
+        return environmentService ? environmentService.stats : '***'
       }
     },
     getServices() {
       return this.platform ? this.services.filter(s => this.platform.includes(s.platform.id)) : this.services
     },
     getEnvServices() {
-      return this.platform ? this.envServices.filter(es => this.getServices.some( s=> s.id === es.service.id)) : this.envServices
+      return this.platform ? this.envServices.filter(es => this.getServices.some(s => s.id === es.service.id)) : this.envServices
     }
   },
   methods: {
     setPlatformStacks(val) {
       this.$refs.stackCombo.setPlatformStacks(val)
-     // this.$nextTick(() =>  this.findAllTags())
-      this.$nextTick(() =>  this.findAllStats())
+      this.$nextTick(() => this.findAllTags())
+      this.$nextTick(() => this.findAllStats())
     },
     performSearch() {
       this.pageNumber = 1
@@ -176,13 +188,17 @@ export default {
       }).finally(() => this.loading = false)
     },
     async findAllTags() {
+      let timeout = 200
       for (let item of this.getEnvServices) {
-        await this.findServiceTag(item)
+        setTimeout(() => this.findServiceTag(item), timeout)
+        timeout += 200
       }
     },
     async findAllStats() {
+      let timeout = 300
       for (let item of this.getEnvServices) {
-        await this.findServiceStats(item)
+        setTimeout(() => this.findServiceStats(item), timeout)
+        timeout += 300
       }
     },
     findServiceTag(item) {
@@ -195,8 +211,8 @@ export default {
             })
             .catch(e => {
               console.error("findServiceTag error:", e.graphQLErrors)
-              let m = (e.graphQLErrors && e.graphQLErrors.length > 0) ? e.graphQLErrors.reduce((a,v) => a+v.message.replace("Unexpected error value:",""),'') : 'ERROR'
-              console.log("mensaje error",m)
+              let m = (e.graphQLErrors && e.graphQLErrors.length > 0) ? e.graphQLErrors.reduce((a, v) => a + v.message.replace("Unexpected error value:", ""), '') : 'ERROR'
+              console.log("mensaje error", m)
               this.$set(item, 'tag', m)
               resolve()
             })
@@ -207,16 +223,31 @@ export default {
         console.log("findServiceStat", item.name, item.stack)
         DockerProvider.findDockerServiceStats(item.id)
             .then(r => {
-              this.$set(item, 'state', r.data.findDockerServiceStats)
+              let result = r.data.findDockerServiceStats
+              this.setServiceState(item, result)
+              this.setServiceCpu(item, result)
+              this.setServiceMemory(item, result)
               resolve()
             })
             .catch(e => {
               console.error("findServiceStat error:", e.graphQLErrors)
-              let m = (e.graphQLErrors && e.graphQLErrors.length > 0) ? e.graphQLErrors.reduce((a,v) => a+v.message.replace("Unexpected error value:",""),'') : 'ERROR'
-              this.$set(item, 'state', m)
+              let m = (e.graphQLErrors && e.graphQLErrors.length > 0) ? e.graphQLErrors.reduce((a, v) => a + v.message.replace("Unexpected error value:", ""), '') : 'ERROR'
+              this.$set(item, 'tasks', m)
               resolve()
             })
       })
+    },
+    setServiceState(item, stats) {
+      let state = stats.map(i => i?.task?.state).join(",")
+      this.$set(item, 'state', state)
+    },
+    setServiceCpu(item, stats) {
+      let state = stats.map(i => i?.stats?.cpu).join(",")
+      this.$set(item, 'cpu', state)
+    },
+    setServiceMemory(item, stats) {
+      let state = stats.map(i => i?.stats?.memoryUsage).join(",")
+      this.$set(item, 'memory', state)
     }
   }
 }
