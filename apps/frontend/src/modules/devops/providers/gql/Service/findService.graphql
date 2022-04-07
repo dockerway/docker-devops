@@ -15,5 +15,16 @@ query findService($id:ID!){
             name
             defaultValue
         }
+        constraints{
+            name
+            operation
+            defaultValue
+        }
+        limits{
+            memoryReservation
+            memoryLimit
+            CPUReservation
+            CPULimit
+        }
     }
 }

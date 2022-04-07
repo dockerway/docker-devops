@@ -23,8 +23,13 @@ const messages = {
                 containerPort: "Container port",
                 hostVolume: "Host volume",
                 containerVolume: "Container volume",
+                memoryReservation:"Memory Reservation",
+                memoryLimit:"Memory Limit",
+                CPUReservation:"CPU Reservation", 
+                CPULimit:"CPU Limit",
                 variable: {
                     name: "Name",
+                    operation: "Operation",
                     value: "Value"
                 },
                 image: "Image",
@@ -58,8 +63,13 @@ const messages = {
                 containerPort: "Container port",
                 hostVolume: "Host volume",
                 containerVolume: "Container volume",
+                memoryReservation:"Reserva de Memoria",
+                memoryLimit:"Límite de Memoria",
+                CPUReservation:"Reserva de CPU", 
+                CPULimit:"Límite de CPU",
                 variable: {
                     name: "Nombre",
+                    operation: "Operación",
                     value: "Valor"
                 },
                 image: "Imagen",
@@ -93,8 +103,13 @@ const messages = {
                 containerPort: "Container port",
                 hostVolume: "Host volume",
                 containerVolume: "Container volume",
+                memoryReservation:"Reserva de memória",
+                memoryLimit:"Limite de Memória",
+                CPUReservation:"Reserva de CPU", 
+                CPULimit:"Limite de CPU",
                 variable: {
                     name: "Name",
+                    operation: "Operação",
                     value: "Value"
                 },
                 image: "Image",

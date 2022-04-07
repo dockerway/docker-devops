@@ -40,9 +40,16 @@ export default {
         image: '',
         repository: '',
         platform: null,
-        volumes: '',
-        ports: '',
-        envs: []
+        volumes: [],
+        ports: [],
+        envs: [],
+        constraints: [],
+        limits: {
+          memoryReservation:0,
+          memoryLimit:0,
+          CPUReservation:0, 
+          CPULimit:0
+        }
       }
     }
   },

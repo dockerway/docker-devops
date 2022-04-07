@@ -160,16 +160,18 @@ export const createDiscovery = function (servicesDiscovered) {
 
                     console.log("SERVICE NEW:", platform, serviceDiscovered)
 
-
-
                     let serviceEnvs = []
                     let servicePorts = []
                     let serviceVolumes = []
+                    let serviceConstraints = []
+                    let serviceLimits = {}
                     if (dockerService) {
                         console.log("dockerService",dockerService)
                         serviceEnvs = dockerService.envs ? dockerService.envs.map(i => ({name: i.name, defaultValue: ''})) : []
                         servicePorts = dockerService.ports ? dockerService.ports.map(i => (i.containerPort)) : []
                         serviceVolumes = dockerService.volumes ? dockerService.volumes.map(i => (i.containerVolume)) : []
+                        serviceConstraints = dockerService.constraints ? dockerService.constraints.map(i => ({name: i.name, operation: i.operation, defaultValue: ''})) : []
+                        serviceLimits = dockerService.limits ? dockerService.limits : {}
                     }
 
                     let baseImage = serviceDiscovered.image.split(":")[0]
@@ -179,7 +181,9 @@ export const createDiscovery = function (servicesDiscovered) {
                         image: baseImage,
                         envs: serviceEnvs,
                         ports: servicePorts,
-                        volumes: serviceVolumes
+                        volumes: serviceVolumes,
+                        constraints: serviceConstraints,
+                        limits: serviceLimits
                     })
 
                     servicesCreated.push(service)
@@ -229,6 +233,8 @@ export const createDiscovery = function (servicesDiscovered) {
                         environmentServiceObj.ports = dockerService.ports ? dockerService.ports : []
                         environmentServiceObj.volumes = dockerService.volumes ? dockerService.volumes : []
                         environmentServiceObj.labels = dockerService.labels ? dockerService.labels : []
+                        environmentServiceObj.constraints = dockerService.constraints ? dockerService.constraints : []
+                        environmentServiceObj.limits = dockerService.limits ? dockerService.limits : {}
                     }
 
                     environmentService = await createEnvironmentService(null, environmentServiceObj)

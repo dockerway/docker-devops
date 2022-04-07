@@ -25,7 +25,7 @@
               <v-list>
                 <show-field :value="item.environment.name" :label="$t('devops.environmentService.labels.environment')"
                             icon="tune"/>
-                <show-field :value="item.replicas.toString()" :label="$t('devops.environmentService.labels.replicas')"
+                <show-field :value="item.replicas ? item.replicas.toString() : ''" :label="$t('devops.environmentService.labels.replicas')"
                             icon="double_arrow"/>
               </v-list>
             </v-col>
@@ -55,7 +55,9 @@
 
 
         <!--PORTS-->
-        <v-tab-item>
+        <v-tab-item
+            key="Ports"
+            v-if="item.ports">
           <v-data-table
               :items="item.ports" :items-per-page="5"
               :headers="[
@@ -67,7 +69,9 @@
 
 
         <!--VOLUMES-->
-        <v-tab-item>
+        <v-tab-item
+            key="Volumes"
+            v-if="item.volumes">
           <v-data-table
               :items="item.volumes" :items-per-page="5"
               :headers="[
@@ -80,6 +84,7 @@
         <!--VARIABLES-->
         <v-tab-item
             key="Envs"
+            v-if="item.envs"
         >
           <v-data-table
               :items="item.envs" hide-default-footer :items-per-page="1000"
@@ -93,6 +98,7 @@
         <!--LABELS-->
         <v-tab-item
             key="Labels"
+            v-if="item.labels"
         >
           <v-data-table
               :items="item.labels" :items-per-page="5"
@@ -101,6 +107,33 @@
               {text:'value',value:'value'},
           ]"
           ></v-data-table>
+        </v-tab-item>
+
+        <!--Constraints-->
+        <v-tab-item
+            key="Constraints"
+            v-if="item.constraints"
+        >
+          <v-data-table
+              :items="item.constraints" :items-per-page="5"
+              :headers="[
+              {text:'name',value:'name'},
+              {text:'operation',value:'operation'},
+              {text:'value',value:'value'},
+          ]"
+          ></v-data-table>
+        </v-tab-item>
+
+        <!--Limits-->
+        <v-tab-item
+            key="Limits"
+            v-if="item.limits"
+        >
+          <v-list>
+              <div v-for="(limit,index) in item.limits" :key="index">
+                  <show-field :label="fetchLabel(index)" :value="limit ? limit.toString() : '0'"  icon="memory"/>
+              </div>
+          </v-list>
         </v-tab-item>
 
       </v-tabs-items>
@@ -116,15 +149,30 @@ import {ShowField} from '@dracul/common-frontend'
 export default {
   name: 'EnvironmentServiceShowData',
   components: {ShowField},
-
   props: {
     item: {type: Object, required: true}
   },
   data() {
     return {
       tab: 0,
-      tabItems: ['Main', 'Ports', 'Volumes', 'Envs', 'Labels']
+      tabItems: ['Main', 'Ports', 'Volumes', 'Envs', 'Labels','Constraints','Limits']
     }
+  },
+  methods:{
+      fetchLabel(i){
+          switch(i){
+              case "memoryReservation":
+                  return this.$t('devops.service.labels.memoryReservation')
+              case "memoryLimit":
+                  return this.$t('devops.service.labels.memoryLimit')
+              case "CPUReservation":
+                  return this.$t('devops.service.labels.CPUReservation')
+              case "CPULimit":
+                  return this.$t('devops.service.labels.CPULimit')
+              default:
+                  return this.$t('devops.service.labels.limits')
+          }
+      }
   }
 }
 </script>

@@ -8,19 +8,28 @@ type LabelService{
     value: String
 }
 
+type ConstraintService {
+    name: String!
+    operation: String
+    value: String
+}
+
+type LimitService{
+    memoryReservation: Int
+    memoryLimit: Int
+    CPUReservation: Int
+    CPULimit: Int
+}
 
 type PortEnvService{
     hostPort: Int!
     containerPort: Int!
 }
 
-
 type VolumeEnvService{
     hostVolume: String!
     containerVolume: String!
 }
-
-
 
 type EnvironmentService{
     id: ID!
@@ -34,6 +43,8 @@ type EnvironmentService{
     ports: [PortEnvService]
     volumes: [VolumeEnvService]
     labels: [LabelService]
+    constraints: [ConstraintService]
+    limits: LimitService
 }
 
 type EnvironmentServicePaginated{
@@ -59,11 +70,23 @@ input LabelServiceInput{
     value: String
 }
 
+input ConstraintServiceInput {
+    name: String!
+    operation: String
+    value: String
+}
+
+type LimitServiceInput{
+    memoryReservation: Int
+    memoryLimit: Int
+    CPUReservation: Int
+    CPULimit: Int
+}
+
 input PortEnvServiceInput{
     hostPort: Int!
     containerPort: Int!
 }
-
 
 input VolumeEnvServiceInput{
     hostVolume: String!
@@ -81,13 +104,14 @@ input EnvironmentServiceInput{
     ports: [PortEnvServiceInput]
     volumes: [VolumeEnvServiceInput]
     labels: [LabelServiceInput]
+    constraints: [ConstraintServiceInput]
+    limits: LimitServiceInput
 }
 
 type EnvironmentServiceDelete{
     id: ID!
     success: Boolean!
 }
-
 
 type Mutation {
     createEnvironmentService(input: EnvironmentServiceInput): EnvironmentService

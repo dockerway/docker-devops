@@ -32,6 +32,17 @@ mutation updateEnvironmentService($id: ID!, $input: EnvironmentServiceInput){
             name
             value
         }
+        constraints{
+            name
+            operation
+            value
+        }
+        limits{
+            memoryReservation
+            memoryLimit
+            CPUReservation
+            CPULimit
+        }
     }
 }
 

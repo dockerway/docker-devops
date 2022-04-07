@@ -120,10 +120,10 @@ export const paginateService = function ( pageNumber = 1, itemsPerPage = 5, sear
 
 
 
-export const createService = async function (authUser, {name, description, platform, image, repository, volumes, ports, envs}) {
-
+export const createService = async function (authUser, {name, description, platform, image, repository, volumes, ports, envs, constraints, limits}) {
+    
     const doc = new Service({
-        name, description, platform, image, repository, volumes, ports, envs
+        name, description, platform, image, repository, volumes, ports, envs, constraints, limits
     })
     doc.id = doc._id;
     return new Promise((resolve, rejects) => {
@@ -141,10 +141,10 @@ export const createService = async function (authUser, {name, description, platf
     })
 }
 
-export const updateService = async function (authUser, id, {name, description, platform, image, repository, volumes, ports, envs}) {
+export const updateService = async function (authUser, id, {name, description, platform, image, repository, volumes, ports, envs, constraints, limits}) {
     return new Promise((resolve, rejects) => {
         Service.findOneAndUpdate({_id: id},
-        {name, description, platform, image, repository, volumes, ports, envs},
+        {name, description, platform, image, repository, volumes, ports, envs, constraints, limits},
         {new: true, runValidators: true, context: 'query'},
         (error,doc) => {
 

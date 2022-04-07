@@ -12,6 +12,18 @@
     ></v-text-field>
   </v-col>
 
+  <v-col cols="12" sm="4" v-show="tabsType == 'constraints'">
+    <v-select
+      name="operation"
+      v-model="form.operation"
+      prepend-icon="calculate"
+      :items="['==','!=']"
+      :label="$t('devops.environmentService.labels.variable.operation')"
+      :placeholder="$t('devops.environmentService.labels.variable.operation')"
+      color="secondary"
+    ></v-select>
+  </v-col>
+
   <v-col cols="12" sm="4">
     <v-text-field
         prepend-icon="task"
@@ -30,6 +42,7 @@
 export default {
   name: "VariableServiceForm",
   props: {
+    tabsType: String,
     value: {type: Object, required: true},
   },
   computed: {

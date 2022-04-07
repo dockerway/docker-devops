@@ -28,6 +28,19 @@ type Label{
     value: String
 }
 
+type Constraint{
+    name: String
+    operation: String
+    value: String
+}
+
+type Limit{
+    memoryReservation: Int
+    memoryLimit: Int
+    CPUReservation: Int
+    CPULimit: Int
+}
+
 type DockerService {
     id: String
     name: String
@@ -39,6 +52,8 @@ type DockerService {
     volumes: [Volume]
     envs: [Env]
     labels: [Label]
+    constraints: [Constraint]
+    limits: Limit
 }
 
 type DockerTask {

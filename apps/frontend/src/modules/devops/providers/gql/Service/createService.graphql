@@ -6,14 +6,25 @@ mutation createService($input: ServiceInput){
         image
         repository
         platform{
-                id
-                name
-            }
+            id
+            name
+        }
         volumes
         ports
         envs{
             name
             defaultValue
+        }
+        constraints{
+            name
+            operation
+            defaultValue
+        }
+        limits{
+            memoryReservation
+            memoryLimit
+            CPUReservation
+            CPULimit
         }
     }
 }

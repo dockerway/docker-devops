@@ -112,10 +112,10 @@ export const paginateEnvironmentService = function (pageNumber = 1, itemsPerPage
 }
 
 
-export const createEnvironmentService = async function (authUser, {environment, service, stack, image, name, replicas, labels, envs, ports, volumes}) {
+export const createEnvironmentService = async function (authUser, {environment, service, stack, image, name, replicas, labels, envs, ports, volumes, constraints, limits}) {
 
     const doc = new EnvironmentService({
-        environment, service, stack, image, name, replicas, labels, envs, ports, volumes
+        environment, service, stack, image, name, replicas, labels, envs, ports, volumes, constraints, limits
     })
     doc.id = doc._id;
     return new Promise((resolve, rejects) => {
@@ -133,10 +133,10 @@ export const createEnvironmentService = async function (authUser, {environment, 
     })
 }
 
-export const updateEnvironmentService = async function (authUser, id, {environment, service, stack, image, name, replicas, labels, envs, ports, volumes}) {
+export const updateEnvironmentService = async function (authUser, id, {environment, service, stack, image, name, replicas, labels, envs, ports, volumes, constraints, limits}) {
     return new Promise((resolve, rejects) => {
         EnvironmentService.findOneAndUpdate({_id: id},
-            {environment, service, stack, image, name, replicas, labels, envs, ports, volumes},
+            {environment, service, stack, image, name, replicas, labels, envs, ports, volumes, constraints, limits},
             {new: true, runValidators: true, context: 'query'},
             (error, doc) => {
 

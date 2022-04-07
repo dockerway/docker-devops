@@ -47,6 +47,8 @@ export default {
         ports: this.item.ports ? this.item.ports : [],
         envs: this.item.envs ? this.item.envs : [],
         labels: this.item.labels ? this.item.labels : [],
+        constraints: this.item.constraints ?  this.item.constraints : [],
+        limits: this.item.limits ?  this.item.limits : {}
       }
     }
   },

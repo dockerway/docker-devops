@@ -14,9 +14,6 @@
         <service-combobox v-model="form.service" :input-errors="inputErrors"/>
       </v-col>
 
-
-
-
       <v-col cols="12" sm="6">
         <v-text-field
 
@@ -164,6 +161,38 @@
             </v-row>
           </v-tab-item>
 
+          <!--CONSTRAINTS-->
+          <v-tab-item
+              key="Constraints"
+          >
+            <v-row>
+              <v-col cols="12">
+                <form-list
+                    v-model="form.constraints"
+                    :new-item="{name:'',operation:'',value:''}"
+                >
+                  <template v-slot:default="{item,index}">
+                    <label-env-service-form :tabsType="'constraints'" v-model="form.constraints[index]"></label-env-service-form>
+                  </template>
+                </form-list>
+
+              </v-col>
+            </v-row>
+          </v-tab-item>
+
+          <!--LIMITS-->
+          <v-tab-item
+              key="Limits"
+          >
+            <v-row>
+              <v-col cols="12">
+                  <template>
+                    <limit-service-form :limits="form.limits"></limit-service-form>
+                  </template>
+              </v-col>
+            </v-row>
+          </v-tab-item>
+
         </v-tabs-items>
       </v-card-text>
     </v-card>
@@ -185,13 +214,14 @@ import ServiceProvider from "@/modules/devops/providers/ServiceProvider";
 import DockerProvider from "@/modules/devops/providers/DockerProvider";
 import StackCombobox from "@/modules/devops/components/StackCombobox/StackCombobox";
 import LabelEnvServiceForm from "@/modules/devops/components/LabelEnvServiceForm/LabelEnvServiceForm";
-
+import LimitServiceForm from "@/modules/devops/components/LimitServiceForm/LimitServiceForm";
 
 export default {
   name: "EnvironmentServiceForm",
   mixins: [InputErrorsByProps, RequiredRule],
   components: {
     LabelEnvServiceForm,
+    LimitServiceForm,
     StackCombobox,
     VolumeEnvServiceForm,
     PortEnvServiceForm,
@@ -231,13 +261,16 @@ export default {
       this.form.envs = service.envs ? service.envs.map(v => ({name: v.name, value: v.value})) : []
       this.form.ports = service.ports ? service.ports.map(p => ({hostPort: p.hostPort, containerPort: p.containerPort})) : []
       this.form.volumes = service.volumes ? service.volumes.map(v => ({hostVolume: v.hostVolume, containerVolume: v.containerVolume})) : []
-
+      this.form.constraints = service.constraints ? service.constraints.map(v => ({name: v.name, operation: v.operation, value: v.value})) : []
+      this.form.limits = service.limits ? service.limits.map(v => ({ memoryReservation:v.memoryReservation, memoryLimit:v.memoryLimit, CPUReservation:v.CPUReservation, CPULimit:v.CPULimit})) : {}
     },
     async getFromService() {
       let service = await this.findService()
       this.form.envs = service.envs ? service.envs.map(v => ({name: v.name, value: v.defaultValue})) : []
       this.form.ports = service.ports ? service.ports.map(p => ({hostPort: p, containerPort: ''})) : []
       this.form.volumes = service.volumes ? service.volumes.map(v => ({hostVolume: v, containerVolume: ''})) : []
+      this.form.constraints = service.constraints ? service.constraints.map(v => ({name: v.name, operation: v.operation, value: v.defaultValue})) : []
+      this.form.limits = service.limits ? service.limits.map(v => ({ memoryReservation:v.memoryReservation, memoryLimit:v.memoryLimit, CPUReservation:v.CPUReservation, CPULimit:v.CPULimit})) : {}
     },
     findService() {
       return new Promise((resolve, reject) => {
@@ -263,7 +296,7 @@ export default {
   data() {
     return {
       tab: 0,
-      items: ['Puertos', 'Volumenes', 'Envs', 'Labels']
+      items: ['Puertos', 'Volumenes', 'Envs', 'Labels', 'Constraints', 'Limits']
     }
   }
 }

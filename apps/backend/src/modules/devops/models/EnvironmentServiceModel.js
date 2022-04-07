@@ -16,20 +16,30 @@ const LabelSchema = new Schema({
     value: {type: String, required: false, index: false},
 })
 
+const ConstraintSchema = new Schema({
+    name: {type: String, required: false, index: false},
+    operation: {type: String, required: false, index: false},
+    value: {type: String, required: false, index: false},
+})
+
+const LimitSchema = new Schema({
+    memoryReservation: {type: Number, required: false, index: false},
+    memoryLimit: {type: Number, required: false, index: false},
+    CPUReservation: {type: Number, required: false, index: false},
+    CPULimit: {type: Number, required: false, index: false},
+})
+
 const PortSchema = new Schema({
     hostPort: {type: String, required: true, index: false},
     containerPort: {type: String, required: false, index: false},
 })
-
 
 const VolumeSchema = new Schema({
     hostVolume: {type: String, required: true, index: false},
     containerVolume: {type: String, required: false, index: false},
 })
 
-
 const EnvironmentServiceSchema = new Schema({
-
     environment: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Environment",
@@ -45,8 +55,9 @@ const EnvironmentServiceSchema = new Schema({
     envs: [EnvSchema],
     ports: [PortSchema],
     volumes: [VolumeSchema],
-    labels: [LabelSchema]
-
+    labels: [LabelSchema],
+    constraints: [ConstraintSchema],
+    limits: LimitSchema
 }, {timestamps: true});
 
 

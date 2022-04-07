@@ -29,7 +29,6 @@ export default {
     open: {type: Boolean, default: true},
     item: {type: Object, required: true}
   },
-
   data() {
     return {
       title: 'devops.service.editing',
@@ -42,10 +41,12 @@ export default {
         description: this.item.description,
         image: this.item.image,
         repository: this.item.repository,
-        platform: this.item.platform ? this.item.platform.id : null,
+        platform: this.item.platform.id ? this.item.platform.id : null,
         volumes: this.item.volumes,
         ports: this.item.ports,
-        envs: this.item.envs ? this.item.envs : []
+        envs: this.item.envs ? this.item.envs : [],
+        constraints: this.item.constraints ?  this.item.constraints : [],
+        limits: this.item.limits ?  this.item.limits : {}
       }
     }
   },
