@@ -15,10 +15,10 @@ type ConstraintService {
 }
 
 type LimitService{
-    memoryReservation: Int
-    memoryLimit: Int
-    CPUReservation: Int
-    CPULimit: Int
+    memoryReservation: Float
+    memoryLimit: Float
+    CPUReservation: Float
+    CPULimit: Float
 }
 
 type PortEnvService{
@@ -77,10 +77,10 @@ input ConstraintServiceInput {
 }
 
 type LimitServiceInput{
-    memoryReservation: Int
-    memoryLimit: Int
-    CPUReservation: Int
-    CPULimit: Int
+    memoryReservation: Float
+    memoryLimit: Float
+    CPUReservation: Float
+    CPULimit: Float
 }
 
 input PortEnvServiceInput{

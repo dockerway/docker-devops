@@ -35,10 +35,10 @@ type Constraint{
 }
 
 type Limit{
-    memoryReservation: Int
-    memoryLimit: Int
-    CPUReservation: Int
-    CPULimit: Int
+    memoryReservation: Float
+    memoryLimit: Float
+    CPUReservation: Float
+    CPULimit: Float
 }
 
 type DockerService {

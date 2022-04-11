@@ -145,10 +145,7 @@ export const fetchDockerService = function (environmentId) {
 export const createDockerService = function (id) {
     return new Promise(async (resolve, reject) => {
         try {
-
-
             let environmentService = await findEnvironmentService(id)
-
             let dockerApiUrl = environmentService.environment.dockerApiUrl
 
             let path = '/api/docker/service'
@@ -156,6 +153,11 @@ export const createDockerService = function (id) {
 
             let serviceName = environmentService.name ? environmentService.name : environmentService.service.name
             let fullServiceName = environmentService.stack.name + "_" + serviceName
+
+            environmentService.limits.memoryReservation = parseFloat(environmentService.limits.memoryReservation * 1000000)
+            environmentService.limits.memoryLimit = parseFloat(environmentService.limits.memoryLimit * 1000000)
+            environmentService.limits.CPUReservation = parseFloat(environmentService.limits.CPUReservation * 1000000000)
+            environmentService.limits.CPULimit = parseFloat(environmentService.limits.CPULimit * 1000000000)
 
             let data = {
                 name: fullServiceName,
@@ -165,15 +167,14 @@ export const createDockerService = function (id) {
                 volumes: environmentService.volumes ? environmentService.volumes : [],
                 ports: environmentService.ports ? environmentService.ports : [],
                 envs: environmentService.envs ? environmentService.envs : [],
-                labels: environmentService.labels ? environmentService.labels : []
+                labels: environmentService.labels ? environmentService.labels : [],
+                constraints: environmentService.constraints ? environmentService.constraints : [],
+                limits: environmentService.limits ? environmentService.limits : {}
             }
-
-            console.log(data)
 
             let response = await axios.post(URL, data)
 
             if (response.status = 200) {
-
                 console.log("createDockerService Response ", response.data)
                 resolve(response.data)
             } else {
@@ -211,6 +212,12 @@ export const updateDockerService = function (id, targetImage = null) {
             let serviceName = environmentService.name ? environmentService.name : environmentService.service.name
             let fullServiceName = environmentService.stack.name + "_" + serviceName
 
+            let limits = {
+                memoryReservation: parseFloat(environmentService.limits.memoryReservation * 1000000),
+                memoryLimit: parseFloat(environmentService.limits.memoryLimit * 1000000),
+                CPUReservation: parseFloat(environmentService.limits.CPUReservation * 1000000000),
+                CPULimit: parseFloat(environmentService.limits.CPULimit * 1000000000)
+            }
 
             let data = {
                 name: fullServiceName,
@@ -220,10 +227,10 @@ export const updateDockerService = function (id, targetImage = null) {
                 volumes: environmentService.volumes ? environmentService.volumes : [],
                 ports: environmentService.ports ? environmentService.ports : [],
                 envs: environmentService.envs ? environmentService.envs : [],
-                labels: environmentService.labels ? environmentService.labels : []
+                labels: environmentService.labels ? environmentService.labels : [],
+                constraints: environmentService.constraints ? environmentService.constraints : [],
+                limits: environmentService.limits ? limits : {}
             }
-
-            console.log(data)
 
             let response = await axios.put(URL, data)
 

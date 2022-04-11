@@ -43,7 +43,7 @@
           :placeholder="$t('devops.environmentService.labels.CPUReservation')"
           min="0"
           max="8"
-          thumb-label
+          thumb-label="always"
         ></v-slider>
       </v-col>
     </v-row>
@@ -60,7 +60,7 @@
           :placeholder="$t('devops.environmentService.labels.CPULimit')"
           min="0"
           max="8"
-          thumb-label
+          thumb-label="always"
         ></v-slider>
       </v-col>
     </v-row>

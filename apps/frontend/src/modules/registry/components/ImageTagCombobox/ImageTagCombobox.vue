@@ -32,7 +32,7 @@ export default {
   mixins: [InputErrorsByProps, RequiredRule],
   props: {
     name: {type: String, required: true},
-    registry: {type: String, required: true},
+    registry: {type: String, required: false},
     showName: {type: Boolean, default: false},
     value: {type: [String, Array]},
     multiple: {type: Boolean, default: false},

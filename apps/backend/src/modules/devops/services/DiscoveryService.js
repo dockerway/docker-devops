@@ -174,6 +174,11 @@ export const createDiscovery = function (servicesDiscovered) {
                         serviceLimits = dockerService.limits ? dockerService.limits : {}
                     }
 
+                    serviceLimits.memoryReservation = parseFloat(serviceLimits.memoryReservation * 1000000)
+                    serviceLimits.memoryLimit = parseFloat(serviceLimits.memoryLimit * 1000000)
+                    serviceLimits.CPUReservation = parseFloat(serviceLimits.CPUReservation * 1000000000)
+                    serviceLimits.CPULimit = parseFloat(serviceLimits.CPULimit * 1000000000)
+
                     let baseImage = serviceDiscovered.image.split(":")[0]
                     service = await createService(null, {
                         name: serviceDiscovered.imageName,
@@ -236,6 +241,11 @@ export const createDiscovery = function (servicesDiscovered) {
                         environmentServiceObj.constraints = dockerService.constraints ? dockerService.constraints : []
                         environmentServiceObj.limits = dockerService.limits ? dockerService.limits : {}
                     }
+
+                    environmentServiceObj.limits.memoryReservation = parseFloat(environmentServiceObj.limits.memoryReservation * 1000000)
+                    environmentServiceObj.limits.memoryLimit = parseFloat(environmentServiceObj.limits.memoryLimit * 1000000)
+                    environmentServiceObj.limits.CPUReservation = parseFloat(environmentServiceObj.limits.CPUReservation * 1000000000)
+                    environmentServiceObj.limits.CPULimit = parseFloat(environmentServiceObj.limits.CPULimit * 1000000000)
 
                     environmentService = await createEnvironmentService(null, environmentServiceObj)
                     environmentServicesCreated.push(environmentService)

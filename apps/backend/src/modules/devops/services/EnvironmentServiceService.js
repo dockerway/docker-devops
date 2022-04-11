@@ -3,9 +3,14 @@ import {UserInputError} from 'apollo-server-express'
 
 export const findEnvironmentService = async function (id) {
     return new Promise((resolve, reject) => {
-        EnvironmentService.findOne({_id: id}).populate('environment').populate('service').populate('stack').exec((err, res) => (
-            err ? reject(err) : resolve(res)
-        ));
+        try {
+            EnvironmentService.findOne({_id: id}).populate('environment').populate('service').populate('stack').exec((err, res) => (
+                err ? reject(err) : resolve(res)
+            ));
+        } catch(err){
+            let message = err.message + ". " + (err.response.data ? err.response.data : '')
+            reject(message)
+        }
     })
 }
 
