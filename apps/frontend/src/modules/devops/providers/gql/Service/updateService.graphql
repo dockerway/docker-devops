@@ -15,6 +15,17 @@ mutation updateService($id: ID!, $input: ServiceInput){
             name
             defaultValue
         }
+        constraints{
+            name
+            operation
+            defaultValue
+        }
+        limits{
+            memoryReservation
+            memoryLimit
+            CPUReservation
+            CPULimit
+        }
     }
 }
 

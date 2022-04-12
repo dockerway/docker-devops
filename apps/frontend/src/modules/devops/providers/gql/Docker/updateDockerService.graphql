@@ -26,5 +26,16 @@ mutation updateDockerService($id: ID!, $targetImage: String){
             name
             value
         }
+        constraints{
+            name
+            operation
+            value
+        }
+        limits{
+            memoryReservation
+            memoryLimit
+            CPUReservation
+            CPULimit
+        }
     }
 }

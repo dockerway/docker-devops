@@ -3,6 +3,19 @@ type EnvService{
     defaultValue: String
 }
 
+type ConstraintService {
+    name: String!
+    operation: String
+    defaultValue: String
+}
+
+type LimitService {
+    memoryReservation: Float
+    memoryLimit: Float
+    CPUReservation: Float
+    CPULimit: Float
+}
+
 type Service{
     id: ID!
     name: String!
@@ -13,6 +26,8 @@ type Service{
     volumes: [String]
     ports: [Int]
     envs: [EnvService]
+    constraints: [ConstraintService]
+    limits: LimitService
 }
 
 type ServicePaginated{
@@ -25,13 +40,24 @@ type Query {
     findService(id:ID!): Service
     fetchService: [Service]
     paginateService( pageNumber: Int, itemsPerPage: Int, search: String, filters: [FilterInput],orderBy: String, orderDesc: Boolean): ServicePaginated
-
-
 }
 
 input EnvServiceInput{
     name: String!
     defaultValue: String
+}
+
+input ConstraintServiceInput{
+    name: String!
+    operation: String
+    defaultValue: String
+}
+
+input LimitServiceInput{
+    memoryReservation: Float
+    memoryLimit: Float
+    CPUReservation: Float
+    CPULimit: Float
 }
 
 input ServiceInput{
@@ -41,15 +67,16 @@ input ServiceInput{
     image: String
     repository: String
     volumes: [String]
-    ports: [String]
+    ports: [Int]
     envs: [EnvServiceInput]
+    constraints: [ConstraintServiceInput]
+    limits: LimitServiceInput
 }
 
 type ServiceDelete{
     id: ID!
     success: Boolean!
 }
-
 
 type Mutation {
     createService(input: ServiceInput): Service

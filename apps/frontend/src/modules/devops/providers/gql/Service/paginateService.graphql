@@ -18,6 +18,17 @@ query paginateService( $pageNumber: Int, $itemsPerPage:Int, $search: String, $fi
                 name
                 defaultValue
             }
+            constraints{
+                name
+                operation
+                defaultValue
+            }
+            limits{
+                memoryReservation
+                memoryLimit
+                CPUReservation
+                CPULimit
+            }
         }
     }
 }

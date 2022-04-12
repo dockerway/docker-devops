@@ -31,7 +31,7 @@
 export default {
   name: "FormList",
   props: {
-    value: {type: Array, required: true},
+    value: {type: [Array,Object], required: true},
     label: {type: String},
     icon: {type: String},
     newItem: {type: [String, Object], required: true}

@@ -45,8 +45,13 @@ export default {
         ports: [],
         envs: [],
         labels: [],
-
-
+        constraints: [],
+        limits: {
+          memoryReservation:0,
+          memoryLimit:0,
+          CPUReservation:0, 
+          CPULimit:0
+        }
       }
     }
   },
@@ -69,7 +74,6 @@ export default {
       }
 
     }
-
   },
 }
 </script>

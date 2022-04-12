@@ -15,6 +15,17 @@ query fetchService{
             name
             defaultValue
         }
+        constraints {
+            name
+            operation
+            defaultValue
+        }
+        limits{
+            memoryReservation
+            memoryLimit
+            CPUReservation
+            CPULimit
+        }
     }
 }
 

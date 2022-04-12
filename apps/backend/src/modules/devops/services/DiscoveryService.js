@@ -160,17 +160,24 @@ export const createDiscovery = function (servicesDiscovered) {
 
                     console.log("SERVICE NEW:", platform, serviceDiscovered)
 
-
-
                     let serviceEnvs = []
                     let servicePorts = []
                     let serviceVolumes = []
+                    let serviceConstraints = []
+                    let serviceLimits = {}
                     if (dockerService) {
                         console.log("dockerService",dockerService)
                         serviceEnvs = dockerService.envs ? dockerService.envs.map(i => ({name: i.name, defaultValue: ''})) : []
                         servicePorts = dockerService.ports ? dockerService.ports.map(i => (i.containerPort)) : []
                         serviceVolumes = dockerService.volumes ? dockerService.volumes.map(i => (i.containerVolume)) : []
+                        serviceConstraints = dockerService.constraints ? dockerService.constraints.map(i => ({name: i.name, operation: i.operation, defaultValue: ''})) : []
+                        serviceLimits = dockerService.limits ? dockerService.limits : {}
                     }
+
+                    serviceLimits.memoryReservation = parseFloat(serviceLimits.memoryReservation * 1000000)
+                    serviceLimits.memoryLimit = parseFloat(serviceLimits.memoryLimit * 1000000)
+                    serviceLimits.CPUReservation = parseFloat(serviceLimits.CPUReservation * 1000000000)
+                    serviceLimits.CPULimit = parseFloat(serviceLimits.CPULimit * 1000000000)
 
                     let baseImage = serviceDiscovered.image.split(":")[0]
                     service = await createService(null, {
@@ -179,7 +186,9 @@ export const createDiscovery = function (servicesDiscovered) {
                         image: baseImage,
                         envs: serviceEnvs,
                         ports: servicePorts,
-                        volumes: serviceVolumes
+                        volumes: serviceVolumes,
+                        constraints: serviceConstraints,
+                        limits: serviceLimits
                     })
 
                     servicesCreated.push(service)
@@ -229,7 +238,14 @@ export const createDiscovery = function (servicesDiscovered) {
                         environmentServiceObj.ports = dockerService.ports ? dockerService.ports : []
                         environmentServiceObj.volumes = dockerService.volumes ? dockerService.volumes : []
                         environmentServiceObj.labels = dockerService.labels ? dockerService.labels : []
+                        environmentServiceObj.constraints = dockerService.constraints ? dockerService.constraints : []
+                        environmentServiceObj.limits = dockerService.limits ? dockerService.limits : {}
                     }
+
+                    environmentServiceObj.limits.memoryReservation = parseFloat(environmentServiceObj.limits.memoryReservation * 1000000)
+                    environmentServiceObj.limits.memoryLimit = parseFloat(environmentServiceObj.limits.memoryLimit * 1000000)
+                    environmentServiceObj.limits.CPUReservation = parseFloat(environmentServiceObj.limits.CPUReservation * 1000000000)
+                    environmentServiceObj.limits.CPULimit = parseFloat(environmentServiceObj.limits.CPULimit * 1000000000)
 
                     environmentService = await createEnvironmentService(null, environmentServiceObj)
                     environmentServicesCreated.push(environmentService)

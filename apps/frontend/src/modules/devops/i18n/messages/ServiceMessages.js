@@ -21,6 +21,12 @@ const messages = {
                 volume: 'Volume',
                 ports: 'Ports',
                 port: 'Port',
+                constraints: 'Constraints',
+                limits: 'Limits',
+                memoryReservation:"Memory Reservation",
+                memoryLimit:"Memory Limit",
+                CPUReservation:"CPU Reservation", 
+                CPULimit:"CPU Limit",
                 variable: {
                     name: "Name",
                     defaultValue: "Default value"
@@ -51,6 +57,12 @@ const messages = {
                 volume: 'Volúmen',
                 ports: 'Puertos',
                 port: 'Puerto',
+                constraints: 'Constraints',
+                limits: 'Límite',
+                memoryReservation:"Reserva de Memoria",
+                memoryLimit:"Límite de Memoria",
+                CPUReservation:"Reserva de CPU", 
+                CPULimit:"Límite de CPU",
                 variable: {
                     name: "Nombre",
                     defaultValue: "Valor por defecto"
@@ -81,6 +93,12 @@ const messages = {
                 volume: 'Volume',
                 ports: 'Ports',
                 port: 'Port',
+                constraints: 'Constraints',
+                limits: 'Limite',
+                memoryReservation:"Reserva de memória",
+                memoryLimit:"Limite de Memória",
+                CPUReservation:"Reserva de CPU", 
+                CPULimit:"Limite de CPU",
                 variable: {
                     name: "Name",
                     defaultValue: "Default value"

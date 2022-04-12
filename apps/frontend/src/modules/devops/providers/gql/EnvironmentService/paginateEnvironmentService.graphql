@@ -36,6 +36,17 @@ query paginateEnvironmentService( $pageNumber: Int, $itemsPerPage:Int, $search: 
                 name
                 value
             }
+            constraints{
+                name
+                operation
+                value
+            }
+            limits{
+                memoryReservation
+                memoryLimit
+                CPUReservation
+                CPULimit
+            }
         }
     }
 }

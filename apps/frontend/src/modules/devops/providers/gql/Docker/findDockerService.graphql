@@ -26,5 +26,16 @@ query findDockerService($id: ID!){
             name
             value
         }
+        constraints{
+            name
+            operation
+            value
+        }
+        limits{
+            memoryReservation
+            memoryLimit
+            CPUReservation
+            CPULimit
+        }
     }
 }
