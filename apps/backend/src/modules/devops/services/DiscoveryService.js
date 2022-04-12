@@ -170,14 +170,14 @@ export const createDiscovery = function (servicesDiscovered) {
                         serviceEnvs = dockerService.envs ? dockerService.envs.map(i => ({name: i.name, defaultValue: ''})) : []
                         servicePorts = dockerService.ports ? dockerService.ports.map(i => (i.containerPort)) : []
                         serviceVolumes = dockerService.volumes ? dockerService.volumes.map(i => (i.containerVolume)) : []
-                        serviceConstraints = dockerService.constraints ? dockerService.constraints.map(i => ({name: i.name, operation: i.operation, defaultValue: ''})) : []
+                        serviceConstraints = dockerService.constraints ? dockerService.constraints.map(i => ({name: i.name, operation: i.operation, defaultValue: i.value})) : []
                         serviceLimits = dockerService.limits ? dockerService.limits : {}
                     }
 
-                    serviceLimits.memoryReservation = parseFloat(serviceLimits.memoryReservation * 1000000)
-                    serviceLimits.memoryLimit = parseFloat(serviceLimits.memoryLimit * 1000000)
-                    serviceLimits.CPUReservation = parseFloat(serviceLimits.CPUReservation * 1000000000)
-                    serviceLimits.CPULimit = parseFloat(serviceLimits.CPULimit * 1000000000)
+                    serviceLimits.memoryReservation = serviceLimits?.memoryReservation ? parseFloat(serviceLimits.memoryReservation / 1000000) : 0
+                    serviceLimits.memoryLimit = serviceLimits?.memoryLimit ? parseFloat(serviceLimits.memoryLimit / 1000000) : 0
+                    serviceLimits.CPUReservation = serviceLimits?.CPUReservation ? parseFloat(serviceLimits.CPUReservation / 1000000000) : 0
+                    serviceLimits.CPULimit = serviceLimits?.CPULimit ? parseFloat(serviceLimits.CPULimit / 1000000000) : 0
 
                     let baseImage = serviceDiscovered.image.split(":")[0]
                     service = await createService(null, {
@@ -242,10 +242,10 @@ export const createDiscovery = function (servicesDiscovered) {
                         environmentServiceObj.limits = dockerService.limits ? dockerService.limits : {}
                     }
 
-                    environmentServiceObj.limits.memoryReservation = parseFloat(environmentServiceObj.limits.memoryReservation * 1000000)
-                    environmentServiceObj.limits.memoryLimit = parseFloat(environmentServiceObj.limits.memoryLimit * 1000000)
-                    environmentServiceObj.limits.CPUReservation = parseFloat(environmentServiceObj.limits.CPUReservation * 1000000000)
-                    environmentServiceObj.limits.CPULimit = parseFloat(environmentServiceObj.limits.CPULimit * 1000000000)
+                    environmentServiceObj.limits.memoryReservation = environmentServiceObj?.limits?.memoryReservation ? parseFloat(environmentServiceObj.limits.memoryReservation / 1000000) : 0
+                    environmentServiceObj.limits.memoryLimit = environmentServiceObj?.limits?.memoryLimit ? parseFloat(environmentServiceObj.limits.memoryLimit / 1000000) : 0
+                    environmentServiceObj.limits.CPUReservation = environmentServiceObj?.limits?.CPUReservation ? parseFloat(environmentServiceObj.limits.CPUReservation / 1000000000) : 0
+                    environmentServiceObj.limits.CPULimit = environmentServiceObj?.limits?.CPULimit ? parseFloat(environmentServiceObj.limits.CPULimit / 1000000000) : 0
 
                     environmentService = await createEnvironmentService(null, environmentServiceObj)
                     environmentServicesCreated.push(environmentService)
