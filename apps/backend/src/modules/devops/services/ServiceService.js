@@ -121,7 +121,6 @@ export const paginateService = function ( pageNumber = 1, itemsPerPage = 5, sear
 
 
 export const createService = async function (authUser, {name, description, platform, image, repository, volumes, ports, envs, constraints, limits}) {
-    
     const doc = new Service({
         name, description, platform, image, repository, volumes, ports, envs, constraints, limits
     })
