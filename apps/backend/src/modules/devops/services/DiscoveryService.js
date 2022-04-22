@@ -165,6 +165,7 @@ export const createDiscovery = function (servicesDiscovered) {
                     let serviceVolumes = []
                     let serviceConstraints = []
                     let serviceLimits = {}
+                    let servicePreferences = []
                     if (dockerService) {
                         console.log("dockerService",dockerService)
                         serviceEnvs = dockerService.envs ? dockerService.envs.map(i => ({name: i.name, defaultValue: ''})) : []
@@ -172,6 +173,7 @@ export const createDiscovery = function (servicesDiscovered) {
                         serviceVolumes = dockerService.volumes ? dockerService.volumes.map(i => (i.containerVolume)) : []
                         serviceConstraints = dockerService.constraints ? dockerService.constraints.map(i => ({name: i.name, operation: i.operation, defaultValue: i.value})) : []
                         serviceLimits = dockerService.limits ? dockerService.limits : {}
+                        servicePreferences = dockerService.preferences ? dockerService.preferences.map(i => ({name: i.name, defaultValue: i.value})) : []
                     }
 
                     serviceLimits.memoryReservation = serviceLimits?.memoryReservation ? parseFloat(serviceLimits.memoryReservation / 1000000) : 0
@@ -188,7 +190,8 @@ export const createDiscovery = function (servicesDiscovered) {
                         ports: servicePorts,
                         volumes: serviceVolumes,
                         constraints: serviceConstraints,
-                        limits: serviceLimits
+                        limits: serviceLimits,
+                        preferences: servicePreferences
                     })
 
                     servicesCreated.push(service)
@@ -240,6 +243,7 @@ export const createDiscovery = function (servicesDiscovered) {
                         environmentServiceObj.labels = dockerService.labels ? dockerService.labels : []
                         environmentServiceObj.constraints = dockerService.constraints ? dockerService.constraints : []
                         environmentServiceObj.limits = dockerService.limits ? dockerService.limits : {}
+                        environmentServiceObj.preferences = dockerService.preferences ? dockerService.preferences : []
                     }
 
                     environmentServiceObj.limits.memoryReservation = environmentServiceObj?.limits?.memoryReservation ? parseFloat(environmentServiceObj.limits.memoryReservation / 1000000) : 0

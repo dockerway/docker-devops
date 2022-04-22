@@ -26,6 +26,10 @@ mutation createService($input: ServiceInput){
             CPUReservation
             CPULimit
         }
+        preferences{
+            name
+            defaultValue
+        }
     }
 }
 

@@ -146,14 +146,16 @@ export const createDockerService = function (id) {
     return new Promise(async (resolve, reject) => {
         try {
             let environmentService = await findEnvironmentService(id)
+            console.log("environmentService: ", environmentService)
+            console.log("environmentService Preferences: ", environmentService.preferences)
             let dockerApiUrl = environmentService.environment.dockerApiUrl
-
+            
             let path = '/api/docker/service'
             const URL = dockerApiUrl + path
-
+            
             let serviceName = environmentService.name ? environmentService.name : environmentService.service.name
             let fullServiceName = environmentService.stack.name + "_" + serviceName
-
+            
             environmentService.limits.memoryReservation = parseFloat(environmentService.limits.memoryReservation * 1000000)
             environmentService.limits.memoryLimit = parseFloat(environmentService.limits.memoryLimit * 1000000)
             environmentService.limits.CPUReservation = parseFloat(environmentService.limits.CPUReservation * 1000000000)
@@ -169,8 +171,11 @@ export const createDockerService = function (id) {
                 envs: environmentService.envs ? environmentService.envs : [],
                 labels: environmentService.labels ? environmentService.labels : [],
                 constraints: environmentService.constraints ? environmentService.constraints : [],
-                limits: environmentService.limits ? environmentService.limits : {}
+                limits: environmentService.limits ? environmentService.limits : {},
+                preferences: environmentService.preferences ? environmentService.preferences : [],
             }
+
+            console.log("DATA PREFERENCES", data.preferences)
 
             let response = await axios.post(URL, data)
 
@@ -229,7 +234,8 @@ export const updateDockerService = function (id, targetImage = null) {
                 envs: environmentService.envs ? environmentService.envs : [],
                 labels: environmentService.labels ? environmentService.labels : [],
                 constraints: environmentService.constraints ? environmentService.constraints : [],
-                limits: environmentService.limits ? limits : {}
+                limits: environmentService.limits ? limits : {},
+                preferences: environmentService.preferences ? environmentService.preferences : []
             }
 
             let response = await axios.put(URL, data)

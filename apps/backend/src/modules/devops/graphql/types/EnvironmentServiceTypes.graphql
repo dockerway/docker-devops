@@ -21,6 +21,11 @@ type LimitService{
     CPULimit: Float
 }
 
+type PreferenceService {
+    name: String!
+    value: String
+}
+
 type PortEnvService{
     hostPort: Int!
     containerPort: Int!
@@ -45,6 +50,7 @@ type EnvironmentService{
     labels: [LabelService]
     constraints: [ConstraintService]
     limits: LimitService
+    preferences: [PreferenceService]
 }
 
 type EnvironmentServicePaginated{
@@ -83,6 +89,11 @@ type LimitServiceInput{
     CPULimit: Float
 }
 
+input PreferenceServiceInput {
+    name: String!
+    value: String
+}
+
 input PortEnvServiceInput{
     hostPort: Int!
     containerPort: Int!
@@ -106,6 +117,7 @@ input EnvironmentServiceInput{
     labels: [LabelServiceInput]
     constraints: [ConstraintServiceInput]
     limits: LimitServiceInput
+    preferences: [PreferenceServiceInput]
 }
 
 type EnvironmentServiceDelete{

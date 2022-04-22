@@ -209,6 +209,25 @@
               </v-col>
             </v-row>
           </v-tab-item>
+
+          <!--PREFERENCES-->
+          <v-tab-item
+              key="Preferences"
+          >
+            <v-row>
+              <v-col cols="12">
+                <!--VER-->
+                <form-list
+                    v-model="form.preferences"
+                    :new-item="{name:'', defaultValue:''}"
+                >
+                  <template v-slot:default="{item,index}">
+                    <variable-preferences-service-form :tabsType="'preferences'" v-model="form.preferences[index]"></variable-preferences-service-form>
+                  </template>
+                </form-list>
+              </v-col>
+            </v-row>
+          </v-tab-item>
         </v-tabs-items>
       </v-card-text>
     </v-card>
@@ -222,6 +241,7 @@ import {InputErrorsByProps, RequiredRule} from '@dracul/common-frontend'
 import PlatformCombobox from "../../../../components/PlatformCombobox";
 import FormList from "@/modules/devops/components/FormList/FormList";
 import VariableServiceForm from "@/modules/devops/components/VariableServiceForm/VariableServiceForm";
+import VariablePreferencesServiceForm from "@/modules/devops/components/VariablePreferencesServiceForm/VariablePreferencesServiceForm";
 import LimitServiceForm from "@/modules/devops/components/LimitServiceForm/LimitServiceForm";
 
 export default {
@@ -232,6 +252,7 @@ export default {
     LimitServiceForm,
     FormList,
     PlatformCombobox,
+    VariablePreferencesServiceForm,
   },
   props: {
     value: {
@@ -265,7 +286,7 @@ export default {
   data() {
     return {
       tab: 0,
-      items: ['Puertos', 'Volumenes', 'Variables', 'Constraints', 'Limits']
+      items: ['Puertos', 'Volumenes', 'Variables', 'Constraints', 'Limits', 'Preferences']
     }
   }
 }

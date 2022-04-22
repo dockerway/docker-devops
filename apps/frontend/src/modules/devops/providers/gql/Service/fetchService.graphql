@@ -26,6 +26,10 @@ query fetchService{
             CPUReservation
             CPULimit
         }
+        preferences{
+            name
+            defaultValue
+        }
     }
 }
 

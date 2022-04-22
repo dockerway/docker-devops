@@ -40,6 +40,14 @@
             </v-row>
         </v-col>
 
+        <v-col cols="12" sm="6" md="4"  v-if="item.preferences">
+            <v-list>
+                <div v-for="(preference, index) in item.preferences" :key="index">
+                    <show-field :value="preference.name + ' ' + preference.defaultValue" :label="$t('devops.service.labels.preferences')" icon="key"/>
+                </div>
+            </v-list>
+        </v-col>
+
     </v-row>
 </template>
 <script>

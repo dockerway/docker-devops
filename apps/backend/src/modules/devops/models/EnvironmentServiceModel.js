@@ -29,6 +29,11 @@ const LimitSchema = new Schema({
     CPULimit: {type: Number, required: false, index: false},
 })
 
+const PreferenceSchema = new Schema({
+    name: {type: String, required: false, index: false},
+    value: {type: String, required: false, index: false},
+})
+
 const PortSchema = new Schema({
     hostPort: {type: String, required: true, index: false},
     containerPort: {type: String, required: false, index: false},
@@ -57,7 +62,8 @@ const EnvironmentServiceSchema = new Schema({
     volumes: [VolumeSchema],
     labels: [LabelSchema],
     constraints: [ConstraintSchema],
-    limits: LimitSchema
+    limits: LimitSchema,
+    preferences: [PreferenceSchema]
 }, {timestamps: true});
 
 

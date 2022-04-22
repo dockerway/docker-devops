@@ -51,7 +51,8 @@ export default {
           memoryLimit:0,
           CPUReservation:0, 
           CPULimit:0
-        }
+        },
+        preferences: []
       }
     }
   },

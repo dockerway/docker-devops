@@ -37,5 +37,9 @@ mutation updateDockerService($id: ID!, $targetImage: String){
             CPUReservation
             CPULimit
         }
+        preferences{
+            name
+            value
+        }
     }
 }

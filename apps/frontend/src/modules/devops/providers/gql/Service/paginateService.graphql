@@ -29,6 +29,10 @@ query paginateService( $pageNumber: Int, $itemsPerPage:Int, $search: String, $fi
                 CPUReservation
                 CPULimit
             }
+            preferences{
+                name
+                defaultValue
+            }
         }
     }
 }
