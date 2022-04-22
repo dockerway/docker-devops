@@ -219,7 +219,7 @@
                 <!--VER-->
                 <form-list
                     v-model="form.preferences"
-                    :new-item="{name:'', defaultValue:''}"
+                    :new-item="{name:'Spread', defaultValue:''}"
                 >
                   <template v-slot:default="{item,index}">
                     <variable-preferences-service-form :tabsType="'preferences'" v-model="form.preferences[index]"></variable-preferences-service-form>

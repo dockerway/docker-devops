@@ -9,6 +9,7 @@
         :label="$t('devops.service.labels.strategy')"
         :placeholder="$t('devops.service.labels.strategy')"
         color="secondary"
+        readonly
     ></v-text-field>
   </v-col>
 

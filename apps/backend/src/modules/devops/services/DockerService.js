@@ -146,8 +146,6 @@ export const createDockerService = function (id) {
     return new Promise(async (resolve, reject) => {
         try {
             let environmentService = await findEnvironmentService(id)
-            console.log("environmentService: ", environmentService)
-            console.log("environmentService Preferences: ", environmentService.preferences)
             let dockerApiUrl = environmentService.environment.dockerApiUrl
             
             let path = '/api/docker/service'
@@ -174,8 +172,6 @@ export const createDockerService = function (id) {
                 limits: environmentService.limits ? environmentService.limits : {},
                 preferences: environmentService.preferences ? environmentService.preferences : [],
             }
-
-            console.log("DATA PREFERENCES", data.preferences)
 
             let response = await axios.post(URL, data)
 
