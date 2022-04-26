@@ -26,5 +26,9 @@ query findService($id:ID!){
             CPUReservation
             CPULimit
         }
+        preferences{
+            name
+            defaultValue
+        }
     }
 }

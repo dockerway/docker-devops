@@ -27,6 +27,8 @@ const messages = {
                 memoryLimit:"Memory Limit",
                 CPUReservation:"CPU Reservation", 
                 CPULimit:"CPU Limit",
+                preferences: 'Preferences',
+                strategy: 'Strategy',
                 variable: {
                     name: "Name",
                     defaultValue: "Default value"
@@ -63,6 +65,8 @@ const messages = {
                 memoryLimit:"Límite de Memoria",
                 CPUReservation:"Reserva de CPU", 
                 CPULimit:"Límite de CPU",
+                preferences: 'Preferencias',
+                strategy: 'Estrategia',
                 variable: {
                     name: "Nombre",
                     defaultValue: "Valor por defecto"
@@ -99,6 +103,8 @@ const messages = {
                 memoryLimit:"Limite de Memória",
                 CPUReservation:"Reserva de CPU", 
                 CPULimit:"Limite de CPU",
+                preferences: 'Preferências',
+                strategy: 'Estratégia',
                 variable: {
                     name: "Name",
                     defaultValue: "Default value"

@@ -136,6 +136,20 @@
           </v-list>
         </v-tab-item>
 
+        <!--Preferences-->
+        <v-tab-item
+            key="Preferences"
+            v-if="item.preferences"
+        >
+          <v-data-table
+              :items="item.preferences" :items-per-page="5"
+              :headers="[
+              {text:'name',value:'name'},
+              {text:'value',value:'value'},
+          ]"
+          ></v-data-table>
+        </v-tab-item>
+
       </v-tabs-items>
     </v-card-text>
 
@@ -155,7 +169,7 @@ export default {
   data() {
     return {
       tab: 0,
-      tabItems: ['Main', 'Ports', 'Volumes', 'Envs', 'Labels','Constraints','Limits']
+      tabItems: ['Main', 'Ports', 'Volumes', 'Envs', 'Labels', 'Constraints', 'Limits', 'Preferences']
     }
   },
   methods:{

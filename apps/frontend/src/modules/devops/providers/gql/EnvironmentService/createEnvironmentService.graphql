@@ -43,6 +43,10 @@ mutation createEnvironmentService($input: EnvironmentServiceInput){
             CPUReservation
             CPULimit
         }
+        preferences{
+            name
+            value
+        }
     }
 }
 

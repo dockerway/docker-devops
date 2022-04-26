@@ -16,6 +16,11 @@ type LimitService {
     CPULimit: Float
 }
 
+type PreferenceService{
+    name: String!
+    defaultValue: String
+}
+
 type Service{
     id: ID!
     name: String!
@@ -28,6 +33,7 @@ type Service{
     envs: [EnvService]
     constraints: [ConstraintService]
     limits: LimitService
+    preferences: [PreferenceService]
 }
 
 type ServicePaginated{
@@ -60,6 +66,11 @@ input LimitServiceInput{
     CPULimit: Float
 }
 
+input PreferenceServiceInput{
+    name: String!
+    defaultValue: String
+}
+
 input ServiceInput{
     name: String!
     description: String
@@ -71,6 +82,7 @@ input ServiceInput{
     envs: [EnvServiceInput]
     constraints: [ConstraintServiceInput]
     limits: LimitServiceInput
+    preferences: [PreferenceServiceInput]
 }
 
 type ServiceDelete{

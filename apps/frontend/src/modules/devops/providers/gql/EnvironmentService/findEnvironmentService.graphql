@@ -44,5 +44,9 @@ query findEnvironmentService($id:ID!){
             CPUReservation
             CPULimit
         }
+        preferences{
+            name
+            value
+        }
     }
 }

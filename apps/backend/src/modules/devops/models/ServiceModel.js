@@ -23,6 +23,11 @@ const LimitSchema = new Schema({
     CPULimit: {type: Number, required: false, index: false},
 })
 
+const PreferenceSchema = new Schema({
+    name: {type: String, required: false, index: false},
+    defaultValue: {type: String, required: false, index: false},
+})
+
 const ServiceSchema = new Schema({
     name: {type: String, required: true, unique: false, index: false},
     description: {type: String, required: false, unique: false, index: false},
@@ -33,7 +38,8 @@ const ServiceSchema = new Schema({
     ports: [{type: Number, required: false}],
     envs: [EnvSchema],
     constraints: [ConstraintSchema],
-    limits: LimitSchema
+    limits: LimitSchema,
+    preferences: [PreferenceSchema]
 }, { timestamps: true });
 
 

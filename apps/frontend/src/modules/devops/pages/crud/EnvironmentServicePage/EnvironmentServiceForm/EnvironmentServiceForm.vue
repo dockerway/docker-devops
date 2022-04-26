@@ -193,6 +193,24 @@
             </v-row>
           </v-tab-item>
 
+          <!--PREFERENCES-->
+          <v-tab-item
+              key="Preferences"
+          >
+            <v-row>
+              <v-col cols="12">
+                <!--VER-->
+                <form-list
+                    v-model="form.preferences"
+                    :new-item="{name:'Spread', value:''}"
+                >
+                  <template v-slot:default="{item,index}">
+                    <variable-preferences-env-service-form :tabsType="'preferences'" v-model="form.preferences[index]"></variable-preferences-env-service-form>
+                  </template>
+                </form-list>
+              </v-col>
+            </v-row>
+          </v-tab-item>
         </v-tabs-items>
       </v-card-text>
     </v-card>
@@ -215,6 +233,7 @@ import DockerProvider from "@/modules/devops/providers/DockerProvider";
 import StackCombobox from "@/modules/devops/components/StackCombobox/StackCombobox";
 import LabelEnvServiceForm from "@/modules/devops/components/LabelEnvServiceForm/LabelEnvServiceForm";
 import LimitServiceForm from "@/modules/devops/components/LimitServiceForm/LimitServiceForm";
+import VariablePreferencesEnvServiceForm from "@/modules/devops/components/VariablePreferencesEnvServiceForm"
 
 export default {
   name: "EnvironmentServiceForm",
@@ -228,7 +247,8 @@ export default {
     FormList,
     VariableEnvServiceForm,
     EnvironmentCombobox,
-    ServiceCombobox
+    ServiceCombobox,
+    VariablePreferencesEnvServiceForm
   },
   props: {
     value: {type: Object, required: true},
@@ -263,6 +283,7 @@ export default {
       this.form.volumes = service.volumes ? service.volumes.map(v => ({hostVolume: v.hostVolume, containerVolume: v.containerVolume})) : []
       this.form.constraints = service.constraints ? service.constraints.map(v => ({name: v.name, operation: v.operation, value: v.value})) : []
       this.form.limits = service.limits ? service.limits.map(v => ({ memoryReservation:v.memoryReservation, memoryLimit:v.memoryLimit, CPUReservation:v.CPUReservation, CPULimit:v.CPULimit})) : {}
+      this.form.preferences = service.preferences ? service.preferences.map(p => ({name: p.name, value: p.value})) : []
     },
     async getFromService() {
       let service = await this.findService()
@@ -271,6 +292,7 @@ export default {
       this.form.volumes = service.volumes ? service.volumes.map(v => ({hostVolume: v, containerVolume: ''})) : []
       this.form.constraints = service.constraints ? service.constraints.map(v => ({name: v.name, operation: v.operation, value: v.defaultValue})) : []
       this.form.limits = service.limits ? service.limits.map(v => ({ memoryReservation:v.memoryReservation, memoryLimit:v.memoryLimit, CPUReservation:v.CPUReservation, CPULimit:v.CPULimit})) : {}
+      this.form.preferences = service.preferences ? service.preferences.map(p => ({name: p.name, value: p.defaultValue})) : []
     },
     findService() {
       return new Promise((resolve, reject) => {
@@ -296,7 +318,7 @@ export default {
   data() {
     return {
       tab: 0,
-      items: ['Puertos', 'Volumenes', 'Envs', 'Labels', 'Constraints', 'Limits']
+      items: ['Puertos', 'Volumenes', 'Envs', 'Labels', 'Constraints', 'Limits', 'Preferences']
     }
   }
 }

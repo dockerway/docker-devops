@@ -41,6 +41,11 @@ type Limit{
     CPULimit: Float
 }
 
+type Preference{
+    name: String
+    value: String
+}
+
 type DockerService {
     id: String
     name: String
@@ -54,6 +59,7 @@ type DockerService {
     labels: [Label]
     constraints: [Constraint]
     limits: Limit
+    preferences: [Preference]
 }
 
 type DockerTask {

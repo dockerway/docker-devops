@@ -26,6 +26,10 @@ mutation updateService($id: ID!, $input: ServiceInput){
             CPUReservation
             CPULimit
         }
+        preferences{
+            name
+            defaultValue
+        }
     }
 }
 
