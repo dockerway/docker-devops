@@ -10,6 +10,7 @@ import {InitService} from '@dracul/user-backend'
 import {initPermissionsCustomization} from '@dracul/customize-backend'
 import {initCustomization} from './custom/initCustomization'
 import operatorRole from './custom/initOperatorRole'
+import supervisorRole from './custom/initSupervisorRole'
 
 import {
     permissions as notiPermissions
@@ -56,7 +57,7 @@ const initService = async () => {
     await InitService.initOperatorRole()
     await InitService.initSupervisorRole()
 
-    await InitService.initRoles([operatorRole])
+    await InitService.initRoles([operatorRole,supervisorRole])
 
     await InitService.initRootUser()
     await InitService.initSupervisorUser()

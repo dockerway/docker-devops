@@ -21,7 +21,8 @@ export default new Vuex.Store({
             reducer: state => (
                 {
                     user: {
-                        access_token: state.user.access_token,
+                        access_token: state.user.access_token,                   
+                        refresh_token: state.user.refresh_token,
                         me: state.user.me,
                         avatarurl: state.user.avatarurl
                     },
