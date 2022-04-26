@@ -153,9 +153,11 @@ export const createDockerService = function (id) {
             
             let serviceName = environmentService.name ? environmentService.name : environmentService.service.name
             let fullServiceName = environmentService.stack.name + "_" + serviceName
-            
-            environmentService.limits.memoryReservation = parseFloat(environmentService.limits.memoryReservation * 1000000)
-            environmentService.limits.memoryLimit = parseFloat(environmentService.limits.memoryLimit * 1000000)
+
+
+            environmentService.limits.memoryReservation = parseFloat(environmentService.limits.memoryReservation * 1048576)
+            environmentService.limits.memoryLimit = parseFloat(environmentService.limits.memoryLimit * 1048576)
+
             environmentService.limits.CPUReservation = parseFloat(environmentService.limits.CPUReservation * 1000000000)
             environmentService.limits.CPULimit = parseFloat(environmentService.limits.CPULimit * 1000000000)
 
@@ -214,8 +216,8 @@ export const updateDockerService = function (id, targetImage = null) {
             let fullServiceName = environmentService.stack.name + "_" + serviceName
 
             let limits = {
-                memoryReservation: parseFloat(environmentService.limits.memoryReservation * 1000000),
-                memoryLimit: parseFloat(environmentService.limits.memoryLimit * 1000000),
+                memoryReservation: parseFloat(environmentService.limits.memoryReservation * 1048576),
+                memoryLimit: parseFloat(environmentService.limits.memoryLimit * 1048576),
                 CPUReservation: parseFloat(environmentService.limits.CPUReservation * 1000000000),
                 CPULimit: parseFloat(environmentService.limits.CPULimit * 1000000000)
             }

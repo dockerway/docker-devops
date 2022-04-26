@@ -176,8 +176,8 @@ export const createDiscovery = function (servicesDiscovered) {
                         servicePreferences = dockerService.preferences ? dockerService.preferences.map(i => ({name: i.name, defaultValue: i.value})) : []
                     }
 
-                    serviceLimits.memoryReservation = serviceLimits?.memoryReservation ? parseFloat(serviceLimits.memoryReservation / 1000000) : 0
-                    serviceLimits.memoryLimit = serviceLimits?.memoryLimit ? parseFloat(serviceLimits.memoryLimit / 1000000) : 0
+                    serviceLimits.memoryReservation = serviceLimits?.memoryReservation ? parseFloat(serviceLimits.memoryReservation / 1048576) : 0
+                    serviceLimits.memoryLimit = serviceLimits?.memoryLimit ? parseFloat(serviceLimits.memoryLimit / 1048576) : 0
                     serviceLimits.CPUReservation = serviceLimits?.CPUReservation ? parseFloat(serviceLimits.CPUReservation / 1000000000) : 0
                     serviceLimits.CPULimit = serviceLimits?.CPULimit ? parseFloat(serviceLimits.CPULimit / 1000000000) : 0
 
@@ -245,11 +245,6 @@ export const createDiscovery = function (servicesDiscovered) {
                         environmentServiceObj.limits = dockerService.limits ? dockerService.limits : {}
                         environmentServiceObj.preferences = dockerService.preferences ? dockerService.preferences : []
                     }
-
-                    environmentServiceObj.limits.memoryReservation = environmentServiceObj?.limits?.memoryReservation ? parseFloat(environmentServiceObj.limits.memoryReservation / 1000000) : 0
-                    environmentServiceObj.limits.memoryLimit = environmentServiceObj?.limits?.memoryLimit ? parseFloat(environmentServiceObj.limits.memoryLimit / 1000000) : 0
-                    environmentServiceObj.limits.CPUReservation = environmentServiceObj?.limits?.CPUReservation ? parseFloat(environmentServiceObj.limits.CPUReservation / 1000000000) : 0
-                    environmentServiceObj.limits.CPULimit = environmentServiceObj?.limits?.CPULimit ? parseFloat(environmentServiceObj.limits.CPULimit / 1000000000) : 0
 
                     environmentService = await createEnvironmentService(null, environmentServiceObj)
                     environmentServicesCreated.push(environmentService)
