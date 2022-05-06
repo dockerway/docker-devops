@@ -15,7 +15,8 @@ const messages = {
                 name: 'Name',
                 permission: 'Permission',
                 dockerApiUrl: 'DockerApiUrl',
-                dockerApiToken: 'Token'
+                dockerApiToken: 'Token',
+                type: 'Type'
             },
           
           }
@@ -36,7 +37,8 @@ const messages = {
                 name: 'Nombre',
                 permission: 'Permiso',
                 dockerApiUrl: 'DockerApiUrl',
-                dockerApiToken: 'Token'
+                dockerApiToken: 'Token',
+                type: 'Tipo'
             },
           
           }
@@ -57,7 +59,8 @@ const messages = {
                 name: 'Nome',
                 permission: 'Permiso',
                 dockerApiUrl: 'DockerApiUrl',
-                dockerApiToken: 'Token'
+                dockerApiToken: 'Token',
+                type: 'Tipo'
             },
           
           }

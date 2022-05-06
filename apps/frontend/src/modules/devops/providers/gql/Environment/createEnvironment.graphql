@@ -2,9 +2,9 @@ mutation createEnvironment($input: EnvironmentInput){
     createEnvironment(input: $input){
         id
         name
-        permission
         dockerApiUrl
         dockerApiToken
+        type
     }
 }
 

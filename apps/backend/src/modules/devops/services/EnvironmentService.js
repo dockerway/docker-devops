@@ -92,10 +92,10 @@ export const paginateEnvironment = function ( pageNumber = 1, itemsPerPage = 5, 
 
 
 
-export const createEnvironment = async function (authUser, {name, permission, dockerApiUrl, dockerApiToken}) {
-    
+export const createEnvironment = async function (authUser, {name, dockerApiUrl, dockerApiToken, type}) {
+
     const doc = new Environment({
-        name, permission, dockerApiUrl, dockerApiToken
+        name, dockerApiUrl, dockerApiToken, type
     })
     doc.id = doc._id;
     return new Promise((resolve, rejects) => {
@@ -107,16 +107,16 @@ export const createEnvironment = async function (authUser, {name, permission, do
                 }
                 return rejects(error)
             }    
-        
+
             resolve(doc)
         }))
     })
 }
 
-export const updateEnvironment = async function (authUser, id, {name, permission, dockerApiUrl, dockerApiToken}) {
+export const updateEnvironment = async function (authUser, id, {name, dockerApiUrl, dockerApiToken, type}) {
     return new Promise((resolve, rejects) => {
         Environment.findOneAndUpdate({_id: id},
-        {name, permission, dockerApiUrl, dockerApiToken}, 
+        {name, dockerApiUrl, dockerApiToken, type}, 
         {new: true, runValidators: true, context: 'query'},
         (error,doc) => {
             

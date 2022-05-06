@@ -1,18 +1,16 @@
-enum permissionEnum{
-    ENV_DEV_VIEW,
-    ENV_DEV_EDIT,
-    ENV_QA_VIEW,
-    ENV_QA_EDIT,
-    ENV_PROD_VIEW,
-    ENV_PROD_EDIT
+enum typeEnum{
+    DEV,
+    QA,
+    PRE,
+    PROD
 }
 
 type Environment{
     id: ID!
     name: String!
-    permission: [permissionEnum]
     dockerApiUrl: String
     dockerApiToken: String
+    type: typeEnum
 }
 
 type EnvironmentPaginated{
@@ -31,9 +29,9 @@ type Query {
 
 input EnvironmentInput{
     name: String!
-    permission: [permissionEnum]
     dockerApiUrl: String
     dockerApiToken: String
+    type: typeEnum
 }
 
 type EnvironmentDelete{

@@ -2,8 +2,8 @@ query findEnvironment($id:ID!){
     findEnvironment(id:$id){
         id
         name
-        permission
         dockerApiUrl
         dockerApiToken
+        type
     }
 }

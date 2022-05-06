@@ -2,9 +2,9 @@ mutation updateEnvironment($id: ID!, $input: EnvironmentInput){
     updateEnvironment(id: $id, input: $input){
         id
         name
-        permission
         dockerApiUrl
         dockerApiToken
+        type
     }
 }
 

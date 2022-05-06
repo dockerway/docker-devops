@@ -18,11 +18,6 @@
                     </v-col>
 
 
-                   <v-col cols="12" sm="6">
-                        <permission-combobox v-model="form.permission" :input-errors="inputErrors" multiple />
-                   </v-col>
-
-
                     <v-col cols="12" sm="6">
                         <v-text-field
 
@@ -54,6 +49,9 @@
                         ></v-text-field>
                     </v-col>
 
+                    <v-col cols="12" sm="6">
+                        <environment-type v-model="form.type" :input-errors="inputErrors" />
+                    </v-col>
         </v-row>
     </v-form>
 </template>
@@ -63,7 +61,7 @@
     import {InputErrorsByProps, RequiredRule } from '@dracul/common-frontend'
 
 
-    import PermissionCombobox from "../../../../components/PermissionCombobox";
+    import EnvironmentType from "../../../../components/EnvironmentType"
 
 
 
@@ -71,7 +69,7 @@
     export default {
         name: "EnvironmentForm",
         mixins: [InputErrorsByProps, RequiredRule    ],
-        components: {PermissionCombobox,},
+        components: {EnvironmentType},
         props:{
             value: {
                 type: Object,
@@ -84,7 +82,7 @@
                 set(val) {this.$emit('input', val)}
             }
         },
-         watch: {
+        watch: {
             form: {
                 handler(newVal) {
                     this.$emit('input', newVal)

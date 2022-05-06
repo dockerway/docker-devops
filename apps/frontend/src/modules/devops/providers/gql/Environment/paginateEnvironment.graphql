@@ -3,11 +3,11 @@ query paginateEnvironment( $pageNumber: Int, $itemsPerPage:Int, $search: String,
         totalItems
         page
         items{
-          id
-          name
-        permission
-        dockerApiUrl
-        dockerApiToken
+            id
+            name
+            dockerApiUrl
+            dockerApiToken
+            type
         }
     }
 }
