@@ -1,5 +1,6 @@
 import EnvironmentService from './../models/EnvironmentServiceModel'
 import {UserInputError} from 'apollo-server-express'
+import { DEV_VIEW, PRE_VIEW, PROD_VIEW, QA_VIEW } from '../permissions/Environment';
 
 export const findEnvironmentService = async function (id) {
     return new Promise((resolve, reject) => {
@@ -34,7 +35,15 @@ export const fetchEnvironmentService = async function () {
     })
 }
 
+export const environmentListAllowed = function (user) {
+    const envPermissions = [DEV_VIEW, QA_VIEW, PRE_VIEW, PROD_VIEW]
+    const userPermissions = user.role
+    console.log("user permissions ", userPermissions)
+}
+
 export const paginateEnvironmentService = function (pageNumber = 1, itemsPerPage = 5, search = null, filters = null, orderBy = null, orderDesc = false) {
+
+    //const envAllowed = environmentListAllowed(user)
 
     function qs(search, filters) {
         let qs = {}
