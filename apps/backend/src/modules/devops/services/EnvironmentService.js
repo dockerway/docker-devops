@@ -1,5 +1,6 @@
 import Environment from './../models/EnvironmentModel'
 import {UserInputError} from 'apollo-server-express'
+import { environmentsAllowedView } from './EnvironmentAllowedService';
 
 export const findEnvironment = async function (id) {
     return new Promise((resolve, reject) => {
@@ -9,9 +10,18 @@ export const findEnvironment = async function (id) {
     })
 }
 
-export const fetchEnvironment = async function () {
+export const fetchEnvironment = function (user) {
+    return new Promise(async (resolve, reject) => {
+        const envsAllowed = await environmentsAllowedView(user)
+        Environment.find({_id: {$in: envsAllowed}}).exec((err, res) => (
+            err ? reject(err) : resolve(res)
+        ));
+    })
+}
+
+export const fetchEnvironmentByTypes = function (types) {
     return new Promise((resolve, reject) => {
-        Environment.find({}).exec((err, res) => (
+        Environment.find({type: {$in: types}}).exec((err, res) => (
             err ? reject(err) : resolve(res)
         ));
     })

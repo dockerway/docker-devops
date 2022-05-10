@@ -8,6 +8,7 @@ query paginateEnvironmentService( $pageNumber: Int, $itemsPerPage:Int, $search: 
             environment{
                 id
                 name
+                type
             }
             service{
                 id

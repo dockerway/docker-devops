@@ -87,6 +87,7 @@
               color="purple" class="white--text"
               x-small
               @click="openDeploy(item.id)"
+              :disabled="!$store.getters.hasPermission(`${item.environment.type}_DEPLOY`)"
           >
             Deploy
           </v-btn>

@@ -1,6 +1,6 @@
 import EnvironmentService from './../models/EnvironmentServiceModel'
 import {UserInputError} from 'apollo-server-express'
-import { DEV_VIEW, PRE_VIEW, PROD_VIEW, QA_VIEW } from '../permissions/Environment';
+import { environmentsAllowedView } from './EnvironmentAllowedService'
 
 export const findEnvironmentService = async function (id) {
     return new Promise((resolve, reject) => {
@@ -35,18 +35,14 @@ export const fetchEnvironmentService = async function () {
     })
 }
 
-export const environmentListAllowed = function (user) {
-    const envPermissions = [DEV_VIEW, QA_VIEW, PRE_VIEW, PROD_VIEW]
-    const userPermissions = user.role
-    console.log("user permissions ", userPermissions)
-}
+export const paginateEnvironmentService = async function (user, pageNumber = 1, itemsPerPage = 5, search = null, filters = null, orderBy = null, orderDesc = false) {
 
-export const paginateEnvironmentService = function (pageNumber = 1, itemsPerPage = 5, search = null, filters = null, orderBy = null, orderDesc = false) {
+    const envsAllowed = await environmentsAllowedView(user)
 
-    //const envAllowed = environmentListAllowed(user)
-
-    function qs(search, filters) {
+    function qs(search, filters, envsAllowed) {
         let qs = {}
+        qs.environment = { $in: envsAllowed }
+
         if (search) {
             qs = {
                 $or: [
@@ -108,7 +104,7 @@ export const paginateEnvironmentService = function (pageNumber = 1, itemsPerPage
         }
     }
 
-    let query = qs(search, filters)
+    let query = qs(search, filters, envsAllowed)
 
     console.log("query", query)
 

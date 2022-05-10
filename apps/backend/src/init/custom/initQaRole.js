@@ -1,42 +1,43 @@
 import {
-  NOTIFICATION_SHOW
+    NOTIFICATION_SHOW
 } from "@dracul/notification-backend/lib/permissions"
 
 import {
-  PLATFORM_MENU,
-  PLATFORM_SHOW
+    PLATFORM_MENU,
+    PLATFORM_SHOW
 } from '../../modules/devops/permissions/Platform'
 
 import {
-  STACK_MENU,
-  STACK_SHOW
+    STACK_MENU,
+    STACK_SHOW
 } from '../../modules/devops/permissions/Stack'
 
 import {
-  SERVICE_MENU,
-  SERVICE_SHOW
+    SERVICE_MENU,
+    SERVICE_SHOW
 } from '../../modules/devops/permissions/Service'
 
 import {
-  ENVIRONMENT_MENU,
-  ENVIRONMENT_SHOW,
-  QA_VIEW,
-  QA_EDIT,
-  QA_ENV,
-  QA_DEPLOY,
-  DEV_VIEW,
-  PRE_VIEW,
-  PROD_VIEW
+    ENVIRONMENT_MENU,
+    ENVIRONMENT_SHOW,
+    QA_VIEW,
+    QA_EDIT,
+    QA_ENV,
+    QA_DEPLOY,
+    DEV_VIEW,
+    PRE_VIEW,
+    PROD_VIEW
 } from '../../modules/devops/permissions/Environment'
 
 import {
-  ENVIRONMENTSERVICE_MENU,
-  ENVIRONMENTSERVICE_SHOW,
+    ENVIRONMENTSERVICE_MENU,
+    ENVIRONMENTSERVICE_SHOW,
+    ENVIRONMENTSERVICE_CREATE
 } from '../../modules/devops/permissions/EnvironmentService'
 
 import {
-  REGISTRY_MENU,
-  REGISTRY_SHOW,
+    REGISTRY_MENU,
+    REGISTRY_SHOW,
 } from '../../modules/registry/permissions/Registry'
 
 module.exports = {
@@ -60,6 +61,7 @@ module.exports = {
         ENVIRONMENT_SHOW,
         ENVIRONMENTSERVICE_MENU,
         ENVIRONMENTSERVICE_SHOW,
+        ENVIRONMENTSERVICE_CREATE,
         REGISTRY_MENU,
         REGISTRY_SHOW,
     ],

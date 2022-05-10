@@ -62,7 +62,7 @@
               return this.$refs.form.validate()
             },
             fetch(){
-               this.loading= true
+                this.loading= true
                 EnvironmentProvider.fetchEnvironment().then(r => {
                     this.items = r.data.fetchEnvironment
                 }).catch(err => console.error(err))
