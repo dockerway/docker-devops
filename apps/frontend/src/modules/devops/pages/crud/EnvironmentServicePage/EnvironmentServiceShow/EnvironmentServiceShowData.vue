@@ -86,13 +86,15 @@
             key="Envs"
             v-if="item.envs"
         >
-          <v-data-table
-              :items="item.envs" hide-default-footer :items-per-page="1000"
-              :headers="[
-              {text:'name',value:'name'},
-              {text:'value',value:'value'},
-          ]"
-          ></v-data-table>
+          <template v-if="$store.getters.hasPermission(item.environment.type+'_ENV')">
+            <v-data-table
+                :items="item.envs" hide-default-footer :items-per-page="1000"
+                :headers="[
+                {text:'name',value:'name'},
+                {text:'value',value:'value'},
+            ]"
+            ></v-data-table>
+          </template>
         </v-tab-item>
 
         <!--LABELS-->

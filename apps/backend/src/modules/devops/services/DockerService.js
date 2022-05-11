@@ -149,7 +149,7 @@ export const createDockerService = function (id, user) {
             let environmentService = await findEnvironmentService(id)
 
             if (! await canUserDeploy(user, environmentService.environment.type)) {
-                return reject("El rol del usuario no tiene permiso para desplegar este servicio")
+                return reject("El usuario no tiene permiso para desplegar este servicio")
             }
 
             let dockerApiUrl = environmentService.environment.dockerApiUrl
@@ -206,7 +206,7 @@ export const updateDockerService = function (id, targetImage = null, user) {
             let environmentService = await findEnvironmentService(id)
 
             if (! await canUserDeploy(user, environmentService.environment.type)) {
-                return reject("El rol del usuario no tiene permiso para actualizar este servicio")
+                return reject("El usuario no tiene permiso para actualizar este servicio")
             }
 
             let dockerService = await findDockerService(id)

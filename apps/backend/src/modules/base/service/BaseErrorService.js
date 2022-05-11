@@ -23,14 +23,14 @@ export const createBaseError = async function ( {name, lastname, age}) {
         name, lastname, age, color
     })
     doc.id = doc._id;
-    return new Promise((resolve, rejects) => {
+    return new Promise((resolve, reject) => {
         doc.save((error => {
 
             if (error) {
                 if (error.name == "ValidationError") {
-                    return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
+                    return reject(new UserInputError(error.message, {inputErrors: error.errors}));
                 }
-                return rejects(error)
+                return reject(error)
             }
 
             doc.execPopulate(() => resolve(doc))

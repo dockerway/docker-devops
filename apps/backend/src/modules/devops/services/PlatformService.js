@@ -107,14 +107,14 @@ export const createPlatform = async function (authUser, {name}) {
         name
     })
     doc.id = doc._id;
-    return new Promise((resolve, rejects) => {
+    return new Promise((resolve, reject) => {
         doc.save((error => {
 
             if (error) {
                 if (error.name == "ValidationError") {
-                    return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
+                    return reject(new UserInputError(error.message, {inputErrors: error.errors}));
                 }
-                return rejects(error)
+                return reject(error)
             }
 
             resolve(doc)
@@ -123,7 +123,7 @@ export const createPlatform = async function (authUser, {name}) {
 }
 
 export const updatePlatform = async function (authUser, id, {name}) {
-    return new Promise((resolve, rejects) => {
+    return new Promise((resolve, reject) => {
         Platform.findOneAndUpdate({_id: id},
         {name},
         {new: true, runValidators: true, context: 'query'},
@@ -131,10 +131,10 @@ export const updatePlatform = async function (authUser, id, {name}) {
 
             if (error) {
                 if (error.name == "ValidationError") {
-                 return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
+                 return reject(new UserInputError(error.message, {inputErrors: error.errors}));
 
                 }
-                return rejects(error)
+                return reject(error)
 
             }
 
@@ -144,10 +144,10 @@ export const updatePlatform = async function (authUser, id, {name}) {
 }
 
 export const deletePlatform = function (id) {
-    return new Promise((resolve, rejects) => {
+    return new Promise((resolve, reject) => {
         findPlatform(id).then((doc) => {
             doc.delete(function (err) {
-                err ? rejects(err) : resolve({id: id, success: true})
+                err ? reject(err) : resolve({id: id, success: true})
             });
         })
     })

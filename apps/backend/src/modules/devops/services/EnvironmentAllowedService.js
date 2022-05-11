@@ -20,3 +20,11 @@ export const canUserDeploy = async function (user, envType) {
     }
     return false
 }
+
+export const canUserUpdate = async function (user, envType) {
+    const userRole = await RoleService.findRole(user.role.id)
+    if (userRole.permissions.includes(`${envType}_EDIT`) ) {
+        return true
+    }
+    return false
+}

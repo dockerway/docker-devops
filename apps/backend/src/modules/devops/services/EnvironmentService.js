@@ -108,14 +108,14 @@ export const createEnvironment = async function (authUser, {name, dockerApiUrl, 
         name, dockerApiUrl, dockerApiToken, type
     })
     doc.id = doc._id;
-    return new Promise((resolve, rejects) => {
+    return new Promise((resolve, reject) => {
         doc.save((error => {
         
             if (error) {
                 if (error.name == "ValidationError") {
-                    return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
+                    return reject(new UserInputError(error.message, {inputErrors: error.errors}));
                 }
-                return rejects(error)
+                return reject(error)
             }    
 
             resolve(doc)
@@ -124,7 +124,7 @@ export const createEnvironment = async function (authUser, {name, dockerApiUrl, 
 }
 
 export const updateEnvironment = async function (authUser, id, {name, dockerApiUrl, dockerApiToken, type}) {
-    return new Promise((resolve, rejects) => {
+    return new Promise((resolve, reject) => {
         Environment.findOneAndUpdate({_id: id},
         {name, dockerApiUrl, dockerApiToken, type}, 
         {new: true, runValidators: true, context: 'query'},
@@ -132,10 +132,10 @@ export const updateEnvironment = async function (authUser, id, {name, dockerApiU
             
             if (error) {
                 if (error.name == "ValidationError") {
-                 return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
+                 return reject(new UserInputError(error.message, {inputErrors: error.errors}));
                 
                 }
-                return rejects(error)
+                return reject(error)
                 
             } 
         
@@ -145,10 +145,10 @@ export const updateEnvironment = async function (authUser, id, {name, dockerApiU
 }
 
 export const deleteEnvironment = function (id) {
-    return new Promise((resolve, rejects) => {
+    return new Promise((resolve, reject) => {
         findEnvironment(id).then((doc) => {
             doc.delete(function (err) {
-                err ? rejects(err) : resolve({id: id, success: true})
+                err ? reject(err) : resolve({id: id, success: true})
             });
         })
     })
