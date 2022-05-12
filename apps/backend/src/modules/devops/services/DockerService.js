@@ -147,6 +147,7 @@ export const createDockerService = function (id, user) {
     return new Promise(async (resolve, reject) => {
         try {
             let environmentService = await findEnvironmentService(id)
+            let token = environmentService.environment.dockerApiToken
 
             if (! await canUserDeploy(user, environmentService.environment.type)) {
                 return reject("El usuario no tiene permiso para desplegar este servicio")
@@ -181,7 +182,8 @@ export const createDockerService = function (id, user) {
                 preferences: environmentService.preferences ? environmentService.preferences : [],
             }
 
-            let response = await axios.post(URL, data)
+            let headers = { headers: { 'Authorization': `Bearer ${token}` } }
+            let response = await axios.post(URL, data, headers)
 
             if (response.status = 200) {
                 console.log("createDockerService Response ", response.data)
@@ -204,6 +206,7 @@ export const updateDockerService = function (id, targetImage = null, user) {
     return new Promise(async (resolve, reject) => {
         try {
             let environmentService = await findEnvironmentService(id)
+            let token = environmentService.environment.dockerApiToken
 
             if (! await canUserDeploy(user, environmentService.environment.type)) {
                 return reject("El usuario no tiene permiso para actualizar este servicio")
@@ -245,7 +248,8 @@ export const updateDockerService = function (id, targetImage = null, user) {
                 preferences: environmentService.preferences ? environmentService.preferences : []
             }
 
-            let response = await axios.put(URL, data)
+            let headers = { headers: { 'Authorization': `Bearer ${token}` } }
+            let response = await axios.put(URL, data, headers)
 
             if (response.status = 200) {
 
