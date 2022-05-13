@@ -37,12 +37,12 @@ export default {
         createDockerService: (_, {id}, {user,rbac}) => {
             if (!user) throw new AuthenticationError("Unauthenticated")
             if(!rbac.isAllowed(user.id, ENVIRONMENTSERVICE_CREATE)) throw new ForbiddenError("Not Authorized")
-            return createDockerService(id)
+            return createDockerService(id, user)
         },
         updateDockerService: (_, {id, targetImage}, {user,rbac}) => {
             if (!user) throw new AuthenticationError("Unauthenticated")
             if(!rbac.isAllowed(user.id, ENVIRONMENTSERVICE_CREATE)) throw new ForbiddenError("Not Authorized")
-            return updateDockerService(id, targetImage)
+            return updateDockerService(id, targetImage, user)
         },
     }
 

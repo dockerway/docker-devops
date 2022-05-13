@@ -21,7 +21,7 @@ export default {
         fetchEnvironment: (_, {}, {user,rbac}) => {
             if (!user) throw new AuthenticationError("Unauthenticated")
             if(!rbac.isAllowed(user.id, ENVIRONMENT_SHOW)) throw new ForbiddenError("Not Authorized")
-            return fetchEnvironment()
+            return fetchEnvironment(user)
         },
         paginateEnvironment: (_, {pageNumber, itemsPerPage, search, filters, orderBy, orderDesc}, {user,rbac}) => {
             if (!user) throw new AuthenticationError("Unauthenticated")

@@ -38,9 +38,9 @@
                 loading: false,
                 form: {
                     name: '',
-                    permission: [],
                     dockerApiUrl: '',
-                    dockerApiToken: ''
+                    dockerApiToken: '',
+                    type: ''
                 }
             }
         },

@@ -1,6 +1,7 @@
 import {findEnvironmentService} from "./EnvironmentServiceService";
 import axios from 'axios'
 import {findEnvironment} from "./EnvironmentService";
+import { canUserDeploy } from "./EnvironmentAllowedService"
 
 export const findDockerServiceTag = function (id) {
     return new Promise(async (resolve, reject) => {
@@ -142,10 +143,16 @@ export const fetchDockerService = function (environmentId) {
     })
 }
 
-export const createDockerService = function (id) {
+export const createDockerService = function (id, user) {
     return new Promise(async (resolve, reject) => {
         try {
             let environmentService = await findEnvironmentService(id)
+            let token = environmentService.environment.dockerApiToken
+
+            if (! await canUserDeploy(user, environmentService.environment.type)) {
+                return reject("El usuario no tiene permiso para desplegar este servicio")
+            }
+
             let dockerApiUrl = environmentService.environment.dockerApiUrl
             
             let path = '/api/docker/service'
@@ -175,7 +182,8 @@ export const createDockerService = function (id) {
                 preferences: environmentService.preferences ? environmentService.preferences : [],
             }
 
-            let response = await axios.post(URL, data)
+            let headers = { headers: { 'Authorization': `Bearer ${token}` } }
+            let response = await axios.post(URL, data, headers)
 
             if (response.status = 200) {
                 console.log("createDockerService Response ", response.data)
@@ -194,12 +202,16 @@ export const createDockerService = function (id) {
 }
 
 
-export const updateDockerService = function (id, targetImage = null) {
+export const updateDockerService = function (id, targetImage = null, user) {
     return new Promise(async (resolve, reject) => {
         try {
-
-
             let environmentService = await findEnvironmentService(id)
+            let token = environmentService.environment.dockerApiToken
+
+            if (! await canUserDeploy(user, environmentService.environment.type)) {
+                return reject("El usuario no tiene permiso para actualizar este servicio")
+            }
+
             let dockerService = await findDockerService(id)
 
             if (!dockerService) {
@@ -236,7 +248,8 @@ export const updateDockerService = function (id, targetImage = null) {
                 preferences: environmentService.preferences ? environmentService.preferences : []
             }
 
-            let response = await axios.put(URL, data)
+            let headers = { headers: { 'Authorization': `Bearer ${token}` } }
+            let response = await axios.put(URL, data, headers)
 
             if (response.status = 200) {
 

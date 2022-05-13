@@ -125,14 +125,14 @@ export const createService = async function (authUser, {name, description, platf
         name, description, platform, image, repository, volumes, ports, envs, constraints, limits, preferences
     })
     doc.id = doc._id;
-    return new Promise((resolve, rejects) => {
+    return new Promise((resolve, reject) => {
         doc.save((error => {
 
             if (error) {
                 if (error.name == "ValidationError") {
-                    return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
+                    return reject(new UserInputError(error.message, {inputErrors: error.errors}));
                 }
-                return rejects(error)
+                return reject(error)
             }
 
             doc.populate('platform').execPopulate(() => resolve(doc))
@@ -141,7 +141,7 @@ export const createService = async function (authUser, {name, description, platf
 }
 
 export const updateService = async function (authUser, id, {name, description, platform, image, repository, volumes, ports, envs, constraints, limits, preferences}) {
-    return new Promise((resolve, rejects) => {
+    return new Promise((resolve, reject) => {
         Service.findOneAndUpdate({_id: id},
         {name, description, platform, image, repository, volumes, ports, envs, constraints, limits, preferences},
         {new: true, runValidators: true, context: 'query'},
@@ -149,10 +149,10 @@ export const updateService = async function (authUser, id, {name, description, p
 
             if (error) {
                 if (error.name == "ValidationError") {
-                 return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
+                 return reject(new UserInputError(error.message, {inputErrors: error.errors}));
 
                 }
-                return rejects(error)
+                return reject(error)
 
             }
 
@@ -162,10 +162,10 @@ export const updateService = async function (authUser, id, {name, description, p
 }
 
 export const deleteService = function (id) {
-    return new Promise((resolve, rejects) => {
+    return new Promise((resolve, reject) => {
         findService(id).then((doc) => {
             doc.delete(function (err) {
-                err ? rejects(err) : resolve({id: id, success: true})
+                err ? reject(err) : resolve({id: id, success: true})
             });
         })
     })

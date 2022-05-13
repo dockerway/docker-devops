@@ -90,7 +90,7 @@
             return [
                     //Entity Headers
                     {text: this.$t('devops.environment.labels.name'), value: 'name'},
-                    {text: this.$t('devops.environment.labels.permission'), value: 'permission'},
+                    {text: this.$t('devops.environment.labels.type'), value: 'type'},
                     {text: this.$t('devops.environment.labels.dockerApiUrl'), value: 'dockerApiUrl'},
                     {text: this.$t('devops.environment.labels.dockerApiToken'), value: 'dockerApiToken'},
                     //Actions

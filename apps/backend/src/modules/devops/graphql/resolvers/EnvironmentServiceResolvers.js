@@ -26,7 +26,7 @@ export default {
         paginateEnvironmentService: (_, {pageNumber, itemsPerPage, search, filters, orderBy, orderDesc}, {user,rbac}) => {
             if (!user) throw new AuthenticationError("Unauthenticated")
             if(!rbac.isAllowed(user.id, ENVIRONMENTSERVICE_SHOW)) throw new ForbiddenError("Not Authorized")
-            return paginateEnvironmentService(pageNumber, itemsPerPage, search, filters, orderBy, orderDesc)
+            return paginateEnvironmentService(user, pageNumber, itemsPerPage, search, filters, orderBy, orderDesc)
         },
         
     },
@@ -44,7 +44,7 @@ export default {
         deleteEnvironmentService: (_, {id}, {user,rbac}) => {
             if (!user) throw new AuthenticationError("Unauthenticated")
             if(!rbac.isAllowed(user.id, ENVIRONMENTSERVICE_DELETE)) throw new ForbiddenError("Not Authorized")
-            return deleteEnvironmentService(id)
+            return deleteEnvironmentService(user, id)
         },
     }
 

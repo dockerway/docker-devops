@@ -1,5 +1,7 @@
 import EnvironmentService from './../models/EnvironmentServiceModel'
 import {UserInputError} from 'apollo-server-express'
+import { canUserUpdate, environmentsAllowedView } from './EnvironmentAllowedService'
+import { findEnvironment } from './EnvironmentService'
 
 export const findEnvironmentService = async function (id) {
     return new Promise((resolve, reject) => {
@@ -34,10 +36,14 @@ export const fetchEnvironmentService = async function () {
     })
 }
 
-export const paginateEnvironmentService = function (pageNumber = 1, itemsPerPage = 5, search = null, filters = null, orderBy = null, orderDesc = false) {
+export const paginateEnvironmentService = async function (user, pageNumber = 1, itemsPerPage = 5, search = null, filters = null, orderBy = null, orderDesc = false) {
 
-    function qs(search, filters) {
+    const envsAllowed = await environmentsAllowedView(user)
+
+    function qs(search, filters, envsAllowed) {
         let qs = {}
+        qs.environment = { $in: envsAllowed }
+
         if (search) {
             qs = {
                 $or: [
@@ -99,7 +105,7 @@ export const paginateEnvironmentService = function (pageNumber = 1, itemsPerPage
         }
     }
 
-    let query = qs(search, filters)
+    let query = qs(search, filters, envsAllowed)
 
     console.log("query", query)
 
@@ -118,19 +124,22 @@ export const paginateEnvironmentService = function (pageNumber = 1, itemsPerPage
 
 
 export const createEnvironmentService = async function (authUser, {environment, service, stack, image, name, replicas, labels, envs, ports, volumes, constraints, limits, preferences}) {
-
+    let env = await findEnvironment(environment)
+    if (! await canUserUpdate(authUser, env.type)) {
+        return Promise.reject("El usuario no tiene permiso para crear este entorno")
+    }
     const doc = new EnvironmentService({
         environment, service, stack, image, name, replicas, labels, envs, ports, volumes, constraints, limits, preferences
     })
     doc.id = doc._id;
-    return new Promise((resolve, rejects) => {
+    return new Promise((resolve, reject) => {
         doc.save((error => {
 
             if (error) {
                 if (error.name == "ValidationError") {
-                    return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
+                    return reject(new UserInputError(error.message, {inputErrors: error.errors}));
                 }
-                return rejects(error)
+                return reject(error)
             }
 
             doc.populate('environment').populate('service').populate('stack').execPopulate(() => resolve(doc))
@@ -139,7 +148,11 @@ export const createEnvironmentService = async function (authUser, {environment, 
 }
 
 export const updateEnvironmentService = async function (authUser, id, {environment, service, stack, image, name, replicas, labels, envs, ports, volumes, constraints, limits, preferences}) {
-    return new Promise((resolve, rejects) => {
+    return new Promise(async (resolve, reject) => {
+        let env = await findEnvironment(environment)
+        if (! await canUserUpdate(authUser, env.type)) {
+            return reject("El usuario no tiene permiso para editar este entorno")
+        }
         EnvironmentService.findOneAndUpdate({_id: id},
             {environment, service, stack, image, name, replicas, labels, envs, ports, volumes, constraints, limits, preferences},
             {new: true, runValidators: true, context: 'query'},
@@ -147,10 +160,10 @@ export const updateEnvironmentService = async function (authUser, id, {environme
 
                 if (error) {
                     if (error.name == "ValidationError") {
-                        return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
+                        return reject(new UserInputError(error.message, {inputErrors: error.errors}));
 
                     }
-                    return rejects(error)
+                    return reject(error)
 
                 }
 
@@ -159,13 +172,16 @@ export const updateEnvironmentService = async function (authUser, id, {environme
     })
 }
 
-export const deleteEnvironmentService = function (id) {
-    return new Promise((resolve, rejects) => {
+export const deleteEnvironmentService = function (authUser, id) {
+    return new Promise(async (resolve, reject) => {
+        let environmentService = await findEnvironmentService(id)
+        if (! await canUserUpdate(authUser, environmentService.environment.type)) {
+            return reject("El usuario no tiene permiso para eliminar este entorno servicio")
+        }
         findEnvironmentService(id).then((doc) => {
             doc.delete(function (err) {
-                err ? rejects(err) : resolve({id: id, success: true})
+                err ? reject(err) : resolve({id: id, success: true})
             });
         })
     })
 }
-

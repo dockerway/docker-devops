@@ -9,7 +9,7 @@
 
         <v-col cols="12" sm="6" md="4">
             <v-list>
-                 <show-field :value="item.permission" :label="$t('devops.environment.labels.permission')" icon="lock"/>
+                 <show-field :value="item.type" :label="$t('devops.environment.labels.type')" icon="integration_instructions"/>
             </v-list>
         </v-col>
 

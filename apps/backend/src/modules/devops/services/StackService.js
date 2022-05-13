@@ -111,14 +111,14 @@ export const createStack = async function (authUser, {name, platform, environmen
         name, platform, environments
     })
     doc.id = doc._id;
-    return new Promise((resolve, rejects) => {
+    return new Promise((resolve, reject) => {
         doc.save((error => {
 
             if (error) {
                 if (error.name == "ValidationError") {
-                    return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
+                    return reject(new UserInputError(error.message, {inputErrors: error.errors}));
                 }
-                return rejects(error)
+                return reject(error)
             }
 
             doc.populate('platform').populate('environments').execPopulate(() => resolve(doc))
@@ -127,7 +127,7 @@ export const createStack = async function (authUser, {name, platform, environmen
 }
 
 export const updateStack = async function (authUser, id, {name, platform, environments}) {
-    return new Promise((resolve, rejects) => {
+    return new Promise((resolve, reject) => {
         Stack.findOneAndUpdate({_id: id},
         {name, platform, environments},
         {new: true, runValidators: true, context: 'query'},
@@ -135,10 +135,10 @@ export const updateStack = async function (authUser, id, {name, platform, enviro
 
             if (error) {
                 if (error.name == "ValidationError") {
-                 return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
+                 return reject(new UserInputError(error.message, {inputErrors: error.errors}));
 
                 }
-                return rejects(error)
+                return reject(error)
 
             }
 
@@ -148,10 +148,10 @@ export const updateStack = async function (authUser, id, {name, platform, enviro
 }
 
 export const deleteStack = function (id) {
-    return new Promise((resolve, rejects) => {
+    return new Promise((resolve, reject) => {
         findStack(id).then((doc) => {
             doc.delete(function (err) {
-                err ? rejects(err) : resolve({id: id, success: true})
+                err ? reject(err) : resolve({id: id, success: true})
             });
         })
     })

@@ -1,5 +1,6 @@
 import Environment from './../models/EnvironmentModel'
 import {UserInputError} from 'apollo-server-express'
+import { environmentsAllowedView } from './EnvironmentAllowedService';
 
 export const findEnvironment = async function (id) {
     return new Promise((resolve, reject) => {
@@ -9,9 +10,18 @@ export const findEnvironment = async function (id) {
     })
 }
 
-export const fetchEnvironment = async function () {
+export const fetchEnvironment = function (user) {
+    return new Promise(async (resolve, reject) => {
+        const envsAllowed = await environmentsAllowedView(user)
+        Environment.find({_id: {$in: envsAllowed}}).exec((err, res) => (
+            err ? reject(err) : resolve(res)
+        ));
+    })
+}
+
+export const fetchEnvironmentByTypes = function (types) {
     return new Promise((resolve, reject) => {
-        Environment.find({}).exec((err, res) => (
+        Environment.find({type: {$in: types}}).exec((err, res) => (
             err ? reject(err) : resolve(res)
         ));
     })
@@ -92,40 +102,40 @@ export const paginateEnvironment = function ( pageNumber = 1, itemsPerPage = 5, 
 
 
 
-export const createEnvironment = async function (authUser, {name, permission, dockerApiUrl, dockerApiToken}) {
-    
+export const createEnvironment = async function (authUser, {name, dockerApiUrl, dockerApiToken, type}) {
+
     const doc = new Environment({
-        name, permission, dockerApiUrl, dockerApiToken
+        name, dockerApiUrl, dockerApiToken, type
     })
     doc.id = doc._id;
-    return new Promise((resolve, rejects) => {
+    return new Promise((resolve, reject) => {
         doc.save((error => {
         
             if (error) {
                 if (error.name == "ValidationError") {
-                    return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
+                    return reject(new UserInputError(error.message, {inputErrors: error.errors}));
                 }
-                return rejects(error)
+                return reject(error)
             }    
-        
+
             resolve(doc)
         }))
     })
 }
 
-export const updateEnvironment = async function (authUser, id, {name, permission, dockerApiUrl, dockerApiToken}) {
-    return new Promise((resolve, rejects) => {
+export const updateEnvironment = async function (authUser, id, {name, dockerApiUrl, dockerApiToken, type}) {
+    return new Promise((resolve, reject) => {
         Environment.findOneAndUpdate({_id: id},
-        {name, permission, dockerApiUrl, dockerApiToken}, 
+        {name, dockerApiUrl, dockerApiToken, type}, 
         {new: true, runValidators: true, context: 'query'},
         (error,doc) => {
             
             if (error) {
                 if (error.name == "ValidationError") {
-                 return rejects(new UserInputError(error.message, {inputErrors: error.errors}));
+                 return reject(new UserInputError(error.message, {inputErrors: error.errors}));
                 
                 }
-                return rejects(error)
+                return reject(error)
                 
             } 
         
@@ -135,10 +145,10 @@ export const updateEnvironment = async function (authUser, id, {name, permission
 }
 
 export const deleteEnvironment = function (id) {
-    return new Promise((resolve, rejects) => {
+    return new Promise((resolve, reject) => {
         findEnvironment(id).then((doc) => {
             doc.delete(function (err) {
-                err ? rejects(err) : resolve({id: id, success: true})
+                err ? reject(err) : resolve({id: id, success: true})
             });
         })
     })

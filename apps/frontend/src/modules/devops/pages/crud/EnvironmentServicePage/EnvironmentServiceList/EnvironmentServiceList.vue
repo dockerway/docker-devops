@@ -87,15 +87,16 @@
               color="purple" class="white--text"
               x-small
               @click="openDeploy(item.id)"
+              :disabled="!$store.getters.hasPermission(`${item.environment.type}_DEPLOY`)"
           >
             Deploy
           </v-btn>
         </template>
 
         <template v-slot:item.action="{ item }">
-          <show-button @click="$emit('show', item)"/>
-          <edit-button v-if="$store.getters.hasPermission('ENVIRONMENTSERVICE_UPDATE')" @click="$emit('update', item)"/>
-          <delete-button v-if="$store.getters.hasPermission('ENVIRONMENTSERVICE_DELETE')"
+          <show-button v-if="$store.getters.hasPermission('ENVIRONMENTSERVICE_SHOW') && $store.getters.hasPermission(`${item.environment.type}_VIEW`)" @click="$emit('show', item)"/>
+          <edit-button v-if="$store.getters.hasPermission('ENVIRONMENTSERVICE_UPDATE') && $store.getters.hasPermission(`${item.environment.type}_EDIT`)" @click="$emit('update', item)"/>
+          <delete-button v-if="$store.getters.hasPermission('ENVIRONMENTSERVICE_DELETE') && $store.getters.hasPermission(`${item.environment.type}_EDIT`)"
                          @click="$emit('delete', item)"/>
         </template>
 

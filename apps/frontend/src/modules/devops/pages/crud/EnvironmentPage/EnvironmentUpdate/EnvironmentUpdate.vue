@@ -39,9 +39,9 @@
                 id: this.item.id,
                 form: {
                     name: this.item.name,
-                    permission: this.item.permission,
                     dockerApiUrl: this.item.dockerApiUrl,
-                    dockerApiToken: this.item.dockerApiToken
+                    dockerApiToken: this.item.dockerApiToken,
+                    type: this.item.type
                 }
             }
         },

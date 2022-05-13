@@ -10,9 +10,9 @@ const Schema = mongoose.Schema;
 const EnvironmentSchema = new Schema({
 
  name: {type: String, required: true, unique: true, index: true},
- permission: [{type: String, enum: ['ENV_DEV_VIEW','ENV_DEV_EDIT','ENV_QA_VIEW','ENV_QA_EDIT','ENV_PROD_VIEW','ENV_PROD_EDIT'], required: false, index: false}],
  dockerApiUrl: {type: String, required: false, unique: false, index: false},
- dockerApiToken: {type: String, required: false, unique: false, index: false}
+ dockerApiToken: {type: String, required: false, unique: false, index: false},
+ type: {type: String, enum: ['DEV', 'QA', 'PRE', 'PROD'], required: true, unique: false, index: false}
 
 
 }, { timestamps: true });

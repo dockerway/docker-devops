@@ -34,7 +34,23 @@ import {
     ENVIRONMENT_DELETE,
     ENVIRONMENT_MENU,
     ENVIRONMENT_SHOW,
-    ENVIRONMENT_UPDATE
+    ENVIRONMENT_UPDATE,
+    DEV_VIEW,
+    DEV_EDIT,
+    DEV_ENV,
+    DEV_DEPLOY,
+    QA_VIEW,
+    QA_EDIT,
+    QA_ENV,
+    QA_DEPLOY,
+    PRE_VIEW,
+    PRE_EDIT,
+    PRE_ENV,
+    PRE_DEPLOY,
+    PROD_VIEW,
+    PROD_EDIT,
+    PROD_ENV,
+    PROD_DEPLOY
 } from '../../modules/devops/permissions/Environment'
 
 import {
@@ -91,5 +107,22 @@ export default [
     REGISTRY_DELETE,
     REGISTRY_MENU,
     REGISTRY_SHOW,
-    REGISTRY_UPDATE
+    REGISTRY_UPDATE,
+
+    DEV_VIEW,
+    DEV_EDIT,
+    DEV_ENV,
+    DEV_DEPLOY,
+    QA_VIEW,
+    QA_EDIT,
+    QA_ENV,
+    QA_DEPLOY,
+    PRE_VIEW,
+    PRE_EDIT,
+    PRE_ENV,
+    PRE_DEPLOY,
+    PROD_VIEW,
+    PROD_EDIT,
+    PROD_ENV,
+    PROD_DEPLOY
 ]
