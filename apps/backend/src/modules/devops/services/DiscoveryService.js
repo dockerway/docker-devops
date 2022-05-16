@@ -112,7 +112,7 @@ export const startDiscovery = function (environmentId) {
 }
 
 
-export const createDiscovery = function (servicesDiscovered) {
+export const createDiscovery = function (servicesDiscovered, user) {
     return new Promise(async (resolve, reject) => {
         try {
 
@@ -246,7 +246,7 @@ export const createDiscovery = function (servicesDiscovered) {
                         environmentServiceObj.preferences = dockerService.preferences ? dockerService.preferences : []
                     }
 
-                    environmentService = await createEnvironmentService(null, environmentServiceObj)
+                    environmentService = await createEnvironmentService(user, environmentServiceObj)
                     environmentServicesCreated.push(environmentService)
                 } else {
                     console.log("ENV_SERVICE OLD:", serviceDiscovered, environmentService)
