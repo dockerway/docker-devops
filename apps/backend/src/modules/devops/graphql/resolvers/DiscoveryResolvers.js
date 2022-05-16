@@ -22,7 +22,7 @@ export default {
         createDiscovery: (_, {input}, {user,rbac}) => {
             if (!user) throw new AuthenticationError("Unauthenticated")
             if(!rbac.isAllowed(user.id, ENVIRONMENTSERVICE_SHOW)) throw new ForbiddenError("Not Authorized")
-            return createDiscovery(input)
+            return createDiscovery(input, user)
         },
 
     }
