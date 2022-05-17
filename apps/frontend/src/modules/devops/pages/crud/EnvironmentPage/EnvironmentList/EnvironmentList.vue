@@ -92,7 +92,6 @@
                     {text: this.$t('devops.environment.labels.name'), value: 'name'},
                     {text: this.$t('devops.environment.labels.type'), value: 'type'},
                     {text: this.$t('devops.environment.labels.dockerApiUrl'), value: 'dockerApiUrl'},
-                    {text: this.$t('devops.environment.labels.dockerApiToken'), value: 'dockerApiToken'},
                     //Actions
                     {text: this.$t('common.actions'), value: 'action', sortable: false},
                 ]
