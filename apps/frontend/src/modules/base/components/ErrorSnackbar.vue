@@ -2,7 +2,7 @@
   <div>
     <v-snackbar
         v-for="(error,i) in $store.getters.getGraphqlErrors" :key="error.key"
-        color="red"
+        :color="getColor(error)"
         bottom right
         :value="true"
         :style="{top: '-'+(50 * i+1) + 'px' }"
@@ -38,6 +38,19 @@ export default {
           return this.$t('error.code.' + error.extensions.code)
         }
         return this.$t('error.general')
+      }
+    },
+    getColor() {
+      return error => {
+        if (error.extensions && error.extensions.code) {
+          switch (error.extensions.code) {
+            case "SERVICE_NOT_FOUND_ERROR":
+              return "yellow darken-2"
+            default:
+              return "red"
+          }
+        }
+        return "red"
       }
     }
   },
