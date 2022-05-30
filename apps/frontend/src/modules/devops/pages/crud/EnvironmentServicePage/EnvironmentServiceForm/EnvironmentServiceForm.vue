@@ -103,7 +103,6 @@
             </v-row>
           </v-tab-item>
 
-
           <!--VOLUMES-->
           <v-tab-item>
             <v-row>
@@ -114,6 +113,25 @@
                 >
                   <template v-slot:default="{item,index}">
                     <volume-env-service-form v-model="form.volumes[index]"></volume-env-service-form>
+                  </template>
+                </form-list>
+
+              </v-col>
+
+            </v-row>
+
+          </v-tab-item>
+
+          <!--FILES-->
+          <v-tab-item>
+            <v-row>
+              <v-col cols="12">
+                <form-list
+                    v-model="form.files"
+                    :new-item="{fileName:'',fileContent:'',hostPath:'',containerPath:''}"
+                >
+                  <template v-slot:default="{item,index}">
+                    <file-env-service-form v-model="form.files[index]"></file-env-service-form>
                   </template>
                 </form-list>
 
@@ -228,6 +246,7 @@ import VariableEnvServiceForm from "@/modules/devops/components/VariableEnvServi
 import FormList from "@/modules/devops/components/FormList/FormList";
 import PortEnvServiceForm from "@/modules/devops/components/PortEnvServiceForm";
 import VolumeEnvServiceForm from "@/modules/devops/components/VolumeEnvServiceForm";
+import FileEnvServiceForm from "@/modules/devops/components/FileEnvServiceForm";
 import ServiceProvider from "@/modules/devops/providers/ServiceProvider";
 import DockerProvider from "@/modules/devops/providers/DockerProvider";
 import StackCombobox from "@/modules/devops/components/StackCombobox/StackCombobox";
@@ -243,6 +262,7 @@ export default {
     LimitServiceForm,
     StackCombobox,
     VolumeEnvServiceForm,
+    FileEnvServiceForm,
     PortEnvServiceForm,
     FormList,
     VariableEnvServiceForm,
@@ -281,6 +301,7 @@ export default {
       this.form.envs = service.envs ? service.envs.map(v => ({name: v.name, value: v.value})) : []
       this.form.ports = service.ports ? service.ports.map(p => ({hostPort: p.hostPort, containerPort: p.containerPort})) : []
       this.form.volumes = service.volumes ? service.volumes.map(v => ({hostVolume: v.hostVolume, containerVolume: v.containerVolume})) : []
+      this.form.files = service.files ? service.files.map(v => ({hostPath: v.hostPath, containerPath: v.containerPath, fileName: v.fileName, fileContent: v.fileContent})) : []
       this.form.constraints = service.constraints ? service.constraints.map(v => ({name: v.name, operation: v.operation, value: v.value})) : []
       this.form.limits = service.limits ? service.limits.map(v => ({ memoryReservation:v.memoryReservation, memoryLimit:v.memoryLimit, CPUReservation:v.CPUReservation, CPULimit:v.CPULimit})) : {}
       this.form.preferences = service.preferences ? service.preferences.map(p => ({name: p.name, value: p.value})) : []
@@ -290,6 +311,7 @@ export default {
       this.form.envs = service.envs ? service.envs.map(v => ({name: v.name, value: v.defaultValue})) : []
       this.form.ports = service.ports ? service.ports.map(p => ({hostPort: p, containerPort: ''})) : []
       this.form.volumes = service.volumes ? service.volumes.map(v => ({hostVolume: v, containerVolume: ''})) : []
+      this.form.files = service.files ? service.files.map(v => ({hostPath: v, containerPath: '', fileName: '', fileContent: ''})) : []
       this.form.constraints = service.constraints ? service.constraints.map(v => ({name: v.name, operation: v.operation, value: v.defaultValue})) : []
       this.form.limits = service.limits ? service.limits.map(v => ({ memoryReservation:v.memoryReservation, memoryLimit:v.memoryLimit, CPUReservation:v.CPUReservation, CPULimit:v.CPULimit})) : {}
       this.form.preferences = service.preferences ? service.preferences.map(p => ({name: p.name, value: p.defaultValue})) : []
@@ -318,7 +340,16 @@ export default {
   data() {
     return {
       tab: 0,
-      items: ['Puertos', 'Volumenes', 'Envs', 'Labels', 'Constraints', 'Limits', 'Preferences']
+      items: [
+        this.$t('devops.service.labels.port'), 
+        this.$t('devops.service.labels.volume'), 
+        this.$t('devops.service.labels.file'),
+        'Envs',
+        'Labels', 
+        this.$t('devops.service.labels.constraints'),
+        this.$t('devops.service.labels.limits'),
+        this.$t('devops.service.labels.preferences')
+      ]
     }
   }
 }

@@ -44,6 +44,7 @@ export default {
         name: this.item.name,
         replicas: this.item.replicas,
         volumes: this.item.volumes ? this.item.volumes : [],
+        files: this.item.files ? this.item.files : [],
         ports: this.item.ports ? this.item.ports : [],
         envs: this.item.envs ? this.item.envs : [],
         labels: this.item.labels ? this.item.labels : [],

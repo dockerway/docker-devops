@@ -10,6 +10,7 @@ query findService($id:ID!){
             name
         }
         volumes
+        files
         ports
         envs{
             name

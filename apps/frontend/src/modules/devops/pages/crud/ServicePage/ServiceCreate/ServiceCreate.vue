@@ -41,6 +41,7 @@ export default {
         repository: '',
         platform: null,
         volumes: [],
+        files: [],
         ports: [],
         envs: [],
         constraints: [],

@@ -149,15 +149,34 @@ export const createDockerService = function (id, user) {
             let environmentService = await findEnvironmentService(id)
             let token = environmentService.environment.dockerApiToken
 
+            let headers = { headers: { 'Authorization': `Bearer ${token}` } }
+            let dockerApiUrl = environmentService.environment.dockerApiUrl
+            
+            let filesPath = '/api/docker/files'
+            const filesURL = dockerApiUrl + filesPath
+
+            let filesCreatedResponse;
+            if(environmentService.files){                
+                //Los archivos (files) son agregados y enviados a fortes como Volumenes (volumes).
+                filesCreatedResponse = await axios.post(filesURL, environmentService.files, headers)
+
+                environmentService.volumes = [...environmentService.volumes, ...environmentService.files.map(file => {
+                    return {
+                        hostVolume: file.hostPath + file.fileName,
+                        containerVolume: file.containerPath + file.fileName
+                    }
+                })]
+            }
+            //ELIMINA DUPLICADOS
+            environmentService.volumes = [...new Set(environmentService.volumes.map(a => JSON.stringify({hostVolume: a.hostVolume, containerVolume: a.containerVolume})))].map(a => JSON.parse(a))
+
             if (! await canUserDeploy(user, environmentService.environment.type)) {
                 return reject("El usuario no tiene permiso para desplegar este servicio")
             }
-
-            let dockerApiUrl = environmentService.environment.dockerApiUrl
             
             let path = '/api/docker/service'
             const URL = dockerApiUrl + path
-            
+
             let serviceName = environmentService.name ? environmentService.name : environmentService.service.name
             let fullServiceName = environmentService.stack.name + "_" + serviceName
 
@@ -182,7 +201,6 @@ export const createDockerService = function (id, user) {
                 preferences: environmentService.preferences ? environmentService.preferences : [],
             }
 
-            let headers = { headers: { 'Authorization': `Bearer ${token}` } }
             let response = await axios.post(URL, data, headers)
 
             if (response.status = 200) {
@@ -208,6 +226,26 @@ export const updateDockerService = function (id, targetImage = null, user) {
             let environmentService = await findEnvironmentService(id)
             let token = environmentService.environment.dockerApiToken
 
+            let headers = { headers: { 'Authorization': `Bearer ${token}` } }
+            let dockerApiUrl = environmentService.environment.dockerApiUrl
+
+            let filesPath = '/api/docker/files'
+            const filesURL = dockerApiUrl + filesPath
+
+            let filesCreatedResponse;
+            if(environmentService.files){
+                //Los archivos (files) son agregados y enviados a fortes como Volumenes (volumes).
+                filesCreatedResponse = await axios.post(filesURL, environmentService.files, headers)
+                environmentService.volumes = [...environmentService.volumes, ...environmentService.files.map(file => {
+                    return {
+                        hostVolume: file.hostPath + file.fileName,
+                        containerVolume: file.containerPath + file.fileName
+                    }
+                })]
+            }
+            //ELIMINA DUPLICADOS
+            environmentService.volumes = [...new Set(environmentService.volumes.map(a => JSON.stringify({hostVolume: a.hostVolume, containerVolume: a.containerVolume})))].map(a => JSON.parse(a))
+
             if (! await canUserDeploy(user, environmentService.environment.type)) {
                 return reject("El usuario no tiene permiso para actualizar este servicio")
             }
@@ -218,11 +256,8 @@ export const updateDockerService = function (id, targetImage = null, user) {
                 reject("DockerService not found. ID:" + id)
             }
 
-            let dockerApiUrl = environmentService.environment.dockerApiUrl
-
             let path = '/api/docker/service/' + dockerService.id
             const URL = dockerApiUrl + path
-
 
             let serviceName = environmentService.name ? environmentService.name : environmentService.service.name
             let fullServiceName = environmentService.stack.name + "_" + serviceName
@@ -248,7 +283,6 @@ export const updateDockerService = function (id, targetImage = null, user) {
                 preferences: environmentService.preferences ? environmentService.preferences : []
             }
 
-            let headers = { headers: { 'Authorization': `Bearer ${token}` } }
             let response = await axios.put(URL, data, headers)
 
             if (response.status = 200) {

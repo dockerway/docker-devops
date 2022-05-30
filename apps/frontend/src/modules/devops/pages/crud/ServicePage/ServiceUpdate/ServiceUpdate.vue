@@ -43,6 +43,7 @@ export default {
         repository: this.item.repository,
         platform: this.item.platform.id ? this.item.platform.id : null,
         volumes: this.item.volumes,
+        files: this.item.files,
         ports: this.item.ports,
         envs: this.item.envs ? this.item.envs : [],
         constraints: this.item.constraints ?  this.item.constraints : [],

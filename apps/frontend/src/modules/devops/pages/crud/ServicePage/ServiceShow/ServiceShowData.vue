@@ -9,6 +9,13 @@
 
         <v-col cols="12" sm="6" md="4">
             <v-list>
+                 <show-field v-if="item.name" :value="item.name ? item.name.toString() : ''" :label="$t('devops.service.labels.name')" icon="fingerprint"/>
+                 <show-field v-if="item.files" :value="item.files ? item.files.toString() : ''" :label="$t('devops.service.labels.files')" icon="storage"/>
+            </v-list>
+        </v-col>
+
+        <v-col cols="12" sm="6" md="4">
+            <v-list>
                  <show-field v-if="item.description" :value="item.description ? item.description.toString() : ''" :label="$t('devops.service.labels.description')" icon=""/>
                  <show-field v-if="item.ports" :value="item.ports ? item.ports.toString() : ''" :label="$t('devops.service.labels.ports')" icon="connecting_airports"/>
             </v-list>

@@ -163,6 +163,7 @@ export const createDiscovery = function (servicesDiscovered, user) {
                     let serviceEnvs = []
                     let servicePorts = []
                     let serviceVolumes = []
+                    let serviceFiles = []
                     let serviceConstraints = []
                     let serviceLimits = {}
                     let servicePreferences = []
@@ -171,6 +172,7 @@ export const createDiscovery = function (servicesDiscovered, user) {
                         serviceEnvs = dockerService.envs ? dockerService.envs.map(i => ({name: i.name, defaultValue: ''})) : []
                         servicePorts = dockerService.ports ? dockerService.ports.map(i => (i.containerPort)) : []
                         serviceVolumes = dockerService.volumes ? dockerService.volumes.map(i => (i.containerVolume)) : []
+                        serviceFiles = dockerService.files ? dockerService.files.map(i => ({fileName: i.fileName, fileContent: i.fileContent, containerPath: i.containerPath})) : []
                         serviceConstraints = dockerService.constraints ? dockerService.constraints.map(i => ({name: i.name, operation: i.operation, defaultValue: i.value})) : []
                         serviceLimits = dockerService.limits ? dockerService.limits : {}
                         servicePreferences = dockerService.preferences ? dockerService.preferences.map(i => ({name: i.name, defaultValue: i.value})) : []
@@ -189,6 +191,7 @@ export const createDiscovery = function (servicesDiscovered, user) {
                         envs: serviceEnvs,
                         ports: servicePorts,
                         volumes: serviceVolumes,
+                        files: serviceFiles,
                         constraints: serviceConstraints,
                         limits: serviceLimits,
                         preferences: servicePreferences
@@ -240,6 +243,7 @@ export const createDiscovery = function (servicesDiscovered, user) {
                         environmentServiceObj.envs = dockerService.envs ? dockerService.envs : []
                         environmentServiceObj.ports = dockerService.ports ? dockerService.ports : []
                         environmentServiceObj.volumes = dockerService.volumes ? dockerService.volumes : []
+                        environmentServiceObj.files = dockerService.files ? dockerService.files : []
                         environmentServiceObj.labels = dockerService.labels ? dockerService.labels : []
                         environmentServiceObj.constraints = dockerService.constraints ? dockerService.constraints : []
                         environmentServiceObj.limits = dockerService.limits ? dockerService.limits : {}

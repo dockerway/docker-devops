@@ -29,6 +29,12 @@ query paginateEnvironmentService( $pageNumber: Int, $itemsPerPage:Int, $search: 
                 hostVolume
                 containerVolume
             }
+            files{
+                fileName
+                fileContent
+                hostPath
+                containerPath
+            }
             envs{
                 name
                 value

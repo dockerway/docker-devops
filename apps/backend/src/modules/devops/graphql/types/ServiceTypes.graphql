@@ -9,6 +9,13 @@ type ConstraintService {
     defaultValue: String
 }
 
+type FileService{
+    fileName: String
+    fileContent: String
+    containerPath: String
+    hostPath: String
+}
+
 type LimitService {
     memoryReservation: Float
     memoryLimit: Float
@@ -29,6 +36,7 @@ type Service{
     repository: String
     platform: Platform!
     volumes: [String]
+    files: [String]
     ports: [Int]
     envs: [EnvService]
     constraints: [ConstraintService]
@@ -59,6 +67,13 @@ input ConstraintServiceInput{
     defaultValue: String
 }
 
+input FileServiceInput{
+    fileName: String
+    fileContent: String
+    containerPath: String
+    hostPath: String
+}
+
 input LimitServiceInput{
     memoryReservation: Float
     memoryLimit: Float
@@ -78,6 +93,7 @@ input ServiceInput{
     image: String
     repository: String
     volumes: [String]
+    files: [FileServiceInput]
     ports: [Int]
     envs: [EnvServiceInput]
     constraints: [ConstraintServiceInput]

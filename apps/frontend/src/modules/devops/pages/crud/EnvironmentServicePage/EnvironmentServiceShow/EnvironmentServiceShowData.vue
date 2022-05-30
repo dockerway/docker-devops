@@ -81,6 +81,20 @@
           ></v-data-table>
         </v-tab-item>
 
+        <!--FILES-->
+        <v-tab-item
+            key="Files"
+            v-if="item.files">
+          <v-data-table
+              :items="item.files" :items-per-page="5"
+              :headers="[
+              {text:'fileName',value:'fileName'},
+              {text:'hostPath',value:'hostPath'},
+              {text:'containerPath',value:'containerPath'},
+          ]"
+          ></v-data-table>
+        </v-tab-item>
+
         <!--VARIABLES-->
         <v-tab-item
             key="Envs"
@@ -161,7 +175,6 @@
 <script>
 import {ShowField} from '@dracul/common-frontend'
 
-
 export default {
   name: 'EnvironmentServiceShowData',
   components: {ShowField},
@@ -171,7 +184,17 @@ export default {
   data() {
     return {
       tab: 0,
-      tabItems: ['Main', 'Ports', 'Volumes', 'Envs', 'Labels', 'Constraints', 'Limits', 'Preferences']
+      tabItems: [
+        this.$t('devops.environmentService.labels.main'), 
+        this.$t('devops.service.labels.port'), 
+        this.$t('devops.service.labels.volume'), 
+        this.$t('devops.service.labels.file'),
+        'Envs',
+        'Labels', 
+        this.$t('devops.service.labels.constraints'),
+        this.$t('devops.service.labels.limits'),
+        this.$t('devops.service.labels.preferences')
+      ]
     }
   },
   methods:{

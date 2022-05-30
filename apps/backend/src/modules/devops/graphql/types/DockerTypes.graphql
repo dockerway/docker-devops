@@ -18,6 +18,13 @@ type Volume{
     hostVolume: String
 }
 
+type File{
+    fileName: String
+    fileContent: String
+    containerPath: String
+    hostPath: String
+}
+
 type Env{
     name: String
     value: String
@@ -55,6 +62,7 @@ type DockerService {
     updatedAt: String
     ports: [Port]
     volumes: [Volume]
+    files: [File]
     envs: [Env]
     labels: [Label]
     constraints: [Constraint]

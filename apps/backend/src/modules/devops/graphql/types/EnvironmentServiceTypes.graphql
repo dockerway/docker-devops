@@ -36,6 +36,13 @@ type VolumeEnvService{
     containerVolume: String!
 }
 
+type FileService{
+    fileName: String
+    fileContent: String
+    containerPath: String
+    hostPath: String
+}
+
 type EnvironmentService{
     id: ID!
     environment: Environment!
@@ -47,6 +54,7 @@ type EnvironmentService{
     envs: [EnvService]
     ports: [PortEnvService]
     volumes: [VolumeEnvService]
+    files: [FileService]
     labels: [LabelService]
     constraints: [ConstraintService]
     limits: LimitService
@@ -104,6 +112,13 @@ input VolumeEnvServiceInput{
     containerVolume: String!
 }
 
+input FileEnvServiceInput{
+    fileName: String
+    fileContent: String
+    containerPath: String
+    hostPath: String
+}
+
 input EnvironmentServiceInput{
     environment: ID!
     service: ID!
@@ -114,6 +129,7 @@ input EnvironmentServiceInput{
     envs: [EnvServiceInput]
     ports: [PortEnvServiceInput]
     volumes: [VolumeEnvServiceInput]
+    files: [FileEnvServiceInput]
     labels: [LabelServiceInput]
     constraints: [ConstraintServiceInput]
     limits: LimitServiceInput

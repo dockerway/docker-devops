@@ -10,6 +10,7 @@ mutation createService($input: ServiceInput){
             name
         }
         volumes
+        files
         ports
         envs{
             name
