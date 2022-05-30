@@ -2,6 +2,7 @@ import {findEnvironmentService} from "./EnvironmentServiceService";
 import axios from 'axios'
 import {findEnvironment} from "./EnvironmentService";
 import { canUserDeploy } from "./EnvironmentAllowedService"
+import ServiceNotFoundError from "../errors/ServiceNotFoundError"
 
 export const findDockerServiceTag = function (id) {
     return new Promise(async (resolve, reject) => {
@@ -103,6 +104,9 @@ export const findDockerService = function (id) {
 
 
         } catch (e) {
+            if (e.response.status == 404) {
+                return reject(new ServiceNotFoundError("ServiceNotFound"))
+            }
             let message = e.message + ". " + (e.response.data ? e.response.data : '')
             reject(message)
         }
