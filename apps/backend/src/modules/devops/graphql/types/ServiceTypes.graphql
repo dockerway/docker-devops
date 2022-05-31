@@ -13,7 +13,6 @@ type FileService{
     fileName: String
     fileContent: String
     containerPath: String
-    hostPath: String
 }
 
 type LimitService {
@@ -36,7 +35,7 @@ type Service{
     repository: String
     platform: Platform!
     volumes: [String]
-    files: [String]
+    files: [FileService]
     ports: [Int]
     envs: [EnvService]
     constraints: [ConstraintService]
@@ -71,7 +70,6 @@ input FileServiceInput{
     fileName: String
     fileContent: String
     containerPath: String
-    hostPath: String
 }
 
 input LimitServiceInput{

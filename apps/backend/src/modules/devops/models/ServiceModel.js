@@ -13,7 +13,6 @@ const EnvSchema = new Schema({
 const FileSchema = new Schema({
     fileName: {type: String, required: true, index: false},
     fileContent: {type: String, required: true, index: false},
-    hostPath: {type: String, required: true, index: false},
     containerPath: {type: String, required: false, index: false},
 })
 

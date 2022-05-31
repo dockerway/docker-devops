@@ -13,7 +13,11 @@ query paginateService( $pageNumber: Int, $itemsPerPage:Int, $search: String, $fi
                 name
             }
             volumes
-            files
+            files{
+                fileName
+                fileContent
+                containerPath
+            }
             ports
             envs{
                 name

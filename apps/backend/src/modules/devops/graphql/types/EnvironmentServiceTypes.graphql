@@ -36,7 +36,7 @@ type VolumeEnvService{
     containerVolume: String!
 }
 
-type FileService{
+type FileEnvService{
     fileName: String
     fileContent: String
     containerPath: String
@@ -54,7 +54,7 @@ type EnvironmentService{
     envs: [EnvService]
     ports: [PortEnvService]
     volumes: [VolumeEnvService]
-    files: [FileService]
+    files: [FileEnvService]
     labels: [LabelService]
     constraints: [ConstraintService]
     limits: LimitService
