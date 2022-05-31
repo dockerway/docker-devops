@@ -163,7 +163,6 @@ export const createDockerService = function (id, user) {
             if(environmentService.files){                
                 //Los archivos (files) son agregados y enviados a fortes como Volumenes (volumes).
                 filesCreatedResponse = await axios.post(filesURL, environmentService.files, headers)
-                console.log("DockerService linea 166 - filesCreatedResponse: ",filesCreatedResponse)
 
                 environmentService.volumes = [...environmentService.volumes, ...environmentService.files.map(file => {
                     return {
