@@ -10,6 +10,12 @@ const EnvSchema = new Schema({
     defaultValue: {type: String, required: false, index: false},
 })
 
+const FileSchema = new Schema({
+    fileName: {type: String, required: true, index: false},
+    fileContent: {type: String, required: true, index: false},
+    containerPath: {type: String, required: false, index: false},
+})
+
 const ConstraintSchema = new Schema({
     name: {type: String, required: false, index: false},
     operation: {type: String, required: false, index: false},
@@ -35,6 +41,7 @@ const ServiceSchema = new Schema({
     image: {type: String, required: false, unique: false, index: false},
     repository: {type: String, required: false, unique: false, index: false},
     volumes: [{type: String, required: false}],
+    files: [FileSchema],
     ports: [{type: Number, required: false}],
     envs: [EnvSchema],
     constraints: [ConstraintSchema],

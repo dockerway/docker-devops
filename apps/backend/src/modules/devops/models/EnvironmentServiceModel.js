@@ -44,6 +44,13 @@ const VolumeSchema = new Schema({
     containerVolume: {type: String, required: false, index: false},
 })
 
+const FileSchema = new Schema({
+    fileName: {type: String, required: true, index: false},
+    fileContent: {type: String, required: true, index: false},
+    hostPath: {type: String, required: true, index: false},
+    containerPath: {type: String, required: false, index: false},
+})
+
 const EnvironmentServiceSchema = new Schema({
     environment: {
         type: mongoose.Schema.Types.ObjectId,
@@ -60,6 +67,7 @@ const EnvironmentServiceSchema = new Schema({
     envs: [EnvSchema],
     ports: [PortSchema],
     volumes: [VolumeSchema],
+    files: [FileSchema],
     labels: [LabelSchema],
     constraints: [ConstraintSchema],
     limits: LimitSchema,

@@ -42,6 +42,7 @@ export default {
         name: '',
         replicas: 1,
         volumes: [],
+        files: [],
         ports: [],
         envs: [],
         labels: [],

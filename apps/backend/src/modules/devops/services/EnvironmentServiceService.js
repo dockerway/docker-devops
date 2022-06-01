@@ -123,13 +123,13 @@ export const paginateEnvironmentService = async function (user, pageNumber = 1, 
 }
 
 
-export const createEnvironmentService = async function (authUser, {environment, service, stack, image, name, replicas, labels, envs, ports, volumes, constraints, limits, preferences}) {
+export const createEnvironmentService = async function (authUser, {environment, service, stack, image, name, replicas, labels, envs, ports, volumes, files, constraints, limits, preferences}) {
     let env = await findEnvironment(environment)
     if (! await canUserUpdate(authUser, env.type)) {
         return Promise.reject("El usuario no tiene permiso para crear este entorno")
     }
     const doc = new EnvironmentService({
-        environment, service, stack, image, name, replicas, labels, envs, ports, volumes, constraints, limits, preferences
+        environment, service, stack, image, name, replicas, labels, envs, ports, volumes, files, constraints, limits, preferences
     })
     doc.id = doc._id;
     return new Promise((resolve, reject) => {
@@ -147,14 +147,14 @@ export const createEnvironmentService = async function (authUser, {environment, 
     })
 }
 
-export const updateEnvironmentService = async function (authUser, id, {environment, service, stack, image, name, replicas, labels, envs, ports, volumes, constraints, limits, preferences}) {
+export const updateEnvironmentService = async function (authUser, id, {environment, service, stack, image, name, replicas, labels, envs, ports, volumes, files, constraints, limits, preferences}) {
     return new Promise(async (resolve, reject) => {
         let env = await findEnvironment(environment)
         if (! await canUserUpdate(authUser, env.type)) {
             return reject("El usuario no tiene permiso para editar este entorno")
         }
         EnvironmentService.findOneAndUpdate({_id: id},
-            {environment, service, stack, image, name, replicas, labels, envs, ports, volumes, constraints, limits, preferences},
+            {environment, service, stack, image, name, replicas, labels, envs, ports, volumes, files, constraints, limits, preferences},
             {new: true, runValidators: true, context: 'query'},
             (error, doc) => {
 

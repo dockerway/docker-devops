@@ -10,6 +10,11 @@ query fetchService{
             name
         }
         volumes
+        files{
+            fileName
+            fileContent
+            containerPath
+        }
         ports
         envs{
             name

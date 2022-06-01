@@ -159,6 +159,25 @@
 
           </v-tab-item>
 
+          <!--FILES-->
+          <v-tab-item>
+            <v-row>
+              <v-col cols="12" sm="12">
+                <form-list
+                    v-model="form.files"
+                    :new-item="{fileName:'',fileContent:'',containerPath:''}"
+                >
+                  <template v-slot:default="{item,index}">
+                    <file-service-form v-model="form.files[index]"></file-service-form>
+                  </template>
+                </form-list>
+
+              </v-col>
+
+            </v-row>
+
+          </v-tab-item>
+
           <!--VARIABLES-->
           <v-tab-item
               key="Variables"
@@ -243,6 +262,7 @@ import FormList from "@/modules/devops/components/FormList/FormList";
 import VariableServiceForm from "@/modules/devops/components/VariableServiceForm/VariableServiceForm";
 import VariablePreferencesServiceForm from "@/modules/devops/components/VariablePreferencesServiceForm/VariablePreferencesServiceForm";
 import LimitServiceForm from "@/modules/devops/components/LimitServiceForm/LimitServiceForm";
+import FileServiceForm from "@/modules/devops/components/FileServiceForm/FileServiceForm"
 
 export default {
   name: "ServiceForm",
@@ -250,6 +270,7 @@ export default {
   components: {
     VariableServiceForm,
     LimitServiceForm,
+    FileServiceForm,
     FormList,
     PlatformCombobox,
     VariablePreferencesServiceForm,
@@ -286,7 +307,15 @@ export default {
   data() {
     return {
       tab: 0,
-      items: ['Puertos', 'Volumenes', 'Variables', 'Constraints', 'Limits', 'Preferences']
+      items: [
+        this.$t('devops.service.labels.port'), 
+        this.$t('devops.service.labels.volume'), 
+        this.$t('devops.service.labels.file'),
+        'Envs',
+        this.$t('devops.service.labels.constraints'),
+        this.$t('devops.service.labels.limits'),
+        this.$t('devops.service.labels.preferences')
+      ]
     }
   }
 }

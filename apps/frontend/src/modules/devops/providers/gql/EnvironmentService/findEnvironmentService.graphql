@@ -25,6 +25,12 @@ query findEnvironmentService($id:ID!){
             hostVolume
             containerVolume
         }
+        files{
+            fileName
+            fileContent
+            hostPath
+            containerPath
+        }
         envs{
             name
             value
