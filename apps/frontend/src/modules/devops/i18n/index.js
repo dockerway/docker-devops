@@ -12,7 +12,7 @@ const messages = merge.all([
     StackMessages,
     EnvironmentMessages,
     EnvironmentServiceMessages,
-    PermissionMessages
+    PermissionMessages,
 ])
 
 export default messages;
