@@ -1,25 +1,8 @@
 const messages = {
     en: {
       role: {
-        role: "role",
-        roles: "roles",
-        title: "Roles management",
-        description: "View, search, create, edit and delete roles",
-        deleteTitle: "Deleting role",
-        createTitle: "Creating role",
-        updateTitle: "Updating role",
-        created: "Role created",
-        updated: "Role updated",
-        deleted: "Role deleted",
-        showTitle: "Roles and Permissions",
-        permission: "Permission",
-        rolDuplicate: "Duplicated Role",
-        label: {
-          name: "Name",
-          childRoles: "Child Roles",
-          permissions: "Permissions",
-        },
         permissions: {
+          BASE_SHOW: "Visualization of bases",
           PLATFORM_CREATE: "Platform Creation",
           PLATFORM_DELETE: "Platform Delete",
           PLATFORM_MENU: "Platform Menu Display",
@@ -72,25 +55,8 @@ const messages = {
     },
     es: {
       role: {
-        role: "rol",
-        roles: "roles",
-        title: "Administración de Roles",
-        description: "Ver, buscar, crear, editar, y borrar roles del sistema",
-        deleteTitle: "Borrando role",
-        createTitle: "Creando rol",
-        updateTitle: "Editando rol",
-        created: "Rol creado",
-        updated: "Rol actualizado",
-        deleted: "Rol eliminado",
-        showTitle: "Roles y Permisos",
-        permission: "Permiso",
-        rolDuplicate: "Rol ya Existente",
-        label: {
-          name: "Nombre",
-          childRoles: "Roles hijos",
-          permissions: "Permisos",
-        },
         permissions: {
+          BASE_SHOW: "Visualización de Bases",
           PLATFORM_CREATE: "Creación de plataforma",
           PLATFORM_DELETE: "Eliminación de Plataforma",
           PLATFORM_MENU: "Visualización de menu de Plataformas",
@@ -143,25 +109,8 @@ const messages = {
     },
     pt: {
       role: {
-        role: "rol",
-        roles: "roles",
-        title: "Administração de função",
-        description: "Ver, buscar, criar, editar e usar função del sistema",
-        deleteTitle: "Eliminar role",
-        createTitle: "Criando função",
-        updateTitle: "Atualizando função",
-        created: "Função criado",
-        updated: "Função atualizado",
-        deleted: "Função removido",
-        showTitle: "Funções e Permissões",
-        permission: "Permissão",
-        rolDuplicate: "Função duplicada",
-        label: {
-          name: "Nome",
-          childRoles: "Funções filhas",
-          permissions: "Permissões",
-        },
         permissions: {
+          BASE_SHOW: "Visualização de bases",
           PLATFORM_CREATE: "Criação de Plataforma",
           PLATFORM_DELETE: "Platform Delete",
           PLATFORM_MENU: "Platform Menu Display",
