@@ -156,6 +156,14 @@ export const createDockerService = function (id, user) {
             let headers = { headers: { 'Authorization': `Bearer ${token}` } }
             let dockerApiUrl = environmentService.environment.dockerApiUrl
             
+            let createFoldersPath = '/api/docker/folders'
+            const createFoldersURL = dockerApiUrl + createFoldersPath
+
+            let createFoldersResponse;
+            if(environmentService.volumes){
+                createFoldersResponse = await axios.post(createFoldersURL, environmentService.volumes)
+            }
+
             let filesPath = '/api/docker/files'
             const filesURL = dockerApiUrl + filesPath
 
@@ -233,6 +241,14 @@ export const updateDockerService = function (id, targetImage = null, user) {
             let headers = { headers: { 'Authorization': `Bearer ${token}` } }
             let dockerApiUrl = environmentService.environment.dockerApiUrl
 
+            let createFoldersPath = '/api/docker/folders'
+            const createFoldersURL = dockerApiUrl + createFoldersPath
+
+            let createFoldersResponse;
+            if(environmentService.volumes){
+                createFoldersResponse = await axios.post(createFoldersURL, environmentService.volumes)
+            }
+            
             let filesPath = '/api/docker/files'
             const filesURL = dockerApiUrl + filesPath
 
