@@ -227,7 +227,7 @@ export const updateDockerService = function (id, targetImage = null, user) {
             let environmentService = await findEnvironmentService(id)
             const token = environmentService.environment.dockerApiToken
 
-            let headers = { headers: { 'Authorization': `Bearer ${token}` } }
+            const headers = { headers: { 'Authorization': `Bearer ${token}` } }
             const dockerApiUrl = environmentService.environment.dockerApiUrl;
 
             let createFoldersPath = '/api/docker/folders'
@@ -293,7 +293,6 @@ export const updateDockerService = function (id, targetImage = null, user) {
                 preferences: environmentService.preferences ? environmentService.preferences : []
             };
 
-            const headers = { headers: { 'Authorization': `Bearer ${token}` } };
             const response = await axios.put(URL, data, headers);
             if (response.status = 200) {
                 console.log("updateDockerService Response ", response.data);
