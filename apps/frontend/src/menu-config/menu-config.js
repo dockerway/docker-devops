@@ -129,6 +129,12 @@ export default [
         ]
     },
     {
+        icon: 'settings',
+        text: 'menu.setting',
+        link: {name: "SettingsPage"},
+        permission: 'SETTINGS_UPDATE'
+    },
+    {
         icon: 'perm_phone_msg',
         text: 'base.about',
         link: {name: "about"},

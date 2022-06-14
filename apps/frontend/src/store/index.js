@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import {UserModuleStore} from '@dracul/user-frontend'
 import {CustomizationStore} from '@dracul/customize-frontend'
 import BaseModuleStore from '../modules/base/storage/BaseModuleStore'
+import {SettingsModuleStore} from '@dracul/settings-frontend'
 
 Vue.use(Vuex)
 
@@ -12,7 +13,8 @@ export default new Vuex.Store({
     modules:{
         user: UserModuleStore,
         base: BaseModuleStore,
-        customization: CustomizationStore
+        customization: CustomizationStore,
+        settings: SettingsModuleStore
     },
     plugins: [
         createPersistedState({

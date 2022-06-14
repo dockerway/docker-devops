@@ -1,19 +1,15 @@
-import {createSettings, findSettingsByKey} from "@dracul/settings-backend";
+import {createSettings, updateSettings, findSettingsByKey} from "@dracul/settings-backend"
 
 
 const settings = [
     //{key:'',value: '',label: {en: '', es:'', pt:''} },
+    //Utilizo \\ en el value de la regex para que se guarde bien en mongo
     {
-        key: 'sample',
-        value: '',
-        label: {en: 'Sample', es: 'Ejemplo', pt: 'Ejemplo'}
-    },
-  /*  {
-        key: 'xxxxx',
-        value: '60',
-        label: {en: 'ENENEN', es: 'ESESES', pt: 'PTPTPT'}
-    },*/
-
+        key: 'regexPaths',
+        value: '^\\/(storage|logs|localdata){1}(\\/{1}[a-z\\_\\-0-9]+)*$',
+        type: 'string',
+        label: {en: 'Paths regular expression', es: 'Expresión regular de rutas', pt: 'Expressão regular de rotas'}
+    }
 ]
 
 export const initSettings = async function () {
@@ -22,6 +18,10 @@ export const initSettings = async function () {
         let setting = await findSettingsByKey(settings[i].key)
         if (!setting) {
             await createSettings(null, settings[i])
+        } else{
+            setting.type =  settings[i].type ? settings[i].type : 'string'
+            setting.options =  settings[i].options ? settings[i].options : []
+            await updateSettings(null, setting.id,setting)
         }
     }
 
