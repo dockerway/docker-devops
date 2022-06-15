@@ -142,13 +142,14 @@ export const createDockerService = function (id, user) {
             let environmentService = await findEnvironmentService(id);
             const token = environmentService.environment.dockerApiToken;
             
-            let createFoldersPath = '/api/docker/folders'
+            //CREACIÓN DE CARPETAS DEJAR COMENTADO
+            /* let createFoldersPath = '/api/docker/folders'
             const createFoldersURL = dockerApiUrl + createFoldersPath
-
+            
             let createFoldersResponse;
             if(environmentService.volumes){
                 createFoldersResponse = await axios.post(createFoldersURL, environmentService.volumes)
-            }
+            } */
 
             let filesPath = '/api/docker/files'
             const filesURL = dockerApiUrl + filesPath
@@ -230,13 +231,14 @@ export const updateDockerService = function (id, targetImage = null, user) {
             const headers = { headers: { 'Authorization': `Bearer ${token}` } }
             const dockerApiUrl = environmentService.environment.dockerApiUrl;
 
-            let createFoldersPath = '/api/docker/folders'
+            //CREACIÓN DE CARPETAS DEJAR COMENTADO
+            /* let createFoldersPath = '/api/docker/folders'
             const createFoldersURL = dockerApiUrl + createFoldersPath
 
             let createFoldersResponse;
             if(environmentService.volumes){
                 createFoldersResponse = await axios.post(createFoldersURL, environmentService.volumes)
-            }
+            } */
             
             let filesPath = '/api/docker/files'
             const filesURL = dockerApiUrl + filesPath
