@@ -143,7 +143,7 @@
                         :error="hasInputErrors('volumes')"
                         :error-messages="getInputErrors('volumes')"
                         color="secondary"
-                        :rules="required"
+                        :rules="rules"
                     >
                       <template v-slot:prepend-inner>
                         <v-chip small>{{ index + 1 }}</v-chip>
@@ -289,6 +289,9 @@ export default {
       set(val) {
         this.$emit('input', val)
       }
+    },
+    regexPaths() {
+      return new RegExp(this.$store.getters.getSettingValue("regexPaths"), 'i')
     }
   },
   watch: {
@@ -315,7 +318,8 @@ export default {
         this.$t('devops.service.labels.constraints'),
         this.$t('devops.service.labels.limits'),
         this.$t('devops.service.labels.preferences')
-      ]
+      ],
+      rules: [ v => this.regexPaths.test(v) || 'Debe comenzar con /storage, /logs o /localdata y finalizar sin /' ]
     }
   }
 }

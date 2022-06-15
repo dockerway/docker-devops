@@ -14,7 +14,8 @@ const messages = {
             stack: "Stack",
             discovery: "Discovery",
             registry: "Registry",
-            image: "Image"
+            image: "Image",
+            setting: "Setting"
         }
     },
     es: {
@@ -31,7 +32,8 @@ const messages = {
             stack: "Stack",
             discovery: "Discovery",
             registry: "Registry",
-            image: "Image"
+            image: "Image",
+            setting: "Configuración"
         }
     },
     pt: {
@@ -48,7 +50,8 @@ const messages = {
             stack: "Stack",
             discovery: "Discovery",
             registry: "Registry",
-            image: "Image"
+            image: "Image",
+            setting: "Configuração"
         }
     }
 }

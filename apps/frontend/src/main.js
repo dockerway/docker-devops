@@ -30,6 +30,22 @@ store.dispatch('loadCustomizations')
     })
 
 
+function loadSettings() {
+    store.dispatch('loadSettings')
+        .then(settings => {
+            let mq = settings.find(s => s.key === 'MinimumQuantity')
+            if (mq && mq.value) {
+                store.commit('setMinimunQuantity', parseInt(mq.value))
+            }
+        })
+        .catch(e => {
+            console.error("Failed loading settings", e)
+            setTimeout(loadSettings, 1000)
+        })
+}
+  
+loadSettings()
+
 new Vue({
   vuetify,
   store,

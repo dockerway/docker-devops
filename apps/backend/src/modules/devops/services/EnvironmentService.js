@@ -104,6 +104,8 @@ export const paginateEnvironment = function ( pageNumber = 1, itemsPerPage = 5, 
 
 export const createEnvironment = async function (authUser, {name, dockerApiUrl, dockerApiToken, type}) {
 
+    dockerApiUrl = dockerApiUrl.replace(/\/+$/, '')
+
     const doc = new Environment({
         name, dockerApiUrl, dockerApiToken, type
     })
@@ -125,6 +127,8 @@ export const createEnvironment = async function (authUser, {name, dockerApiUrl, 
 
 export const updateEnvironment = async function (authUser, id, {name, dockerApiUrl, dockerApiToken, type}) {
     return new Promise((resolve, reject) => {
+        dockerApiUrl = dockerApiUrl.replace(/\/+$/, '')
+
         Environment.findOneAndUpdate({_id: id},
         {name, dockerApiUrl, dockerApiToken, type}, 
         {new: true, runValidators: true, context: 'query'},
