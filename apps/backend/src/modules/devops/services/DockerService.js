@@ -236,7 +236,9 @@ export const updateDockerService = function (id, targetImage = null, user) {
             const createFoldersURL = dockerApiUrl + createFoldersPath
 
             let createFoldersResponse;
+            console.log("VOLUMES:",environmentService.volumes)
             if(environmentService.volumes){
+                console.log("entro volumes")
                 createFoldersResponse = await axios.post(createFoldersURL, environmentService.volumes)
             }
             
@@ -244,7 +246,9 @@ export const updateDockerService = function (id, targetImage = null, user) {
             const filesURL = dockerApiUrl + filesPath
 
             let filesCreatedResponse;
+            console.log("VOLUMES:",environmentService.files)
             if(environmentService.files){
+                console.log("entro files")
                 //Los archivos (files) son agregados y enviados a fortes como Volumenes (volumes).
                 filesCreatedResponse = await axios.post(filesURL, environmentService.files, headers)
                 environmentService.volumes = [...environmentService.volumes, ...environmentService.files.map(file => {
