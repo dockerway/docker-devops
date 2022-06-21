@@ -236,9 +236,8 @@ export const updateDockerService = function (id, targetImage = null, user) {
             const createFoldersURL = dockerApiUrl + createFoldersPath
 
             let createFoldersResponse;
-            console.log("VOLUMES:",!environmentService.volumes)
             console.log("VOLUMES:",!!environmentService.volumes)
-            if(!!environmentService.volumes){
+            if(environmentService.volumes){
                 console.log("entro volumes")
                 createFoldersResponse = await axios.post(createFoldersURL, environmentService.volumes)
             }
