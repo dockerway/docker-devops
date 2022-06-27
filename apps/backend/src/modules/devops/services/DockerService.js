@@ -52,7 +52,6 @@ export const findDockerServiceStats = function (id) {
 
             const path = '/api/docker/service/' + fullServiceName + '/stats';
             URL = dockerApiUrl + path;
-            console.log("URL Stats FINAL", URL);
 
             const headers = { headers: { 'Authorization': `Bearer ${token}` } };
             let response = await axios.get(URL, headers);
@@ -84,13 +83,11 @@ export const findDockerService = function (id) {
 
             const path = '/api/docker/service/' + fullServiceName;
             const URL = dockerApiUrl + path;
-            console.log("URL FINAL", URL);
 
             const headers = { headers: { 'Authorization': `Bearer ${token}` } };
             const response = await axios.get(URL, headers);
 
             if (response.status = 200) {
-
                 //console.log("findServiceTag Response ", response.data)
                 resolve(response.data);
             } else {
@@ -120,7 +117,6 @@ export const fetchDockerService = function (environmentId) {
             const response = await axios.get(URL, headers);
 
             if (response.status = 200) {
-
                 //console.log("fetchDockerService Response ", response.data)
                 resolve(response.data);
             } else {
@@ -142,14 +138,13 @@ export const createDockerService = function (id, user) {
             let environmentService = await findEnvironmentService(id);
             const token = environmentService.environment.dockerApiToken;
             
-            //CREACIÓN DE CARPETAS DEJAR COMENTADO
-            /* let createFoldersPath = '/api/docker/folders'
+            let createFoldersPath = '/api/docker/folders'
             const createFoldersURL = dockerApiUrl + createFoldersPath
             
             let createFoldersResponse;
             if(environmentService.volumes){
                 createFoldersResponse = await axios.post(createFoldersURL, environmentService.volumes)
-            } */
+            }
 
             let filesPath = '/api/docker/files'
             const filesURL = dockerApiUrl + filesPath
@@ -206,7 +201,6 @@ export const createDockerService = function (id, user) {
             const response = await axios.post(URL, data, headers);
 
             if (response.status = 200) {
-                console.log("createDockerService Response ", response.data);
                 resolve(response.data);
             } else {
                 reject(response);
@@ -231,14 +225,13 @@ export const updateDockerService = function (id, targetImage = null, user) {
             const headers = { headers: { 'Authorization': `Bearer ${token}` } }
             const dockerApiUrl = environmentService.environment.dockerApiUrl;
 
-            //CREACIÓN DE CARPETAS DEJAR COMENTADO
-            /* let createFoldersPath = '/api/docker/folders'
+            let createFoldersPath = '/api/docker/folders'
             const createFoldersURL = dockerApiUrl + createFoldersPath
 
             let createFoldersResponse;
             if(environmentService.volumes){
                 createFoldersResponse = await axios.post(createFoldersURL, environmentService.volumes)
-            } */
+            }
             
             let filesPath = '/api/docker/files'
             const filesURL = dockerApiUrl + filesPath
@@ -297,8 +290,6 @@ export const updateDockerService = function (id, targetImage = null, user) {
 
             const response = await axios.put(URL, data, headers);
             if (response.status = 200) {
-                console.log("updateDockerService Response ", response.data);
-
                 if(response?.data?.image?.fullname){
                     environmentService.image = response?.data?.image?.fullname;
                     await environmentService.save();
