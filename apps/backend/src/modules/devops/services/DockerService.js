@@ -138,7 +138,6 @@ export const createDockerService = function (id, user) {
             let environmentService = await findEnvironmentService(id);
             const token = environmentService.environment.dockerApiToken;
             
-            //CREACIÓN DE CARPETAS DEJAR COMENTADO
             let createFoldersPath = '/api/docker/folders'
             const createFoldersURL = dockerApiUrl + createFoldersPath
             
@@ -226,7 +225,6 @@ export const updateDockerService = function (id, targetImage = null, user) {
             const headers = { headers: { 'Authorization': `Bearer ${token}` } }
             const dockerApiUrl = environmentService.environment.dockerApiUrl;
 
-            //CREACIÓN DE CARPETAS DEJAR COMENTADO
             let createFoldersPath = '/api/docker/folders'
             const createFoldersURL = dockerApiUrl + createFoldersPath
 
