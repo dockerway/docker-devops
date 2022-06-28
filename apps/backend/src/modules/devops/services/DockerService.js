@@ -138,12 +138,15 @@ export const createDockerService = function (id, user) {
             let environmentService = await findEnvironmentService(id);
             const token = environmentService.environment.dockerApiToken;
             
+            const dockerApiUrl = environmentService.environment.dockerApiUrl;
+            const headers = { headers: { 'Authorization': `Bearer ${token}` } };
+
             let createFoldersPath = '/api/docker/folders'
             const createFoldersURL = dockerApiUrl + createFoldersPath
             
             let createFoldersResponse;
             if(environmentService.volumes){
-                createFoldersResponse = await axios.post(createFoldersURL, environmentService.volumes)
+                createFoldersResponse = await axios.post(createFoldersURL, environmentService.volumes, headers)
             }
 
             let filesPath = '/api/docker/files'
@@ -168,7 +171,6 @@ export const createDockerService = function (id, user) {
                 return reject("El usuario no tiene permiso para desplegar este servicio");
             }
 
-            const dockerApiUrl = environmentService.environment.dockerApiUrl;
             
             const path = '/api/docker/service';
             const URL = dockerApiUrl + path;
@@ -197,7 +199,6 @@ export const createDockerService = function (id, user) {
                 preferences: environmentService.preferences ? environmentService.preferences : [],
             };
 
-            const headers = { headers: { 'Authorization': `Bearer ${token}` } };
             const response = await axios.post(URL, data, headers);
 
             if (response.status = 200) {
@@ -208,7 +209,7 @@ export const createDockerService = function (id, user) {
 
 
         } catch (e) {
-            const message = e.message + ". " + (e.response.data ? e.response.data : '');
+            const message = e.message + ". " + (e.response?.data ? e.response.data : '');
             reject(message);
         }
 
@@ -302,7 +303,7 @@ export const updateDockerService = function (id, targetImage = null, user) {
 
 
         } catch (e) {
-            const message = e.message + ". " + (e.response.data ? e.response.data : '');
+            const message = e.message + ". " + (e.response?.data ? e.response.data : '');
             reject(message);
         }
 
