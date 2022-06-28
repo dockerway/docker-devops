@@ -6,9 +6,15 @@ const settings = [
     //Utilizo \\ en el value de la regex para que se guarde bien en mongo
     {
         key: 'regexPaths',
-        value: '^\\/(storage|logs|localdata){1}(\\/{1}[a-z\\_\\-0-9]+)*$',
+        value: '^\\/(storage|logs|localdata){1}(\\/{1}[a-z\\_\\.\\-0-9]+)*$',
         type: 'string',
         label: {en: 'Paths regular expression', es: 'Expresión regular de rutas', pt: 'Expressão regular de rotas'}
+    },
+    {
+        key: 'regexPathsFiles',
+        value: '^\\/(storage){1}(\\/{1}[a-z\\_\\.\\-0-9]+)*$',
+        type: 'string',
+        label: {en: 'File Paths regular expression', es: 'Archivo Expresión regular de rutas', pt: 'Archivo Expressão regular de rotas'}
     }
 ]
 

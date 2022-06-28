@@ -65,7 +65,7 @@ export default {
   name: "FileEnvServiceForm",
   data() {
     return {
-      rules: [ v => this.regexPaths.test(v) || 'Debe comenzar con /storage, /logs o /localdata y finalizar sin /' ]
+      rules: [ v => this.regexPathsFiles.test(v) || 'Debe comenzar con /storage y finalizar sin /' ]
     }
   },
   props: {
@@ -80,8 +80,8 @@ export default {
         this.$emit('input', val)
       }
     },
-    regexPaths() {
-      return new RegExp(this.$store.getters.getSettingValue("regexPaths"), 'i')
+    regexPathsFiles() {
+      return new RegExp(this.$store.getters.getSettingValue("regexPathsFiles"), 'i')
     }
   },
   watch: {
