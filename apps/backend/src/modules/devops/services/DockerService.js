@@ -231,7 +231,7 @@ export const updateDockerService = function (id, targetImage = null, user) {
 
             let createFoldersResponse;
             if(environmentService.volumes){
-                createFoldersResponse = await axios.post(createFoldersURL, environmentService.volumes)
+                createFoldersResponse = await axios.post(createFoldersURL, environmentService.volumes, headers)
             }
             
             let filesPath = '/api/docker/files'
