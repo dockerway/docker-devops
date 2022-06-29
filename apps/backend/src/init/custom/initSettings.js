@@ -18,7 +18,7 @@ const settings = [
     },
     {
         key: 'regexFileName',
-        value: '^[a-zA-Z]+$',
+        value: '^[a-zA-Z0-9._]+$',
         type: 'string',
         label: {en: 'File name regular expression', es: 'Nombre del archivo Expresión regular de rutas', pt: 'Nombre del archivo Expressão regular de rotas'}
     }
