@@ -15,6 +15,12 @@ const settings = [
         value: '^\\/(storage){1}(\\/{1}[a-z\\_\\.\\-0-9]+)*$',
         type: 'string',
         label: {en: 'File Paths regular expression', es: 'Archivo Expresión regular de rutas', pt: 'Archivo Expressão regular de rotas'}
+    },
+    {
+        key: 'regexFileName',
+        value: '^[a-zA-Z]+$',
+        type: 'string',
+        label: {en: 'File name regular expression', es: 'Nombre del archivo Expresión regular de rutas', pt: 'Nombre del archivo Expressão regular de rotas'}
     }
 ]
 
