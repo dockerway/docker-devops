@@ -32,7 +32,7 @@ export const findDockerServiceTag = function (id) {
 
 
         } catch (e) {
-            const message = e.message + ". " + (e.response.data ? e.response.data : '');
+            const message = e.message + ". " + (e.response?.data ? e.response.data : '');
             reject(message);
         }
 
@@ -64,7 +64,7 @@ export const findDockerServiceStats = function (id) {
 
 
         } catch (e) {
-            const message = e.message + ". " + (e.response.data ? e.response.data : '');
+            const message = e.message + ". " + (e.response?.data ? e.response.data : '');
             reject(message);
         }
 
@@ -96,7 +96,7 @@ export const findDockerService = function (id) {
 
 
         } catch (e) {
-            const message = e.message + ". " + (e.response.data ? e.response.data : '');
+            const message = e.message + ". " + (e.response?.data ? e.response.data : '');
             reject(message);
         }
 
@@ -125,7 +125,7 @@ export const fetchDockerService = function (environmentId) {
 
 
         } catch (e) {
-            const message = e.message + ". " + (e.response.data ? e.response.data : '');
+            const message = e.message + ". " + (e.response?.data ? e.response.data : '');
             reject(message);
         }
 
@@ -159,8 +159,8 @@ export const createDockerService = function (id, user) {
 
                 environmentService.volumes = [...environmentService.volumes, ...environmentService.files.map(file => {
                     return {
-                        hostVolume: file.hostPath + "/" + file.fileName,
-                        containerVolume: file.containerPath + "/" + file.fileName
+                        hostVolume: file.hostPath,
+                        containerVolume: file.containerPath
                     }
                 })]
             }
@@ -243,8 +243,8 @@ export const updateDockerService = function (id, targetImage = null, user) {
                 filesCreatedResponse = await axios.post(filesURL, environmentService.files, headers)
                 environmentService.volumes = [...environmentService.volumes, ...environmentService.files.map(file => {
                     return {
-                        hostVolume: file.hostPath + "/" + file.fileName,
-                        containerVolume: file.containerPath + "/" + file.fileName
+                        hostVolume: file.hostPath,
+                        containerVolume: file.containerPath
                     }
                 })]
             }
