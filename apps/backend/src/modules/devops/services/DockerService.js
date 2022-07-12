@@ -167,8 +167,8 @@ export const createDockerService = function (id, user) {
 
                 environmentService.volumes = [...environmentService.volumes, ...environmentService.files.map(file => {
                     return {
-                        hostVolume: file.hostPath,
-                        containerVolume: file.containerPath
+                        hostVolume: file.hostPath + "/" + file.fileName,
+                        containerVolume: file.containerPath + "/" + file.fileName
                     }
                 })]
             }
@@ -258,8 +258,8 @@ export const updateDockerService = function (id, targetImage = null, user) {
                 filesCreatedResponse = await axios.post(filesURL, environmentService.files, headers)
                 environmentService.volumes = [...environmentService.volumes, ...environmentService.files.map(file => {
                     return {
-                        hostVolume: file.hostPath,
-                        containerVolume: file.containerPath
+                        hostVolume: file.hostPath + "/" + file.fileName,
+                        containerVolume: file.containerPath + "/" + file.fileName
                     }
                 })]
             }
