@@ -149,12 +149,8 @@ export const createDockerService = function (id, user) {
             if(environmentService.volumes){
                 let verifiedVolumes = environmentService.volumes.map(function(vol) {return vol.hostVolume});
                 let verifiedFiles = environmentService.files.map(function(file) {return file.hostPath + "/" + file.fileName});
-                let body = {
-                    volumes: verifiedVolumes,
-                    files: verifiedFiles
-                }
-                console.log(body)
-                createFoldersResponse = await axios.post(createFoldersURL, body, headers)
+                let verifiedFolders = verifiedVolumes.filter(elem => !elem.includes(verifiedFiles))
+                createFoldersResponse = await axios.post(createFoldersURL, verifiedFolders, headers)
             }
 
             let filesPath = '/api/docker/files'
@@ -241,12 +237,8 @@ export const updateDockerService = function (id, targetImage = null, user) {
             if(environmentService.volumes){
                 let verifiedVolumes = environmentService.volumes.map(function(vol) {return vol.hostVolume});
                 let verifiedFiles = environmentService.files.map(function(file) {return file.hostPath + "/" + file.fileName});
-                let body = {
-                    volumes: verifiedVolumes,
-                    files: verifiedFiles
-                }
-                console.log(body)
-                createFoldersResponse = await axios.post(createFoldersURL, body, headers)
+                let verifiedFolders = verifiedVolumes.filter(elem => !elem.includes(verifiedFiles))
+                createFoldersResponse = await axios.post(createFoldersURL, verifiedFolders, headers)
             }
             
             let filesPath = '/api/docker/files'
