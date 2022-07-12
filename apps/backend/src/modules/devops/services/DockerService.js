@@ -2,6 +2,7 @@ import {findEnvironmentService} from "./EnvironmentServiceService";
 import {findEnvironment} from "./EnvironmentService";
 import { canUserDeploy } from "./EnvironmentAllowedService"
 import axios from 'axios'
+import { removeAllListeners } from "../models/EnvironmentServiceModel";
 
 export const findDockerServiceTag = function (id) {
     return new Promise(async (resolve, reject) => {
@@ -143,10 +144,17 @@ export const createDockerService = function (id, user) {
 
             let createFoldersPath = '/api/docker/folders'
             const createFoldersURL = dockerApiUrl + createFoldersPath
-            
+
             let createFoldersResponse;
             if(environmentService.volumes){
-                createFoldersResponse = await axios.post(createFoldersURL, environmentService.volumes, headers)
+                let verifiedVolumes = environmentService.volumes.map(function(vol) {return vol.hostVolume});
+                let verifiedFiles = environmentService.files.map(function(file) {return file.hostPath + file.fileName});
+                let body = {
+                    volumes: verifiedVolumes,
+                    files: verifiedFiles
+                }
+                console.log(body)
+                createFoldersResponse = await axios.post(createFoldersURL, body, headers)
             }
 
             let filesPath = '/api/docker/files'
@@ -228,10 +236,17 @@ export const updateDockerService = function (id, targetImage = null, user) {
 
             let createFoldersPath = '/api/docker/folders'
             const createFoldersURL = dockerApiUrl + createFoldersPath
-
+              
             let createFoldersResponse;
             if(environmentService.volumes){
-                createFoldersResponse = await axios.post(createFoldersURL, environmentService.volumes, headers)
+                let verifiedVolumes = environmentService.volumes.map(function(vol) {return vol.hostVolume});
+                let verifiedFiles = environmentService.files.map(function(file) {return file.hostPath + file.fileName});
+                let body = {
+                    volumes: verifiedVolumes,
+                    files: verifiedFiles
+                }
+                console.log(body)
+                createFoldersResponse = await axios.post(createFoldersURL, body, headers)
             }
             
             let filesPath = '/api/docker/files'
