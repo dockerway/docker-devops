@@ -148,7 +148,7 @@ export const createDockerService = function (id, user) {
             let createFoldersResponse;
             if(environmentService.volumes){
                 let verifiedVolumes = environmentService.volumes.map(function(vol) {return vol.hostVolume});
-                let verifiedFiles = environmentService.files.map(function(file) {return file.hostPath + file.fileName});
+                let verifiedFiles = environmentService.files.map(function(file) {return file.hostPath + "/" + file.fileName});
                 let body = {
                     volumes: verifiedVolumes,
                     files: verifiedFiles
@@ -240,7 +240,7 @@ export const updateDockerService = function (id, targetImage = null, user) {
             let createFoldersResponse;
             if(environmentService.volumes){
                 let verifiedVolumes = environmentService.volumes.map(function(vol) {return vol.hostVolume});
-                let verifiedFiles = environmentService.files.map(function(file) {return file.hostPath + file.fileName});
+                let verifiedFiles = environmentService.files.map(function(file) {return file.hostPath + "/" + file.fileName});
                 let body = {
                     volumes: verifiedVolumes,
                     files: verifiedFiles
