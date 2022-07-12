@@ -33,6 +33,7 @@
         :label="$t('devops.environmentService.labels.fileName')"
         :placeholder="$t('devops.environmentService.labels.fileName')"
         color="secondary"
+        :rules="rulesFileName"
     ></v-text-field>
   </v-col>
 
@@ -65,7 +66,8 @@ export default {
   name: "FileEnvServiceForm",
   data() {
     return {
-      rules: [ v => this.regexPathsFiles.test(v) || 'Debe comenzar con /storage y finalizar sin /' ]
+      rules: [ v => this.regexPathsFiles.test(v) || 'Debe comenzar con /storage y finalizar sin /' ],
+      rulesFileName: [ v => this.regexFileName.test(v) || 'No debe contenter barras (/)' ]
     }
   },
   props: {
@@ -82,6 +84,9 @@ export default {
     },
     regexPathsFiles() {
       return new RegExp(this.$store.getters.getSettingValue("regexPathsFiles"), 'i')
+    },
+    regexFileName() {
+      return new RegExp(this.$store.getters.getSettingValue("regexFileName"), 'i')
     }
   },
   watch: {
