@@ -168,7 +168,7 @@
                     :new-item="{fileName:'',fileContent:'',containerPath:''}"
                 >
                   <template v-slot:default="{item,index}">
-                    <file-service-form v-model="form.files[index]"></file-service-form>
+                    <file-service-form v-model="form.files[index]" :files="form.files"></file-service-form>
                   </template>
                 </form-list>
 
