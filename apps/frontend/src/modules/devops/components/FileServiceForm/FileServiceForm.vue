@@ -51,15 +51,26 @@
 
 <script>
 export default {
-  name: "FileEnvServiceForm",
+  name: "FileServiceForm",
   data() {
     return {
       rules: [ v => this.regexPathsFiles.test(v) || 'Debe comenzar con /storage, /logs o /localdata y finalizar sin /' ],
-      rulesFileName: [ v => this.regexFileName.test(v) || 'No debe contenter barras (/)' ]
+      rulesFileName: [ 
+        v => this.regexFileName.test(v) || 'No debe contenter barras (/)',
+        v => this.regexDuplicatedFiles(v) || 'Nombre del archivo ya existente con el mismo path'
+      ]
     }
   },
   props: {
     value: {type: Object, required: true},
+    files: {type: Array, required: true}
+  },
+  methods: {
+    regexDuplicatedFiles(fileName) {
+      let filesDuplicatedLength = this.files.filter(item => item.containerPath === this.form.containerPath && item.fileName === fileName).length
+      let filesDuplicated = filesDuplicatedLength >= 2
+      return !filesDuplicated
+    }
   },
   computed: {
     form: {
