@@ -48,6 +48,7 @@ const initService = async () => {
 
     //Init settings
     await initSettings()
+    await InitService.initLdapSettings()
 
     //Dracul Customization module Permissions
     await initPermissionsCustomization()
