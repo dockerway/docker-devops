@@ -52,7 +52,7 @@ import {
 } from '../../modules/registry/permissions/Registry'
 
 module.exports = {
-    name: "Implementaciones",
+    name: "Infraestructura",
     permissions: [
         NOTIFICATION_SHOW,
         DEV_VIEW,
