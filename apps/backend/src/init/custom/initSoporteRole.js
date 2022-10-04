@@ -34,7 +34,7 @@ import {
 } from '../../modules/registry/permissions/Registry'
 
 module.exports = {
-    name: "soporte",
+    name: "Soporte",
     permissions: [
         NOTIFICATION_SHOW,
         PROD_VIEW,
