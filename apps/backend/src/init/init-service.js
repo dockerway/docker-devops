@@ -13,6 +13,10 @@ import desarrolladorRole from './custom/initDesarrolladorRole'
 import soporteRole from './custom/initSoporteRole'
 import qaRole from './custom/initQaRole'
 import implementadorRole from './custom/initImplementadorRole'
+import direccionRole from './custom/initDireccionRole'
+import pmRole from './custom/initPMRole'
+import infraestructuraRole from './custom/initInfraestructuraRole'
+
 
 import {
     permissions as notiPermissions
@@ -58,7 +62,7 @@ const initService = async () => {
 
     await InitService.initAdminRole()
 
-    await InitService.initRoles([desarrolladorRole, soporteRole, qaRole, implementadorRole])
+    await InitService.initRoles([soporteRole, desarrolladorRole, qaRole, pmRole, direccionRole, implementadorRole, infraestructuraRole])
 
     await InitService.initRootUser()
 

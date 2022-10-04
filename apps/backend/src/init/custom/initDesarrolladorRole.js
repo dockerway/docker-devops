@@ -43,7 +43,7 @@ import {
 } from '../../modules/registry/permissions/Registry'
 
 module.exports = {
-    name: "desarrollador",
+    name: "desarrollo",
     permissions: [
         NOTIFICATION_SHOW,
         DEV_VIEW,
