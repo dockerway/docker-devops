@@ -1,6 +1,6 @@
 import {
     NOTIFICATION_SHOW
-} from "@dracul/notification-backend/lib/permissions";
+} from "@dracul/notification-backend/lib/permissions"
 
 import {
     PLATFORM_MENU,
@@ -20,11 +20,11 @@ import {
 import {
     ENVIRONMENT_MENU,
     ENVIRONMENT_SHOW,
-    DEV_VIEW,
-    DEV_EDIT,
-    DEV_ENV,
-    DEV_DEPLOY,
     QA_VIEW,
+    QA_EDIT,
+    QA_ENV,
+    QA_DEPLOY,
+    DEV_VIEW,
     PRE_VIEW,
     PROD_VIEW
 } from '../../modules/devops/permissions/Environment'
@@ -43,14 +43,14 @@ import {
 } from '../../modules/registry/permissions/Registry'
 
 module.exports = {
-    name: "desarrollo",
+    name: "QA",
     permissions: [
         NOTIFICATION_SHOW,
-        DEV_VIEW,
-        DEV_EDIT,
-        DEV_ENV,
-        DEV_DEPLOY,
         QA_VIEW,
+        QA_EDIT,
+        QA_ENV,
+        QA_DEPLOY,
+        DEV_VIEW,
         PRE_VIEW,
         PROD_VIEW,
         PLATFORM_MENU,
