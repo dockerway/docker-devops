@@ -2,7 +2,7 @@ import {findEnvironmentService} from "./EnvironmentServiceService";
 import {findEnvironment} from "./EnvironmentService";
 import { canUserDeploy } from "./EnvironmentAllowedService"
 import axios from 'axios'
-import { removeAllListeners } from "../models/EnvironmentServiceModel";
+import { createAudit } from "@dracul/audit-backend";
 
 export const findDockerServiceTag = function (id) {
     return new Promise(async (resolve, reject) => {
@@ -133,7 +133,7 @@ export const fetchDockerService = function (environmentId) {
     })
 }
 
-export const createDockerService = function (id, user) {
+export const createDockerService = function (authUser, id) {
     return new Promise(async (resolve, reject) => {
         try {
             let environmentService = await findEnvironmentService(id);
@@ -171,7 +171,7 @@ export const createDockerService = function (id, user) {
             //ELIMINA DUPLICADOS
             environmentService.volumes = [...new Set(environmentService.volumes.map(a => JSON.stringify({hostVolume: a.hostVolume, containerVolume: a.containerVolume})))].map(a => JSON.parse(a))
 
-            if (! await canUserDeploy(user, environmentService.environment.type)) {
+            if (! await canUserDeploy(authUser, environmentService.environment.type)) {
                 return reject("El usuario no tiene permiso para desplegar este servicio");
             }
 
@@ -206,6 +206,7 @@ export const createDockerService = function (id, user) {
             const response = await axios.post(URL, data, headers);
 
             if (response.status = 200) {
+                await createAudit(authUser, {authUser: authUser.id, action:'Deploy docker service', resource: data.name})
                 resolve(response.data);
             } else {
                 reject(response);
@@ -303,6 +304,7 @@ export const updateDockerService = function (id, targetImage = null, user) {
                     await environmentService.save();
                 }
 
+                await createAudit(user, {user: user.id, action:'Update docker service', resource: `${data.name}`})
                 resolve(response.data);
             } else {
                 reject(response);

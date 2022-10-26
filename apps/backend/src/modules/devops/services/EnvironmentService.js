@@ -1,6 +1,7 @@
 import Environment from './../models/EnvironmentModel'
 import {UserInputError} from 'apollo-server-express'
 import { environmentsAllowedView } from './EnvironmentAllowedService';
+import { createAudit } from "@dracul/audit-backend"
 
 export const findEnvironment = async function (id) {
     return new Promise((resolve, reject) => {
@@ -101,7 +102,6 @@ export const paginateEnvironment = function ( pageNumber = 1, itemsPerPage = 5, 
 
 
 
-
 export const createEnvironment = async function (authUser, {name, dockerApiUrl, dockerApiToken, type}) {
 
     dockerApiUrl = dockerApiUrl.replace(/\/+$/, '')
@@ -111,7 +111,7 @@ export const createEnvironment = async function (authUser, {name, dockerApiUrl, 
     })
     doc.id = doc._id;
     return new Promise((resolve, reject) => {
-        doc.save((error => {
+        doc.save( (async (error) => {
         
             if (error) {
                 if (error.name == "ValidationError") {
@@ -120,6 +120,8 @@ export const createEnvironment = async function (authUser, {name, dockerApiUrl, 
                 return reject(error)
             }    
 
+            await createAudit(authUser, {user: authUser.id, action:'Create environment', resource: `${doc.name}`})
+
             resolve(doc)
         }))
     })
@@ -127,12 +129,19 @@ export const createEnvironment = async function (authUser, {name, dockerApiUrl, 
 
 export const updateEnvironment = async function (authUser, id, {name, dockerApiUrl, dockerApiToken, type}) {
     return new Promise((resolve, reject) => {
+
+        let envOriginalName
+
+        findEnvironment(id).then(({name}) => {
+            envOriginalName = name
+        })
+
         dockerApiUrl = dockerApiUrl.replace(/\/+$/, '')
 
         Environment.findOneAndUpdate({_id: id},
         {name, dockerApiUrl, dockerApiToken, type}, 
         {new: true, runValidators: true, context: 'query'},
-        (error,doc) => {
+        async (error,doc) => {
             
             if (error) {
                 if (error.name == "ValidationError") {
@@ -142,17 +151,26 @@ export const updateEnvironment = async function (authUser, id, {name, dockerApiU
                 return reject(error)
                 
             } 
+
+            const auditDescription = envOriginalName !== name ? `Resource's new name is ${name}` : ''
+            await createAudit(authUser, {user: authUser.id, action:'Update environment',
+                resource: envOriginalName,
+                description: auditDescription}
+            )
         
             resolve(doc)
         })
     })
 }
 
-export const deleteEnvironment = function (id) {
+export const deleteEnvironment = function (authUser, id) {
     return new Promise((resolve, reject) => {
         findEnvironment(id).then((doc) => {
-            doc.delete(function (err) {
-                err ? reject(err) : resolve({id: id, success: true})
+            doc.delete(async function (err) {
+                if (err) reject(err)
+                
+                await createAudit(authUser, {user: authUser.id, action:'Delete environment', resource: `${doc.name}`})
+                resolve({id: id, success: true})
             });
         })
     })

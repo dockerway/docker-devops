@@ -2,6 +2,7 @@ import EnvironmentService from './../models/EnvironmentServiceModel'
 import {UserInputError} from 'apollo-server-express'
 import { canUserUpdate, environmentsAllowedView } from './EnvironmentAllowedService'
 import { findEnvironment } from './EnvironmentService'
+import { createAudit } from "@dracul/audit-backend"
 
 export const findEnvironmentService = async function (id) {
     return new Promise((resolve, reject) => {
@@ -142,13 +143,22 @@ export const createEnvironmentService = async function (authUser, {environment, 
                 return reject(error)
             }
 
-            doc.populate('environment').populate('service').populate('stack').execPopulate(() => resolve(doc))
+            doc.populate('environment').populate('service').populate('stack').execPopulate(async () => {
+                await createAudit(authUser, {user: authUser.id, action:'Create environment service', resource: `${doc.name}`})
+                resolve(doc)
+            })
         }))
     })
 }
 
 export const updateEnvironmentService = async function (authUser, id, {environment, service, stack, image, name, replicas, labels, envs, ports, volumes, files, constraints, limits, preferences}) {
     return new Promise(async (resolve, reject) => {
+
+        let envServiceOriginalName
+        findEnvironmentService(id).then(({name}) => {
+            envServiceOriginalName = name
+        })
+
         let env = await findEnvironment(environment)
         if (! await canUserUpdate(authUser, env.type)) {
             return reject("El usuario no tiene permiso para editar este entorno")
@@ -167,7 +177,15 @@ export const updateEnvironmentService = async function (authUser, id, {environme
 
                 }
 
-                doc.populate('environment').populate('service').populate('stack').execPopulate(() => resolve(doc))
+                doc.populate('environment').populate('service').populate('stack').execPopulate(async () => {
+                    const auditDescription = envServiceOriginalName !== name ? `Resource's new name is ${name}` : ''
+                    await createAudit(authUser, {user: authUser.id, action:'Update environment service',
+                        resource: envServiceOriginalName,
+                        description: auditDescription}
+                    )
+                    
+                    resolve(doc)
+                })
             })
     })
 }
@@ -179,8 +197,11 @@ export const deleteEnvironmentService = function (authUser, id) {
             return reject("El usuario no tiene permiso para eliminar este entorno servicio")
         }
         findEnvironmentService(id).then((doc) => {
-            doc.delete(function (err) {
-                err ? reject(err) : resolve({id: id, success: true})
+            doc.delete(async function (err) {
+                if (err) reject(err)
+                
+                await createAudit(authUser, {user: authUser.id, action:'Delete environment service', resource: `${environmentService.name}`})
+                resolve({id: id, success: true})
             });
         })
     })

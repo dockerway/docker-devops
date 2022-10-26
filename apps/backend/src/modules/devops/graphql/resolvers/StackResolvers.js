@@ -44,7 +44,7 @@ export default {
         deleteStack: (_, {id}, {user,rbac}) => {
             if (!user) throw new AuthenticationError("Unauthenticated")
             if(!rbac.isAllowed(user.id, STACK_DELETE)) throw new ForbiddenError("Not Authorized")
-            return deleteStack(id)
+            return deleteStack(user, id)
         },
     }
 

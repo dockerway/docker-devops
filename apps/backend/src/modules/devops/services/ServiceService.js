@@ -1,5 +1,6 @@
 import Service from './../models/ServiceModel'
 import {UserInputError} from 'apollo-server-express'
+import {createAudit} from "@dracul/audit-backend"
 
 export const findService = async function (id) {
     return new Promise((resolve, reject) => {
@@ -135,17 +136,29 @@ export const createService = async function (authUser, {name, description, platf
                 return reject(error)
             }
 
-            doc.populate('platform').execPopulate(() => resolve(doc))
+
+            doc.populate('platform').execPopulate(async () => {
+                await createAudit(authUser, {user: authUser.id, action: 'Create service', resource: doc.name})
+            
+                resolve(doc)
+            })
         }))
     })
 }
 
 export const updateService = async function (authUser, id, {name, description, platform, image, repository, volumes, ports, envs, files, constraints, limits, preferences}) {
     return new Promise((resolve, reject) => {
+
+        let serviceOriginalName
+
+        findService(id).then(({name}) => {
+            serviceOriginalName = name
+        })
+
         Service.findOneAndUpdate({_id: id},
         {name, description, platform, image, repository, volumes, ports, envs, files, constraints, limits, preferences},
         {new: true, runValidators: true, context: 'query'},
-        (error,doc) => {
+        async(error,doc) => {
 
             if (error) {
                 if (error.name == "ValidationError") {
@@ -156,17 +169,29 @@ export const updateService = async function (authUser, id, {name, description, p
 
             }
 
-            doc.populate('platform').execPopulate(() => resolve(doc))
+            doc.populate('platform').execPopulate(async () => {
+                const auditDescription = serviceOriginalName !== name ? `Resource's new name is ${name}` : ''
+                await createAudit(authUser, {user: authUser.id, action:'Update service',
+                    resource: serviceOriginalName,
+                    description: auditDescription}
+                )
+
+                resolve(doc)
+            })
         })
     })
 }
 
-export const deleteService = function (id) {
+export const deleteService = function (user, id) {
     return new Promise((resolve, reject) => {
         findService(id).then((doc) => {
-            doc.delete(function (err) {
-                err ? reject(err) : resolve({id: id, success: true})
+            doc.delete(async function (err) {
+                if (err) reject(err)
+
+                await createAudit(user, {user: user.id, action:'Delete service', resource: doc.name})
+                resolve({id: id, success: true})
             });
+
         })
     })
 }

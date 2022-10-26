@@ -1,5 +1,6 @@
 import Stack from './../models/StackModel'
 import {UserInputError} from 'apollo-server-express'
+import {createAudit} from "@dracul/audit-backend"
 
 export const findStack = async function (id) {
     return new Promise((resolve, reject) => {
@@ -121,13 +122,23 @@ export const createStack = async function (authUser, {name, platform, environmen
                 return reject(error)
             }
 
-            doc.populate('platform').populate('environments').execPopulate(() => resolve(doc))
+            doc.populate('platform').populate('environments').execPopulate(async () => {
+                await createAudit(authUser, {user: authUser.id, action:'Create stack', resource: `${doc.name}`})
+                resolve(doc)
+            })
         }))
     })
 }
 
 export const updateStack = async function (authUser, id, {name, platform, environments}) {
     return new Promise((resolve, reject) => {
+        
+        let stackOriginalName
+
+        findStack(id).then(({name}) => {
+            stackOriginalName = name
+        })
+
         Stack.findOneAndUpdate({_id: id},
         {name, platform, environments},
         {new: true, runValidators: true, context: 'query'},
@@ -142,16 +153,27 @@ export const updateStack = async function (authUser, id, {name, platform, enviro
 
             }
 
-            doc.populate('platform').populate('environments').execPopulate(() => resolve(doc))
+            doc.populate('platform').populate('environments').execPopulate(async() => {
+                const auditDescription = stackOriginalName !== name ? `Resource's new name is ${name}` : ''
+                await createAudit(authUser, {user: authUser.id, action:'Update stack',
+                    resource: stackOriginalName,
+                    description: auditDescription}
+                )
+                
+                resolve(doc)
+            })
         })
     })
 }
 
-export const deleteStack = function (id) {
+export const deleteStack = function (authUser, id) {
     return new Promise((resolve, reject) => {
         findStack(id).then((doc) => {
-            doc.delete(function (err) {
-                err ? reject(err) : resolve({id: id, success: true})
+            doc.delete(async function (err) {
+                if (err) reject(err)
+                
+                await createAudit(authUser, {user: authUser.id, action:'Delete stack', resource: `${doc.name}`})
+                resolve({id: id, success: true})
             });
         })
     })

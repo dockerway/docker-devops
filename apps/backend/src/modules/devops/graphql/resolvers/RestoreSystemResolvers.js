@@ -13,7 +13,7 @@ export default {
         restoreSystem: (_, {input}, {user,rbac}) => {
             if (!user) throw new AuthenticationError("Unauthenticated")
             if(!rbac.isAllowed(user.id, RESTORE_SYSTEM)) throw new ForbiddenError("Not Authorized")
-            return restoreSystem()
+            return restoreSystem(user)
         },
     }
 
