@@ -29,6 +29,7 @@ import {
 import {initSettings} from './custom/initSettings'
 
 import modulesPermissions from './custom/modulesPermissions'
+import { permissions as AuditPermissions } from "@dracul/audit-backend"
 
 const initService = async () => {
 
@@ -48,6 +49,11 @@ const initService = async () => {
         settingsPermissions.SETTINGS_UPDATE,
         settingsPermissions.SETTINGS_DELETE,
         settingsPermissions.SETTINGS_SHOW,
+    ])
+
+    //Audit Permissions
+    await InitService.initPermissions([
+        AuditPermissions.AUDIT_SHOW
     ])
 
     //Init settings

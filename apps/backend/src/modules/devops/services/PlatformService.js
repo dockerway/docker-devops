@@ -1,5 +1,6 @@
 import Platform from './../models/PlatformModel'
 import {UserInputError} from 'apollo-server-express'
+import { createAudit } from '@dracul/audit-backend'
 
 export const findPlatform = async function (id) {
     return new Promise((resolve, reject) => {
@@ -102,13 +103,13 @@ export const paginatePlatform = function ( pageNumber = 1, itemsPerPage = 5, sea
 
 
 export const createPlatform = async function (authUser, {name}) {
-
+    console.log(`AUTH USER VALUE: ${authUser}`)
     const doc = new Platform({
         name
     })
     doc.id = doc._id;
     return new Promise((resolve, reject) => {
-        doc.save((error => {
+        doc.save((async (error) => {
 
             if (error) {
                 if (error.name == "ValidationError") {
@@ -117,6 +118,7 @@ export const createPlatform = async function (authUser, {name}) {
                 return reject(error)
             }
 
+            await createAudit(authUser, {user: authUser.id, action: 'Create platform', resource: doc.name})
             resolve(doc)
         }))
     })
@@ -124,10 +126,17 @@ export const createPlatform = async function (authUser, {name}) {
 
 export const updatePlatform = async function (authUser, id, {name}) {
     return new Promise((resolve, reject) => {
+
+        let platformOriginalName
+
+        findPlatform(id).then(({name}) =>{
+            platformOriginalName = name
+        })
+
         Platform.findOneAndUpdate({_id: id},
         {name},
         {new: true, runValidators: true, context: 'query'},
-        (error,doc) => {
+        async (error,doc) => {
 
             if (error) {
                 if (error.name == "ValidationError") {
@@ -138,16 +147,25 @@ export const updatePlatform = async function (authUser, id, {name}) {
 
             }
 
+            const auditDescription = platformOriginalName !== name ? `Resource's new name is ${name}` : ''
+            await createAudit(authUser, {user: authUser.id, action:'Update platform',
+                resource: platformOriginalName,
+                description: auditDescription}
+            )
+
             resolve(doc)
         })
     })
 }
 
-export const deletePlatform = function (id) {
+export const deletePlatform = function (authUser, id) {
     return new Promise((resolve, reject) => {
         findPlatform(id).then((doc) => {
-            doc.delete(function (err) {
-                err ? reject(err) : resolve({id: id, success: true})
+            doc.delete(async function (err) {
+                if (err) reject(err)
+            
+                await createAudit(authUser, {user: authUser.id, action:'Delete platform', resource: doc.name})
+                resolve({id: id, success: true})
             });
         })
     })

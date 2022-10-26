@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import App from './App.vue'
-import vuetify from './plugins/vuetify';
+import vuetify from './plugins/vuetify'
 import store from './store'
 import i18n from './i18n'
-import router from "./router";
+import router from "./router"
+import { AuditProvider } from '@dracul/audit-frontend'
+
 
 import apolloClient from './apollo'
 import {setGraphQlClientToProviders} from '@dracul/user-frontend'
@@ -15,6 +17,7 @@ customizationProvider.setGqlc(apolloClient)
 notificationProvider.setGqlc(apolloClient)
 notificationProvider.setGqlcWs(apolloClient)
 SettingsProvider.setGqlc(apolloClient)
+AuditProvider.setGqlc(apolloClient)
 
 Vue.config.productionTip = false
 

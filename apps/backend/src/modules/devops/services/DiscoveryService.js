@@ -147,7 +147,7 @@ export const createDiscovery = function (servicesDiscovered, user) {
 
                 if (!platform) {
                     console.log("PLATFORM NEW:", serviceDiscovered)
-                    platform = await createPlatform(null, {name: serviceDiscovered.namespace})
+                    platform = await createPlatform(user, {name: serviceDiscovered.namespace})
                     platformsCreated.push(platform)
                 } else {
                     console.log("PLATFORM OLD:", serviceDiscovered)
@@ -184,7 +184,7 @@ export const createDiscovery = function (servicesDiscovered, user) {
                     serviceLimits.CPULimit = serviceLimits?.CPULimit ? parseFloat(serviceLimits.CPULimit / 1000000000) : 0
 
                     let baseImage = serviceDiscovered.image.split(":")[0]
-                    service = await createService(null, {
+                    service = await createService(user, {
                         name: serviceDiscovered.imageName,
                         platform: platform.id,
                         image: baseImage,
@@ -210,7 +210,7 @@ export const createDiscovery = function (servicesDiscovered, user) {
 
                 if (!stack) {
                     console.log("STACK NEW:", serviceDiscovered)
-                    stack = await createStack(null,
+                    stack = await createStack(user,
                         {
                             name: serviceDiscovered.stack,
                             platform: platform.id,

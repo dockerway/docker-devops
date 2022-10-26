@@ -44,7 +44,7 @@ export default {
         deleteEnvironment: (_, {id}, {user,rbac}) => {
             if (!user) throw new AuthenticationError("Unauthenticated")
             if(!rbac.isAllowed(user.id, ENVIRONMENT_DELETE)) throw new ForbiddenError("Not Authorized")
-            return deleteEnvironment(id)
+            return deleteEnvironment(user, id)
         },
     }
 

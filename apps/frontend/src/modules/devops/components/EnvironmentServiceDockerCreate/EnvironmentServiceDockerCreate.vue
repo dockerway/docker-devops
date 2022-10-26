@@ -110,6 +110,8 @@ export default {
       return new Promise((resolve, reject) => {
         this.errors = []
         this.loading = true
+        console.log(`createdockerservice`)
+
         DockerProvider.createDockerService(this.serviceId)
             .then(r => {
               this.created = true

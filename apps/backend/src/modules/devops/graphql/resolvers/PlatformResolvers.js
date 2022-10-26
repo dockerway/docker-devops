@@ -44,7 +44,7 @@ export default {
         deletePlatform: (_, {id}, {user,rbac}) => {
             if (!user) throw new AuthenticationError("Unauthenticated")
             if(!rbac.isAllowed(user.id, PLATFORM_DELETE)) throw new ForbiddenError("Not Authorized")
-            return deletePlatform(id)
+            return deletePlatform(user, id)
         },
     }
 

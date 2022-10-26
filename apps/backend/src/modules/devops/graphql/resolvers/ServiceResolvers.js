@@ -44,7 +44,7 @@ export default {
         deleteService: (_, {id}, {user,rbac}) => {
             if (!user) throw new AuthenticationError("Unauthenticated")
             if(!rbac.isAllowed(user.id, SERVICE_DELETE)) throw new ForbiddenError("Not Authorized")
-            return deleteService(id)
+            return deleteService(user, id)
         },
     }
 

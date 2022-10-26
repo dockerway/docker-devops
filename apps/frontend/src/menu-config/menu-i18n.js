@@ -15,7 +15,8 @@ const messages = {
             discovery: "Discovery",
             registry: "Registry",
             image: "Image",
-            setting: "Setting"
+            setting: "Setting",
+            audit:"Audit"
         }
     },
     es: {
@@ -33,7 +34,9 @@ const messages = {
             discovery: "Discovery",
             registry: "Registry",
             image: "Image",
-            setting: "Configuración"
+            setting: "Configuración",
+            audit:"Auditoria"
+
         }
     },
     pt: {
@@ -51,7 +54,8 @@ const messages = {
             discovery: "Discovery",
             registry: "Registry",
             image: "Image",
-            setting: "Configuração"
+            setting: "Configuração",
+            audit:"Audit"
         }
     }
 }
