@@ -8,7 +8,7 @@ mongoose.set('useCreateIndex', true)
 
 import {InitService} from '@dracul/user-backend'
 import {initPermissionsCustomization} from '@dracul/customize-backend'
-import {initCustomization} from './custom/initCustomization'
+import {customizationInit} from './custom/initCustomization'
 import desarrolladorRole from './custom/initDesarrolloRole'
 import soporteRole from './custom/initSoporteRole'
 import qaRole from './custom/initQARole'
@@ -72,7 +72,7 @@ const initService = async () => {
 
     await InitService.initRootUser()
 
-    await initCustomization()
+    await customizationInit()
 }
 
 export {initService}
