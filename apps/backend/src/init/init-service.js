@@ -13,6 +13,7 @@ import desarrolladorRole from './custom/initDesarrolloRole'
 import soporteRole from './custom/initSoporteRole'
 import qaRole from './custom/initQARole'
 import implementadorRole from './custom/initImplementacionesRole'
+import sudoRole from './custom/initSudoRole'
 import direccionRole from './custom/initDireccionRole'
 import pmRole from './custom/initPMRole'
 import infraestructuraRole from './custom/initInfraestructuraRole'
@@ -68,7 +69,7 @@ const initService = async () => {
 
     await InitService.initAdminRole()
 
-    await InitService.initRoles([soporteRole, desarrolladorRole, qaRole, pmRole, direccionRole, implementadorRole, infraestructuraRole])
+    await InitService.initRoles([soporteRole, desarrolladorRole, qaRole, pmRole, direccionRole, implementadorRole, infraestructuraRole, sudoRole])
 
     await InitService.initRootUser()
 
