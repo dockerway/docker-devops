@@ -32,6 +32,7 @@
     "core-js": "^3.6.5",
     "dayjs": "^1.10.4",
     "graphql": "15.4.0",
+    "graphql-upload":"^13.0.0",
     "jwt-decode": "^2.2.0",
     "vue": "^2.7.4",
     "vue-chartjs": "^3.5.0",
