@@ -16,6 +16,8 @@ import {jwtMiddleware, corsMiddleware, rbacMiddleware, sessionMiddleware} from '
 import {ResponseTimeMiddleware,RequestMiddleware, GqlErrorLog, GqlResponseLog} from '@dracul/logger-backend'
 import {TimeoutMiddleware} from "./middlewares/TimeoutMiddleware";
 
+import { graphqlUploadExpress } from 'graphql-upload'
+
 const app = express();
 
 
@@ -71,6 +73,7 @@ const apolloServer = new ApolloServer({
     ]
 });
 
+graphqlUploadExpress(graphqlUploadExpress({ maxFileSize: 1000000000, maxFiles: 10 }))
 
 apolloServer.applyMiddleware({app})
 
