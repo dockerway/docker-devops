@@ -3,6 +3,7 @@ import {DefaultLogger} from "@dracul/logger-backend";
 DefaultLogger.info("Starting APP")
 
 
+import {graphqlUploadExpress} from 'graphql-upload';
 import initService from "./init/init-service";
 import express from 'express';
 
@@ -14,12 +15,12 @@ import {resolvers, typeDefs} from './modules-merge'
 import path from 'path'
 import {jwtMiddleware, corsMiddleware, rbacMiddleware, sessionMiddleware} from '@dracul/user-backend'
 import {ResponseTimeMiddleware,RequestMiddleware, GqlErrorLog, GqlResponseLog} from '@dracul/logger-backend'
-import {TimeoutMiddleware} from "./middlewares/TimeoutMiddleware";
 
 const app = express();
 
 
 
+app.use(graphqlUploadExpress({maxFileSize: 10000000, maxFiles: 10}));
 app.use(corsMiddleware)
 app.use(express.json())
 app.use(jwtMiddleware)
