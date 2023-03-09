@@ -206,7 +206,7 @@ export const createDockerService = function (authUser, id) {
             const response = await axios.post(URL, data, headers);
 
             if (response.status = 200) {
-                await createAudit(authUser, {authUser: authUser.id, action:'Deploy docker service', resource: data.name})
+                await createAudit(authUser, {user: authUser.id, action:'Deploy docker service', resource: data.name})
                 resolve(response.data);
             } else {
                 reject(response);
