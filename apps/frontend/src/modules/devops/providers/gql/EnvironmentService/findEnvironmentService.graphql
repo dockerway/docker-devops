@@ -5,6 +5,7 @@ query findEnvironmentService($id:ID!){
         environment{
             id
             name
+            type
         }
         service{
             id
