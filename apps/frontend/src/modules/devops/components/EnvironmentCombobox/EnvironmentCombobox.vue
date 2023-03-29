@@ -54,19 +54,17 @@
                 set(val) {this.$emit('input', val)}
             }
         },
-        mounted() {
-         this.fetch()
+        async mounted() {
+         await this.fetch()
         },
         methods: {
             validate(){
               return this.$refs.form.validate()
             },
-            fetch(){
-                this.loading= true
-                EnvironmentProvider.fetchEnvironment().then(r => {
-                    this.items = r.data.fetchEnvironment
-                }).catch(err => console.error(err))
-                .finally(()=> this.loading = false)
+            async fetch(){
+                this.loading = true
+                this.items = (await EnvironmentProvider.fetchEnvironment()).data.fetchEnvironment
+                this.loading = false
             }
             
         }
