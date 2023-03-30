@@ -115,7 +115,8 @@ export const paginateEnvironmentService = async function (user, pageNumber = 1, 
 
 export const createEnvironmentService = async function (authUser, { environment, service, stack, image, name, replicas, labels, envs, ports, volumes, files, constraints, limits, preferences }) {
     const env = await findEnvironment(environment)
-    if (! await canUserUpdate(authUser, env.type)) return Promise.reject("El usuario no tiene permiso para crear este entorno")
+
+    if (! await canUserUpdate(authUser, env.type)) throw new Error("El usuario no tiene permiso para crear este entorno")
 
     const doc = new EnvironmentService({
         environment, service, stack, image, name, replicas, labels, envs, ports, volumes, files, constraints, limits, preferences

@@ -151,14 +151,17 @@ export default {
       }
 
     },
-    createDiscovery() {
+    async createDiscovery() {
       if (this.getSelectedWithPlatform.length > 0) {
-        this.loading = true
-        DiscoveryProvider.createDiscovery(this.getSelectedWithPlatform)
-          .then(r => {
-            this.created = r.data.createDiscovery
-          })
-          .finally(() => this.loading = false)
+        try {
+          this.loading = true
+          const createDiscovery = await DiscoveryProvider.createDiscovery(this.getSelectedWithPlatform)
+          this.created = createDiscovery.data.createDiscovery
+        } catch (error) {
+          console.log(`An error happened when we tried to create the discovery '${error}'`)
+        } finally {
+          this.loading = false
+        }
       }
     },
     async startDiscovery() {
@@ -168,7 +171,7 @@ export default {
       } catch (error) {
         console.log('An error happened when we started the discovery')
       } finally {
-        () => this.loading = false
+        this.loading = false
       }
     }
   }

@@ -1,31 +1,22 @@
 <template>
-  <crud-create :open="open"
-               :loading="loading"
-               :title="title"
-               :errorMessage="errorMessage"
-               @create="create"
-               @close="$emit('close')"
-  >
-    <environment-service-form ref="form" v-model="form" :input-errors="inputErrors"/>
+  <crud-create :open="open" :loading="loading" :title="title" :errorMessage="errorMessage" @create="create"
+    @close="$emit('close')">
+    <environment-service-form ref="form" v-model="form" :input-errors="inputErrors" />
   </crud-create>
 </template>
 
 <script>
 
 import EnvironmentServiceProvider from "../../../../providers/EnvironmentServiceProvider";
-
-import {CrudCreate, ClientError} from '@dracul/common-frontend'
-
+import { CrudCreate, ClientError } from '@dracul/common-frontend'
 import EnvironmentServiceForm from "../EnvironmentServiceForm";
 
 
 export default {
   name: "EnvironmentServiceCreate",
-
-  components: {EnvironmentServiceForm, CrudCreate},
-
+  components: { EnvironmentServiceForm, CrudCreate },
   props: {
-    open: {type: Boolean, default: true}
+    open: { type: Boolean, default: true }
   },
 
   data() {
@@ -48,10 +39,10 @@ export default {
         labels: [],
         constraints: [],
         limits: {
-          memoryReservation:0,
-          memoryLimit:0,
-          CPUReservation:0, 
-          CPULimit:0
+          memoryReservation: 0,
+          memoryLimit: 0,
+          CPUReservation: 0,
+          CPULimit: 0
         },
         preferences: []
       }
@@ -59,20 +50,26 @@ export default {
   },
 
   methods: {
-    create() {
+    async create() {
       if (this.$refs.form.validate()) {
         this.loading = true
-        EnvironmentServiceProvider.createEnvironmentService(this.form).then(r => {
-              if (r) {
-                this.$emit('itemCreated', r.data.createEnvironmentService)
-                this.$emit('close')
-              }
-            }
-        ).catch(error => {
-          let clientError = new ClientError(error)
+        try {
+          const newEnvironmentService = await EnvironmentServiceProvider.createEnvironmentService(this.form)
+
+          if (newEnvironmentService) {
+            this.$emit('itemCreated', newEnvironmentService.data.createEnvironmentService)
+            this.$emit('close')
+          }
+
+        } catch (error) {
+          const clientError = new ClientError(error)
+
           this.inputErrors = clientError.inputErrors
           this.errorMessage = clientError.i18nMessage
-        }).finally(() => this.loading = false)
+
+        } finally {
+          this.loading = false
+        }
       }
 
     }
@@ -80,7 +77,5 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
 

@@ -1,8 +1,5 @@
 <template>
-  <simple-dialog
-      v-model="value" @close="$emit('close')" fullscreen
-      title="Docker Deploy"
-  >
+  <simple-dialog v-model="value" @close="$emit('close')" fullscreen title="Docker Deploy">
 
     <v-card-text class="overflow-y-auto" style="height: 420px">
 
@@ -11,7 +8,7 @@
     </v-card-text>
 
     <v-card-text class="pa-0">
-      <v-alert type="error" v-for="(error,index) in errors" :key="index">
+      <v-alert type="error" v-for="(error, index) in errors" :key="index">
         {{ error }}
       </v-alert>
     </v-card-text>
@@ -36,13 +33,11 @@
 
 
   </simple-dialog>
-
-
 </template>
 
 <script>
 import EnvironmentServiceProvider from "@/modules/devops/providers/EnvironmentServiceProvider";
-import {SimpleDialog} from "@dracul/common-frontend"
+import { SimpleDialog } from "@dracul/common-frontend"
 import DockerProvider from "@/modules/devops/providers/DockerProvider";
 import EnvironmentServiceShowData
   from "@/modules/devops/pages/crud/EnvironmentServicePage/EnvironmentServiceShow/EnvironmentServiceShowData";
@@ -50,10 +45,10 @@ import ImageTagCombobox from "@/modules/registry/components/ImageTagCombobox/Ima
 
 export default {
   name: "EnvironmentServiceDockerCreate",
-  components: {ImageTagCombobox, EnvironmentServiceShowData, SimpleDialog},
+  components: { ImageTagCombobox, EnvironmentServiceShowData, SimpleDialog },
   props: {
-    serviceId: {type: String},
-    value: {type: Boolean}
+    serviceId: { type: String },
+    value: { type: Boolean }
   },
   data() {
     return {
@@ -70,87 +65,91 @@ export default {
     getBaseImage() {
       return this.envService.service.image
     },
-    getTargetImage(){
-      return this.targetImage ? this.envService.service.image + ":" +this.targetImage : null
+    getTargetImage() {
+      return this.targetImage ? this.envService.service.image + ":" + this.targetImage : null
     }
   },
-  created() {
-    console.log("Created")
-    this.findEnvironmentService()
-    this.findDockerService()
+  async created() {
+    await this.findEnvironmentService()
+    await this.findDockerService()
   },
   methods: {
-    findEnvironmentService() {
+    async findEnvironmentService() {
       this.loading = true
-      EnvironmentServiceProvider.findEnvironmentService(this.serviceId)
-          .then(r => {
-            this.envService = r.data.findEnvironmentService
-          })
-          .finally(() => this.loading = false)
+      try {
+        const environmentService = (await EnvironmentServiceProvider.findEnvironmentService(this.serviceId)).data.findEnvironmentService
+        this.envService = environmentService
+
+      } catch (error) {
+        console.log(`An error happened when we tried to find the environment service '${this.serviceId}': '${error}'`)
+        throw error
+
+      } finally {
+        this.loading = false
+      }
     },
-    findDockerService() {
-      console.log("findDockerService", this.serviceId)
-      return new Promise((resolve, reject) => {
-        this.loading = true
-        DockerProvider.findDockerService(this.serviceId)
-            .then(r => {
-              console.log("findDockerService then", this.serviceId)
-              let dockerService = r.data.findDockerService
-              if (dockerService && dockerService.id) {
-                this.created = true
-                this.envServiceCreated = r.data.findDockerService
-              }
-              resolve(r.data.findDockerService)
-            })
-            .catch(err => reject(err))
-            .finally(() => this.loading = false)
-      })
+    async findDockerService() {
+      this.loading = true
+
+      try {
+        const dockerService = (await DockerProvider.findDockerService(this.serviceId)).data.findDockerService
+
+        if (dockerService && dockerService.id) {
+          this.created = true
+          this.envServiceCreated = dockerService
+        }
+
+        return dockerService
+
+      } catch (error) {
+        console.log(`An error happened when we tried to find the service '${this.serviceId}': '${error}'`)
+        throw error
+      } finally {
+        this.loading = false
+      }
     },
     async createDockerService() {
-      return new Promise((resolve, reject) => {
-        this.errors = []
-        this.loading = true
-        console.log(`createdockerservice`)
+      console.log("CREATE DOCKER SERVICE")
+      this.errors = []
+      this.loading = true
 
-        DockerProvider.createDockerService(this.serviceId)
-            .then(r => {
-              this.created = true
-              this.envServiceCreated = r.data.createDockerService
-              console.log(r.data.createDockerService)
-              resolve(r.data.createDockerService)
+      try {
+        const serviceCreated = (await DockerProvider.createDockerService(this.serviceId)).data.createDockerService
 
-            })
-            .catch(e => {
-              this.errors = e.graphQLErrors.map(i => i.message)
-              reject(e)
-            })
-            .finally(() => this.loading = false)
-      })
+        this.created = true
+        this.envServiceCreated = serviceCreated
+
+        return serviceCreated
+      } catch (error) {
+        this.errors = error.graphQLErrors?.map(i => i.message)
+        throw error
+      } finally {
+        this.loading = false
+      }
     },
     async updateDockerService() {
-      return new Promise((resolve, reject) => {
-        this.errors = []
-        this.loading = true
-        DockerProvider.updateDockerService(this.serviceId, this.getTargetImage)
-            .then(r => {
-              this.updated = true
-              this.envServiceCreated = r.data.updateDockerService
-              this.envService.image = r.data.updateDockerService.image.fullname
-              console.log(r.data.updateDockerService)
-              resolve(r.data.updateDockerService)
+      console.log("UPDATE DOCKER SERVICE")
+      this.errors = []
+      this.loading = true
 
-            })
-            .catch(e => {
-              this.errors = e.graphQLErrors.map(i => i.message)
-              reject(e)
-            })
-            .finally(() => this.loading = false)
-      })
+      try {
+        const updatedDockerService = await DockerProvider.updateDockerService(this.serviceId, this.getTargetImage)
+
+        this.updated = true
+        this.envServiceCreated = updatedDockerService.data.updateDockerService
+        this.envService.image = updatedDockerService.data.updateDockerService.image.fullname
+
+        console.log(`updatedDockerService.data.updateDockerService: '${JSON.stringify(updatedDockerService.data.updateDockerService)}'`)
+        return updatedDockerService.data.updateDockerService
+      } catch (error) {
+        this.errors = error.graphQLErrors?.map(i => i.message)
+        throw error
+      } finally {
+        this.loading = false
+      }
     }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
