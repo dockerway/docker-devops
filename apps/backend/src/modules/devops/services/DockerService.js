@@ -1,8 +1,8 @@
 import { findEnvironmentService } from "./EnvironmentServiceService";
 import { findEnvironment } from "./EnvironmentService";
-import { canUserDeploy } from "./EnvironmentAllowedService"
-import axios from 'axios'
+import { canUserDeploy } from "./EnvironmentAllowedService";
 import { createAudit } from "@dracul/audit-backend";
+import axios from 'axios';
 
 export const findDockerServiceTag = async function (id) {
     try {
@@ -110,30 +110,47 @@ export const fetchDockerService = async function (environmentId) {
     }
 }
 
+async function getDockerApiConfig(id) {
+    const environmentService = await findEnvironmentService(id)
+    const token = environmentService.environment.dockerApiToken
+    const dockerApiUrl = environmentService.environment.dockerApiUrl
+    const headers = { headers: { 'Authorization': `Bearer ${token}` } }
+    const createFoldersPath = '/api/docker/folders'
+    const createFoldersURL = dockerApiUrl + createFoldersPath
+
+    return {
+        environmentService,
+        dockerApiUrl,
+        headers,
+        createFoldersPath,
+        createFoldersURL
+    }
+}
+
+function createVerifiedFolders(environmentService) {
+    if (environmentService.volumes) {
+        const verifiedVolumes = environmentService.volumes.map(function (vol) { return vol.hostVolume })
+        const verifiedFiles = environmentService.files.map(function (file) { return file.hostPath + "/" + file.fileName })
+        const verifiedFolders = verifiedVolumes.filter(elem => !elem.includes(verifiedFiles))
+
+        return verifiedFolders
+    }
+}
+
+
 export const createDockerService = async function (authUser, id) {
     try {
-        const environmentService = await findEnvironmentService(id);
-        const token = environmentService.environment.dockerApiToken;
+        const { environmentService, dockerApiUrl, headers, createFoldersURL } = await getDockerApiConfig(id)
+        const verifiedFolders = createVerifiedFolders(environmentService)
+        const filesURL = dockerApiUrl + '/api/docker/files'
 
-        const dockerApiUrl = environmentService.environment.dockerApiUrl;
-        const headers = { headers: { 'Authorization': `Bearer ${token}` } };
-
-        const createFoldersPath = '/api/docker/folders'
-        const createFoldersURL = dockerApiUrl + createFoldersPath
-
-        if (environmentService.volumes) {
-            const verifiedVolumes = environmentService.volumes.map(function (vol) { return vol.hostVolume });
-            const verifiedFiles = environmentService.files.map(function (file) { return file.hostPath + "/" + file.fileName });
-            const verifiedFolders = verifiedVolumes.filter(elem => !elem.includes(verifiedFiles))
-
-            await axios.post(createFoldersURL, verifiedFolders, headers)
+        if (! await canUserDeploy(authUser, environmentService.environment.type)){
+            throw new Error("El usuario no tiene permiso para desplegar este servicio")
         }
 
-        let filesPath = '/api/docker/files'
-        const filesURL = dockerApiUrl + filesPath
+        await axios.post(createFoldersURL, verifiedFolders, headers)
 
-        if (environmentService.files) {
-            //Los archivos (files) son agregados y enviados a fortes como Volumenes (volumes).
+        if (environmentService.files) { //files are sent to fortes as volumes
             await axios.post(filesURL, environmentService.files, headers)
 
             environmentService.volumes = [...environmentService.volumes, ...environmentService.files.map(file => {
@@ -147,21 +164,17 @@ export const createDockerService = async function (authUser, id) {
         //ELIMINA DUPLICADOS
         environmentService.volumes = [...new Set(environmentService.volumes.map(a => JSON.stringify({ hostVolume: a.hostVolume, containerVolume: a.containerVolume })))].map(a => JSON.parse(a))
 
-        if (! await canUserDeploy(authUser, environmentService.environment.type)) throw new Error("El usuario no tiene permiso para desplegar este servicio");
-
-        const path = '/api/docker/service'
-        const URL = dockerApiUrl + path
-
         const serviceName = environmentService.name ? environmentService.name : environmentService.service.name
         const fullServiceName = environmentService.stack.name + "_" + serviceName
 
-
+        // envService limits
         environmentService.limits.memoryReservation = parseFloat(environmentService.limits.memoryReservation * 1048576)
         environmentService.limits.memoryLimit = parseFloat(environmentService.limits.memoryLimit * 1048576)
 
         environmentService.limits.CPUReservation = parseFloat(environmentService.limits.CPUReservation * 1000000000)
         environmentService.limits.CPULimit = parseFloat(environmentService.limits.CPULimit * 1000000000)
 
+        // data mapping for POST request to fortes
         const data = {
             name: fullServiceName,
             stack: environmentService.stack.name,
@@ -174,12 +187,14 @@ export const createDockerService = async function (authUser, id) {
             constraints: environmentService.constraints ? environmentService.constraints : [],
             limits: environmentService.limits ? environmentService.limits : {},
             preferences: environmentService.preferences ? environmentService.preferences : [],
+            networks: environmentService.networks ? environmentService.networks : [],
         }
 
+        const URL = dockerApiUrl + '/api/docker/service'
         const response = await axios.post(URL, data, headers);
 
         if (response.status = 200) {
-            await createAudit(authUser, { user: authUser.id, action: 'Deploy docker service', resource: data.name })
+            await createAudit(authUser, { user: authUser.id, action: 'Deploy docker service', resource: data.name, description: JSON.stringify(data) })
             return response.data
         } else {
             throw new Error(response);
@@ -194,31 +209,18 @@ export const createDockerService = async function (authUser, id) {
 
 export const updateDockerService = async function (id, targetImage = null, user) {
     try {
-        const environmentService = await findEnvironmentService(id)
-        const token = environmentService.environment.dockerApiToken
+        const { environmentService, dockerApiUrl, headers, createFoldersURL } = await getDockerApiConfig(id)
+        const verifiedFolders = createVerifiedFolders(environmentService)
+        const filesURL = dockerApiUrl + '/api/docker/files'
 
-        const headers = { headers: { 'Authorization': `Bearer ${token}` } }
-        const dockerApiUrl = environmentService.environment.dockerApiUrl
+        if (! await canUserDeploy(user, environmentService.environment.type)) throw new Error("El usuario no tiene permiso para actualizar este servicio")
+        
+        await axios.post(createFoldersURL, verifiedFolders, headers)
 
-        let createFoldersPath = '/api/docker/folders'
-        const createFoldersURL = dockerApiUrl + createFoldersPath
-
-        let createFoldersResponse;
-        if (environmentService.volumes) {
-            const verifiedVolumes = environmentService.volumes.map(function (vol) { return vol.hostVolume })
-            const verifiedFiles = environmentService.files.map(function (file) { return file.hostPath + "/" + file.fileName })
-            const verifiedFolders = verifiedVolumes.filter(elem => !elem.includes(verifiedFiles))
-
-            createFoldersResponse = await axios.post(createFoldersURL, verifiedFolders, headers)
-        }
-
-        let filesPath = '/api/docker/files'
-        const filesURL = dockerApiUrl + filesPath
-
-        let filesCreatedResponse;
         if (environmentService.files) {
-            //Los archivos (files) son agregados y enviados a fortes como Volumenes (volumes).
-            filesCreatedResponse = await axios.post(filesURL, environmentService.files, headers)
+            //files are sent to fortes as volumes
+            await axios.post(filesURL, environmentService.files, headers)
+
             environmentService.volumes = [...environmentService.volumes, ...environmentService.files.map(file => {
                 return {
                     hostVolume: file.hostPath + "/" + file.fileName,
@@ -226,18 +228,12 @@ export const updateDockerService = async function (id, targetImage = null, user)
                 }
             })]
         }
+
         //ELIMINA DUPLICADOS
         environmentService.volumes = [...new Set(environmentService.volumes.map(a => JSON.stringify({ hostVolume: a.hostVolume, containerVolume: a.containerVolume })))].map(a => JSON.parse(a))
 
-        if (! await canUserDeploy(user, environmentService.environment.type)) throw new Error("El usuario no tiene permiso para actualizar este servicio")
-
         const dockerService = await findDockerService(id)
-
         if (!dockerService) throw new Error("DockerService not found. ID:" + id)
-
-        const path = '/api/docker/service/' + dockerService.id
-        const URL = dockerApiUrl + path
-
 
         const serviceName = environmentService.name ? environmentService.name : environmentService.service.name
         const fullServiceName = environmentService.stack.name + "_" + serviceName
@@ -260,9 +256,11 @@ export const updateDockerService = async function (id, targetImage = null, user)
             labels: environmentService.labels ? environmentService.labels : [],
             constraints: environmentService.constraints ? environmentService.constraints : [],
             limits: environmentService.limits ? limits : {},
-            preferences: environmentService.preferences ? environmentService.preferences : []
+            preferences: environmentService.preferences ? environmentService.preferences : [],
+            networks: environmentService.networks ? environmentService.networks : [],
         }
 
+        const URL = dockerApiUrl + '/api/docker/service/' + dockerService.id
         const response = await axios.put(URL, data, headers)
         if (response.status = 200) {
             if (response?.data?.image?.fullname) {
@@ -275,7 +273,6 @@ export const updateDockerService = async function (id, targetImage = null, user)
         } else {
             throw new Error(response)
         }
-
 
     } catch (error) {
         const message = error.message + ". " + (error.response?.data ? error.response.data : '')

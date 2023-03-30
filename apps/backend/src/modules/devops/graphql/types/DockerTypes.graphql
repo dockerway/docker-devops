@@ -53,6 +53,11 @@ type Preference{
     value: String
 }
 
+type Networks{
+    target: String
+    aliases: [String]
+}
+
 type DockerService {
     id: String
     name: String
@@ -68,6 +73,7 @@ type DockerService {
     constraints: [Constraint]
     limits: Limit
     preferences: [Preference]
+    networks: [Networks]
 }
 
 type DockerTask {
