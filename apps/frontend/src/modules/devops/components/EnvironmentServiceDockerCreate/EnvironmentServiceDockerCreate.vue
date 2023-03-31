@@ -102,8 +102,10 @@ export default {
         return dockerService
 
       } catch (error) {
-        console.log(`An error happened when we tried to find the service '${this.serviceId}': '${error}'`)
-        throw error
+        if(! error.message.includes('404')){
+          console.log(`An error happened when we tried to find the service '${this.serviceId}': '${error}'`)
+          throw error
+        }
       } finally {
         this.loading = false
       }
@@ -121,7 +123,7 @@ export default {
 
         return serviceCreated
       } catch (error) {
-        this.errors = error.graphQLErrors?.map(i => i.message)
+        this.errors = error.graphQLErrors.map(i => (! i.message.includes('404') ? i.message : null))
         throw error
       } finally {
         this.loading = false
@@ -142,7 +144,7 @@ export default {
         console.log(`updatedDockerService.data.updateDockerService: '${JSON.stringify(updatedDockerService.data.updateDockerService)}'`)
         return updatedDockerService.data.updateDockerService
       } catch (error) {
-        this.errors = error.graphQLErrors?.map(i => i.message)
+        this.errors = error.graphQLErrors.map(i => (! i.message.includes('404') ? i.message : null))
         throw error
       } finally {
         this.loading = false

@@ -74,16 +74,20 @@ export const findDockerService = async function (id) {
         const headers = { headers: { 'Authorization': `Bearer ${token}` } }
         const response = await axios.get(URL, headers)
 
-        if (response.status = 200) {
+        console.log(`response status = '${response.status}'`)
+
+        if (response.status == 200) {
             return response.data
-        } else {
+        }else{
             throw new Error(response)
         }
 
 
     } catch (error) {
-        const message = error.message + ". " + (error.response?.data ? error.response.data : '')
-        throw new Error(message)
+        console.log(`error status = '${error}'`)
+        if (error.message.includes('404')) return error.message
+
+        throw new Error(error.message + ". " + (error.response?.data ? error.response.data : ''))
     }
 }
 
