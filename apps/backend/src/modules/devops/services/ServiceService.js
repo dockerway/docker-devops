@@ -2,197 +2,146 @@ import Service from './../models/ServiceModel'
 import {UserInputError} from 'apollo-server-express'
 import {createAudit} from "@dracul/audit-backend"
 
-export const findService = async function (id) {
-    return new Promise((resolve, reject) => {
-        Service.findOne({_id: id}).populate('platform').exec((err, res) => (
-            err ? reject(err) : resolve(res)
-        ));
-    })
+export const getServiceById = async function (id) {
+    try {
+        return await Service.findOne({_id: id}).populate('platform').exec()
+    } catch (error) {
+        throw error
+    }
 }
 
-export const findServiceByName = async function (name) {
-    return new Promise((resolve, reject) => {
-        Service.findOne({name: name}).populate('platform').exec((err, res) => (
-            err ? reject(err) : resolve(res)
-        ));
-    })
+export const getServiceByName = async function (name) {
+    try {
+        return await Service.findOne({name: name}).populate('platform').exec()
+    } catch (error) {
+        throw error
+    }
 }
 
-export const findServiceByNameAndPlatform = async function (name, platform) {
-    return new Promise((resolve, reject) => {
-        Service.findOne({name: name, platform: platform}).populate('platform').exec((err, res) => (
-            err ? reject(err) : resolve(res)
-        ));
-    })
+export const getServiceByNameAndPlatform = async function (name, platform) {
+    try {
+        return await Service.findOne({name: name, platform: platform}).populate('platform').exec()
+    } catch (error) {
+        throw error
+    }
 }
 
-export const findServiceByNameStackPlatform = async function (name, stack, platform) {
-    return new Promise((resolve, reject) => {
-        Service.findOne({name: name, platform: platform, stack: stack}).populate('platform').exec((err, res) => (
-            err ? reject(err) : resolve(res)
-        ));
-    })
+export const getServiceByNameStackPlatform = async function (name, stack, platform) {
+    try {
+        return await Service.findOne({name: name, platform: platform, stack: stack}).populate('platform').exec()
+    } catch (error) {
+        throw error
+    }
 }
 
-export const fetchService = async function () {
-    return new Promise((resolve, reject) => {
-        Service.find({}).populate('platform').exec((err, res) => (
-            err ? reject(err) : resolve(res)
-        ));
-    })
+export const getAllServices = async function () {
+    try {
+        return await Service.find({}).populate('platform').exec()
+    } catch (error) {
+        throw error
+    }
 }
 
-export const paginateService = function ( pageNumber = 1, itemsPerPage = 5, search = null, filters = null, orderBy = null, orderDesc = false) {
 
-    function qs(search, filters) {
-        let qs = {}
-        if (search) {
-            qs = {
-                $or: [
-                    {name: {$regex: search, $options: 'i'}}
-                ]
-            }
+export async function paginateServices(pageNumber = 1, itemsPerPage = 5, search = null, filters = null, orderBy = null, orderDesc = false) {
+    const query = {
+      ...(search && {
+        $or: [
+          { name: { $regex: search, $options: 'i' } },
+        ],
+      }),
+      ...(filters && filters.reduce((acc, filter) => {
+        if (filter.value) {
+          const operator = {
+            '=': '$eq',
+            eq: '$eq',
+            contain: '$regex',
+            regex: '$regex',
+            '>': '$gt',
+            gt: '$gt',
+            '<': '$lt',
+            lt: '$lt',
+            '>=': '$gte',
+            gte: '$gte',
+            '<=': '$lte',
+            lte: '$lte',
+          }[filter.operator] ?? '$eq';
+          return { ...acc, [filter.field]: { [operator]: filter.value } }
         }
-
-        if(filters){
-
-            for(let filter of filters){
-                if(!filter.value){
-                    continue
-                }
-
-                switch(filter.operator){
-                    case '=':
-                    case 'eq':
-                        qs[filter.field] = {...qs[filter.field], $eq: filter.value}
-                        break;
-                    case 'contain':
-                    case 'regex':
-                        qs[filter.field] = {...qs[filter.field], $regex: filter.value}
-                        break;
-                    case '>':
-                    case 'gt':
-                        qs[filter.field] = {...qs[filter.field], $gt: filter.value}
-                        break;
-                    case '<':
-                    case 'lt':
-                        qs[filter.field] = {...qs[filter.field], $lt: filter.value}
-                        break;
-                    case '>=':
-                    case 'gte':
-                        qs[filter.field] = {...qs[filter.field], $gte: filter.value}
-                        break;
-                    case '<=':
-                    case 'lte':
-                        qs[filter.field] = {...qs[filter.field], $lte: filter.value}
-                        break;
-                    default:
-                        qs[filter.field] = {...qs[filter.field], $eq: filter.value}
-                }
-            }
-
-        }
-
-        return qs
+        return acc
+      }, {})),
     }
 
-     function getSort(orderBy, orderDesc) {
-        if (orderBy) {
-            return (orderDesc ? '-' : '') + orderBy
-        } else {
-            return null
-        }
+    const populate = ['platform'];
+    const sort = orderBy ? (orderDesc ? `-${orderBy}` : orderBy) : null
+    const params = { page: pageNumber, limit: itemsPerPage, populate, sort }
+    const result = await Service.paginate(query, params)
+
+    return {
+      items: result.docs,
+      totalItems: result.totalDocs,
+      page: result.page,
     }
-
-    let query = qs(search, filters)
-    let populate = ['platform']
-    let sort = getSort(orderBy, orderDesc)
-    let params = {page: pageNumber, limit: itemsPerPage, populate, sort}
-
-    return new Promise((resolve, reject) => {
-        Service.paginate(query, params).then(result => {
-                resolve({items: result.docs, totalItems: result.totalDocs, page: result.page})
-            }
-        ).catch(err => reject(err))
-    })
-}
-
-
-
+    
+  }
+  
 
 
 export const createService = async function (authUser, {name, description, platform, image, repository, volumes, ports, envs, files, constraints, limits, preferences}) {
     const doc = new Service({
         name, description, platform, image, repository, volumes, ports, envs, files, constraints, limits, preferences
     })
-    doc.id = doc._id;
-    return new Promise((resolve, reject) => {
-        doc.save((error => {
+    doc.id = doc._id
 
-            if (error) {
-                if (error.name == "ValidationError") {
-                    return reject(new UserInputError(error.message, {inputErrors: error.errors}));
-                }
-                return reject(error)
-            }
+    try {
+        await doc.save()
+        await doc.populate('platform').execPopulate()
 
+        await createAudit(authUser, {user: authUser.id, action: 'Create service', resource: doc.name})
 
-            doc.populate('platform').execPopulate(async () => {
-                await createAudit(authUser, {user: authUser.id, action: 'Create service', resource: doc.name})
-            
-                resolve(doc)
-            })
-        }))
-    })
+        return doc
+    } catch (error) {
+        if (error.name == "ValidationError") throw new UserInputError(error.message, {inputErrors: error.errors})
+        throw error
+    }
 }
 
 export const updateService = async function (authUser, id, {name, description, platform, image, repository, volumes, ports, envs, files, constraints, limits, preferences}) {
-    return new Promise((resolve, reject) => {
+    const serviceOriginalName = (await findService(id)).name
 
-        let serviceOriginalName
+    try {
+        const doc = await Service.findOneAndUpdate(
+            {_id: id},
+            {name, description, platform, image, repository, volumes, ports, envs, files, constraints, limits, preferences},
+            {new: true, runValidators: true, context: 'query'}
+        )
+        await doc.populate('platform').execPopulate()
 
-        findService(id).then(({name}) => {
-            serviceOriginalName = name
+        await createAudit(authUser, {
+            user: authUser.id,
+            action: 'Update service',
+            resource: serviceOriginalName,
+            description: serviceOriginalName !== name ? `Resource's new name is ${name}` : ''
         })
 
-        Service.findOneAndUpdate({_id: id},
-        {name, description, platform, image, repository, volumes, ports, envs, files, constraints, limits, preferences},
-        {new: true, runValidators: true, context: 'query'},
-        async(error,doc) => {
-
-            if (error) {
-                if (error.name == "ValidationError") {
-                 return reject(new UserInputError(error.message, {inputErrors: error.errors}));
-
-                }
-                return reject(error)
-
-            }
-
-            doc.populate('platform').execPopulate(async () => {
-                const auditDescription = serviceOriginalName !== name ? `Resource's new name is ${name}` : ''
-                await createAudit(authUser, {user: authUser.id, action:'Update service',
-                    resource: serviceOriginalName,
-                    description: auditDescription}
-                )
-
-                resolve(doc)
-            })
-        })
-    })
+        return doc
+    } catch (error) {
+        if (error.name == "ValidationError") {
+            throw new UserInputError(error.message, {inputErrors: error.errors})
+        }
+        throw error
+    }
 }
 
-export const deleteService = function (user, id) {
-    return new Promise((resolve, reject) => {
-        findService(id).then((doc) => {
-            doc.delete(async function (err) {
-                if (err) reject(err)
+export const deleteService = async function (user, id) {
+    try {
+        const doc = await findService(id)
 
-                await createAudit(user, {user: user.id, action:'Delete service', resource: doc.name})
-                resolve({id: id, success: true})
-            });
+        await doc.delete()
+        await createAudit(user, {user: user.id, action: 'Delete service', resource: doc.name})
 
-        })
-    })
+        return {id: id, success: true}
+    } catch (error) {
+        throw error
+    }
 }
-

@@ -29,14 +29,12 @@ export const findEnvironmentServiceByEnvironmentStackService = async function ({
 }
 
 export const fetchEnvironmentService = async function () {
-    const envService = await EnvironmentService.find({}).populate('environment').populate('service').populate('stack').exec()
-    return envService
+    return await EnvironmentService.find({}).populate('environment').populate('service').populate('stack').exec()
 }
 
 export const paginateEnvironmentService = async function (user, pageNumber = 1, itemsPerPage = 5, search = null, filters = null, orderBy = null, orderDesc = false) {
 
     const envsAllowed = await environmentsAllowedView(user)
-
     function qs(search, filters, envsAllowed) {
         let qs = {}
         qs.environment = { $in: envsAllowed }
@@ -89,27 +87,16 @@ export const paginateEnvironmentService = async function (user, pageNumber = 1, 
         return qs
     }
 
-    function getSort(orderBy, orderDesc) {
-        if (orderBy) {
-            return (orderDesc ? '-' : '') + orderBy
-        } else {
-            return null
-        }
+    const query = qs(search, filters, envsAllowed)
+    const populate = ['environment', 'service', 'stack']
+    const sort = orderBy ? `${orderDesc ? '-' : ''}${orderBy}` : null
+
+    try {
+        const environmentServices = (await EnvironmentService.paginate(query, { page: pageNumber, limit: itemsPerPage, populate, sort }))
+        return { items: environmentServices.docs, totalItems: environmentServices.totalDocs, page: environmentServices.page }
+    } catch (error) {
+        throw error
     }
-
-    let query = qs(search, filters, envsAllowed)
-
-
-    let populate = ['environment', 'service', 'stack']
-    let sort = getSort(orderBy, orderDesc)
-    let params = { page: pageNumber, limit: itemsPerPage, populate, sort }
-
-    return new Promise((resolve, reject) => {
-        EnvironmentService.paginate(query, params).then(result => {
-            resolve({ items: result.docs, totalItems: result.totalDocs, page: result.page })
-        }
-        ).catch(err => reject(err))
-    })
 }
 
 
@@ -139,12 +126,9 @@ export const createEnvironmentService = async function (authUser, { environment,
 export const updateEnvironmentService = async function (authUser, id, { environment, service, stack, image, name, replicas, labels, envs, ports, volumes, files, constraints, limits, preferences }) {
     try {
         const environmentService = await findEnvironmentService(id)
-        let envServiceOriginalName = environmentService.name
+        const envServiceOriginalName = environmentService.name
 
-        const env = await findEnvironment(environment)
-        const canUpdate = await canUserUpdate(authUser, env.type)
-
-        if (!canUpdate) throw "El usuario no tiene permiso para editar este entorno"
+        if (!await canUserUpdate(authUser, (await findEnvironment(environment)).type)) throw "El usuario no tiene permiso para editar este entorno"
 
         const updatedEnvService = await EnvironmentService.findOneAndUpdate(
             { _id: id },
