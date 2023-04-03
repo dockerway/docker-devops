@@ -83,7 +83,7 @@
     </v-col>
 
     <environment-service-docker-create v-if="deploy" v-model="deploy" :service-id="serviceToCreate"
-      @close="closeDeploy"></environment-service-docker-create>
+      @close="closeDeploy" />
 
   </v-row>
 </template>
@@ -155,21 +155,23 @@ export default {
       return (Array.isArray(this.orderDesc)) ? this.orderDesc[0] : this.orderDesc
     }
   },
-  created() {
-    this.fetch()
+  async created() {
+    await this.fetch()
   },
   methods: {
     openDeploy(serviceId) {
       this.serviceToCreate = serviceId
       this.deploy = true
     },
-    closeDeploy() {
+    async closeDeploy() {
       this.serviceToCreate = null
       this.deploy = false
+
+      await this.fetch()
     },
-    performSearch() {
+    async performSearch() {
       this.pageNumber = 1
-      this.fetch()
+      await this.fetch()
     },
     async fetch() {
       this.loading = true
@@ -187,7 +189,7 @@ export default {
         this.items = items
         this.totalItems = totalItems
       } catch (error) {
-        console.error(error)
+        console.error(`An error happened when we tried to fetch the environment services: '${error}'`)
       } finally {
         this.loading = false
       }
