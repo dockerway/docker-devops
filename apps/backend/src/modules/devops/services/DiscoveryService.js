@@ -1,6 +1,6 @@
 import { fetchEnvironment, findEnvironment } from "./EnvironmentService";
 import { fetchDockerService } from "./DockerService";
-import { createService, findServiceByNameAndPlatform } from "./ServiceService";
+import { createService, getServiceByNameAndPlatform } from "./ServiceService";
 import { createPlatform, findPlatformByName } from "./PlatformService";
 import {
     createEnvironmentService,
@@ -59,7 +59,7 @@ export const startDiscovery = async function (environmentId) {
                     console.log("PLATFORM NEW:", serviceDiscovered)
                     addServiceDiscovered(serviceDiscovered)
                 } else {
-                    const service = await findServiceByNameAndPlatform(serviceDiscovered.imageName, platform.id)
+                    const service = await getServiceByNameAndPlatform(serviceDiscovered.imageName, platform.id)
                     if (!service) {
                         console.log("SERVICE NEW:", serviceDiscovered)
                         addServiceDiscovered(serviceDiscovered)
@@ -114,7 +114,7 @@ async function findOrCreateServiceByNameAndPlatform(serviceDiscovered, platformI
 
 
     const dockerService = await getDockerService(serviceDiscovered)
-    let service = await findServiceByNameAndPlatform(serviceDiscovered.imageName, platformId)
+    let service = await getServiceByNameAndPlatform(serviceDiscovered.imageName, platformId)
 
     if (!service) {
         let serviceEnvs = []
