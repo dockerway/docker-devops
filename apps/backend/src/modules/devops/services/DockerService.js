@@ -1,321 +1,286 @@
-import {findEnvironmentService} from "./EnvironmentServiceService";
-import {findEnvironment} from "./EnvironmentService";
-import { canUserDeploy } from "./EnvironmentAllowedService"
-import axios from 'axios'
+import { findEnvironmentService } from "./EnvironmentServiceService";
+import { findEnvironment } from "./EnvironmentService";
+import { canUserDeploy } from "./EnvironmentAllowedService";
 import { createAudit } from "@dracul/audit-backend";
+import axios from 'axios';
 
-export const findDockerServiceTag = function (id) {
-    return new Promise(async (resolve, reject) => {
-        let URL
-        try {
-            const environmentService = await findEnvironmentService(id);
-            const token = environmentService.environment.dockerApiToken;
-            const dockerApiUrl = environmentService.environment.dockerApiUrl;
+export const findDockerServiceTag = async function (id) {
+    try {
+        const environmentService = await findEnvironmentService(id)
+        const token = environmentService.environment.dockerApiToken
+        const dockerApiUrl = environmentService.environment.dockerApiUrl
 
-            const serviceName = environmentService.name ? environmentService.name : environmentService.service.name;
-            const fullServiceName = environmentService.stack.name + "_" + serviceName;
+        const serviceName = environmentService.name ? environmentService.name : environmentService.service.name
+        const fullServiceName = environmentService.stack.name + "_" + serviceName
 
-            const path = '/api/docker/service/' + fullServiceName + '/tag';
-            URL = dockerApiUrl + path;
+        const path = '/api/docker/service/' + fullServiceName + '/tag'
+        const URL = dockerApiUrl + path
 
-            //console.log("URL FINAL", URL)
+        const headers = { headers: { 'Authorization': `Bearer ${token}` } }
+        const response = await axios.get(URL, headers)
 
-            const headers = { headers: { 'Authorization': `Bearer ${token}` } };
-            const response = await axios.get(URL, headers);
-
-            if (response.status = 200) {
-
-                //console.log("findServiceTag Response ", response.data)
-                resolve(response.data);
-            } else {
-                reject(response);
-            }
-
-
-        } catch (e) {
-            const message = e.message + ". " + (e.response?.data ? e.response.data : '');
-            reject(message);
+        if (response.status = 200) {
+            return response.data
+        } else {
+            throw new Error(response)
         }
 
-    })
+    } catch (error) {
+        const message = error.message + ". " + (error.response?.data ? error.response.data : '');
+        throw new Error(message)
+    }
 }
 
-export const findDockerServiceStats = function (id) {
-    return new Promise(async (resolve, reject) => {
-        let URL
-        try {
-            const environmentService = await findEnvironmentService(id);
-            const token = environmentService.environment.dockerApiToken;
-            const dockerApiUrl = environmentService.environment.dockerApiUrl;
+export const findDockerServiceStats = async function (id) {
+    try {
+        const environmentService = await findEnvironmentService(id)
+        const token = environmentService.environment.dockerApiToken
+        const dockerApiUrl = environmentService.environment.dockerApiUrl
 
-            const serviceName = environmentService.name ? environmentService.name : environmentService.service.name;
-            const fullServiceName = environmentService.stack.name + "_" + serviceName;
+        const serviceName = environmentService.name ? environmentService.name : environmentService.service.name
+        const fullServiceName = environmentService.stack.name + "_" + serviceName
 
-            const path = '/api/docker/service/' + fullServiceName + '/stats';
-            URL = dockerApiUrl + path;
+        const path = '/api/docker/service/' + fullServiceName + '/stats'
+        const URL = dockerApiUrl + path
 
-            const headers = { headers: { 'Authorization': `Bearer ${token}` } };
-            let response = await axios.get(URL, headers);
+        const headers = { headers: { 'Authorization': `Bearer ${token}` } }
+        const response = await axios.get(URL, headers)
 
-            if (response.status = 200) {
-                resolve(response.data);
-            } else {
-                reject(response);
-            }
-
-
-        } catch (e) {
-            const message = e.message + ". " + (e.response?.data ? e.response.data : '');
-            reject(message);
+        if (response.status = 200) {
+            return response.data
+        } else {
+            throw new Error(response)
         }
 
-    })
+
+    } catch (error) {
+        const message = error.message + ". " + (error.response?.data ? error.response.data : '')
+        throw new Error(message)
+    }
 }
 
-export const findDockerService = function (id) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const environmentService = await findEnvironmentService(id);
-            const token = environmentService.environment.dockerApiToken;
-            const dockerApiUrl = environmentService.environment.dockerApiUrl;
+export const findDockerService = async function (id) {
+    try {
+        const environmentService = await findEnvironmentService(id)
+        const token = environmentService.environment.dockerApiToken
+        const dockerApiUrl = environmentService.environment.dockerApiUrl
 
-            const serviceName = environmentService.name ? environmentService.name : environmentService.service.name;
-            const fullServiceName = environmentService.stack.name + "_" + serviceName;
+        const serviceName = environmentService.name ? environmentService.name : environmentService.service.name
+        const fullServiceName = environmentService.stack.name + "_" + serviceName
 
-            const path = '/api/docker/service/' + fullServiceName;
-            const URL = dockerApiUrl + path;
+        const path = '/api/docker/service/' + fullServiceName
+        const URL = dockerApiUrl + path
 
-            const headers = { headers: { 'Authorization': `Bearer ${token}` } };
-            const response = await axios.get(URL, headers);
+        const headers = { headers: { 'Authorization': `Bearer ${token}` } }
+        const response = await axios.get(URL, headers)
 
-            if (response.status = 200) {
-                //console.log("findServiceTag Response ", response.data)
-                resolve(response.data);
-            } else {
-                reject(response);
-            }
+        console.log(`response status = '${response.status}'`)
 
-
-        } catch (e) {
-            const message = e.message + ". " + (e.response?.data ? e.response.data : '');
-            reject(message);
+        if (response.status == 200) {
+            return response.data
+        }else{
+            throw new Error(response)
         }
 
-    })
+
+    } catch (error) {
+        console.log(`error status = '${error}'`)
+        if (error.message.includes('404')) return error.message
+
+        throw new Error(error.message + ". " + (error.response?.data ? error.response.data : ''))
+    }
 }
 
-export const fetchDockerService = function (environmentId) {
+export const fetchDockerService = async function (environmentId) {
+    try {
+        const environment = await findEnvironment(environmentId)
+        const token = environment.dockerApiToken
+        const dockerApiUrl = environment.dockerApiUrl
+        const path = '/api/docker/service'
+        const URL = dockerApiUrl + path
 
-    return new Promise(async (resolve, reject) => {
-        try {
-            const environment = await findEnvironment(environmentId);
-            const token = environment.dockerApiToken;
-            const dockerApiUrl = environment.dockerApiUrl;
-            const path = '/api/docker/service';
-            const URL = dockerApiUrl + path;
-            
-            const headers = { headers: { 'Authorization': `Bearer ${token}` } };
-            const response = await axios.get(URL, headers);
+        const headers = { headers: { 'Authorization': `Bearer ${token}` } }
+        const response = await axios.get(URL, headers)
 
-            if (response.status = 200) {
-                //console.log("fetchDockerService Response ", response.data)
-                resolve(response.data);
-            } else {
-                reject(response);
-            }
-
-
-        } catch (e) {
-            const message = e.message + ". " + (e.response?.data ? e.response.data : '');
-            reject(message);
+        if (response.status = 200) {
+            return response.data
+        } else {
+            throw new Error(response)
         }
 
-    })
+    } catch (error) {
+        const message = error.message + ". " + (error.response?.data ? error.response.data : '')
+        throw message
+    }
 }
 
-export const createDockerService = function (authUser, id) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let environmentService = await findEnvironmentService(id);
-            const token = environmentService.environment.dockerApiToken;
-            
-            const dockerApiUrl = environmentService.environment.dockerApiUrl;
-            const headers = { headers: { 'Authorization': `Bearer ${token}` } };
+async function getDockerApiConfig(id) {
+    const environmentService = await findEnvironmentService(id)
+    const token = environmentService.environment.dockerApiToken
+    const dockerApiUrl = environmentService.environment.dockerApiUrl
+    const headers = { headers: { 'Authorization': `Bearer ${token}` } }
+    const createFoldersPath = '/api/docker/folders'
+    const createFoldersURL = dockerApiUrl + createFoldersPath
 
-            let createFoldersPath = '/api/docker/folders'
-            const createFoldersURL = dockerApiUrl + createFoldersPath
+    return {
+        environmentService,
+        dockerApiUrl,
+        headers,
+        createFoldersPath,
+        createFoldersURL
+    }
+}
 
-            let createFoldersResponse;
-            if(environmentService.volumes){
-                let verifiedVolumes = environmentService.volumes.map(function(vol) {return vol.hostVolume});
-                let verifiedFiles = environmentService.files.map(function(file) {return file.hostPath + "/" + file.fileName});
-                let verifiedFolders = verifiedVolumes.filter(elem => !elem.includes(verifiedFiles))
-                createFoldersResponse = await axios.post(createFoldersURL, verifiedFolders, headers)
-            }
+function createVerifiedFolders(environmentService) {
+    if (environmentService.volumes) {
+        const verifiedVolumes = environmentService.volumes.map(function (vol) { return vol.hostVolume })
+        const verifiedFiles = environmentService.files.map(function (file) { return file.hostPath + "/" + file.fileName })
+        const verifiedFolders = verifiedVolumes.filter(elem => !elem.includes(verifiedFiles))
 
-            let filesPath = '/api/docker/files'
-            const filesURL = dockerApiUrl + filesPath
-
-            let filesCreatedResponse;
-            if(environmentService.files){                
-                //Los archivos (files) son agregados y enviados a fortes como Volumenes (volumes).
-                filesCreatedResponse = await axios.post(filesURL, environmentService.files, headers)
-
-                environmentService.volumes = [...environmentService.volumes, ...environmentService.files.map(file => {
-                    return {
-                        hostVolume: file.hostPath + "/" + file.fileName,
-                        containerVolume: file.containerPath + "/" + file.fileName
-                    }
-                })]
-            }
-            //ELIMINA DUPLICADOS
-            environmentService.volumes = [...new Set(environmentService.volumes.map(a => JSON.stringify({hostVolume: a.hostVolume, containerVolume: a.containerVolume})))].map(a => JSON.parse(a))
-
-            if (! await canUserDeploy(authUser, environmentService.environment.type)) {
-                return reject("El usuario no tiene permiso para desplegar este servicio");
-            }
-
-            
-            const path = '/api/docker/service';
-            const URL = dockerApiUrl + path;
-            
-            const serviceName = environmentService.name ? environmentService.name : environmentService.service.name;
-            const fullServiceName = environmentService.stack.name + "_" + serviceName;
-
-
-            environmentService.limits.memoryReservation = parseFloat(environmentService.limits.memoryReservation * 1048576);
-            environmentService.limits.memoryLimit = parseFloat(environmentService.limits.memoryLimit * 1048576);
-
-            environmentService.limits.CPUReservation = parseFloat(environmentService.limits.CPUReservation * 1000000000);
-            environmentService.limits.CPULimit = parseFloat(environmentService.limits.CPULimit * 1000000000);
-
-            let data = {
-                name: fullServiceName,
-                stack: environmentService.stack.name,
-                image: environmentService.image,
-                replicas: environmentService.replicas,
-                volumes: environmentService.volumes ? environmentService.volumes : [],
-                ports: environmentService.ports ? environmentService.ports : [],
-                envs: environmentService.envs ? environmentService.envs : [],
-                labels: environmentService.labels ? environmentService.labels : [],
-                constraints: environmentService.constraints ? environmentService.constraints : [],
-                limits: environmentService.limits ? environmentService.limits : {},
-                preferences: environmentService.preferences ? environmentService.preferences : [],
-            };
-
-            const response = await axios.post(URL, data, headers);
-
-            if (response.status = 200) {
-                await createAudit(authUser, {user: authUser.id, action:'Deploy docker service', resource: data.name})
-                resolve(response.data);
-            } else {
-                reject(response);
-            }
-
-
-        } catch (e) {
-            const message = e.message + ". " + (e.response?.data ? e.response.data : '');
-            reject(message);
-        }
-
-    })
+        return verifiedFolders
+    }
 }
 
 
-export const updateDockerService = function (id, targetImage = null, user) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let environmentService = await findEnvironmentService(id)
-            const token = environmentService.environment.dockerApiToken
+export const createDockerService = async function (authUser, id) {
+    try {
+        const { environmentService, dockerApiUrl, headers, createFoldersURL } = await getDockerApiConfig(id)
+        const verifiedFolders = createVerifiedFolders(environmentService)
+        const filesURL = dockerApiUrl + '/api/docker/files'
 
-            const headers = { headers: { 'Authorization': `Bearer ${token}` } }
-            const dockerApiUrl = environmentService.environment.dockerApiUrl;
+        if (! await canUserDeploy(authUser, environmentService.environment.type)){
+            throw new Error("El usuario no tiene permiso para desplegar este servicio")
+        }
 
-            let createFoldersPath = '/api/docker/folders'
-            const createFoldersURL = dockerApiUrl + createFoldersPath
-              
-            let createFoldersResponse;
-            if(environmentService.volumes){
-                let verifiedVolumes = environmentService.volumes.map(function(vol) {return vol.hostVolume});
-                let verifiedFiles = environmentService.files.map(function(file) {return file.hostPath + "/" + file.fileName});
-                let verifiedFolders = verifiedVolumes.filter(elem => !elem.includes(verifiedFiles))
-                createFoldersResponse = await axios.post(createFoldersURL, verifiedFolders, headers)
-            }
-            
-            let filesPath = '/api/docker/files'
-            const filesURL = dockerApiUrl + filesPath
+        await axios.post(createFoldersURL, verifiedFolders, headers)
 
-            let filesCreatedResponse;
-            if(environmentService.files){
-                //Los archivos (files) son agregados y enviados a fortes como Volumenes (volumes).
-                filesCreatedResponse = await axios.post(filesURL, environmentService.files, headers)
-                environmentService.volumes = [...environmentService.volumes, ...environmentService.files.map(file => {
-                    return {
-                        hostVolume: file.hostPath + "/" + file.fileName,
-                        containerVolume: file.containerPath + "/" + file.fileName
-                    }
-                })]
-            }
-            //ELIMINA DUPLICADOS
-            environmentService.volumes = [...new Set(environmentService.volumes.map(a => JSON.stringify({hostVolume: a.hostVolume, containerVolume: a.containerVolume})))].map(a => JSON.parse(a))
+        if (environmentService.files) { //files are sent to fortes as volumes
+            await axios.post(filesURL, environmentService.files, headers)
 
-            if (! await canUserDeploy(user, environmentService.environment.type)) {
-                return reject("El usuario no tiene permiso para actualizar este servicio");
-            }
-
-            const dockerService = await findDockerService(id);
-
-            if (!dockerService) {
-                reject("DockerService not found. ID:" + id);
-            }
-
-            const path = '/api/docker/service/' + dockerService.id;
-            const URL = dockerApiUrl + path;
-
-
-            const serviceName = environmentService.name ? environmentService.name : environmentService.service.name;
-            const fullServiceName = environmentService.stack.name + "_" + serviceName;
-
-            const limits = {
-                memoryReservation: parseFloat(environmentService.limits.memoryReservation * 1048576),
-                memoryLimit: parseFloat(environmentService.limits.memoryLimit * 1048576),
-                CPUReservation: parseFloat(environmentService.limits.CPUReservation * 1000000000),
-                CPULimit: parseFloat(environmentService.limits.CPULimit * 1000000000)
-            };
-
-            const data = {
-                name: fullServiceName,
-                stack: environmentService.stack.name,
-                image: targetImage ? targetImage : environmentService.image,
-                replicas: environmentService.replicas,
-                volumes: environmentService.volumes ? environmentService.volumes : [],
-                ports: environmentService.ports ? environmentService.ports : [],
-                envs: environmentService.envs ? environmentService.envs : [],
-                labels: environmentService.labels ? environmentService.labels : [],
-                constraints: environmentService.constraints ? environmentService.constraints : [],
-                limits: environmentService.limits ? limits : {},
-                preferences: environmentService.preferences ? environmentService.preferences : []
-            };
-
-            const response = await axios.put(URL, data, headers);
-            if (response.status = 200) {
-                if(response?.data?.image?.fullname){
-                    environmentService.image = response?.data?.image?.fullname;
-                    await environmentService.save();
+            environmentService.volumes = [...environmentService.volumes, ...environmentService.files.map(file => {
+                return {
+                    hostVolume: file.hostPath + "/" + file.fileName,
+                    containerVolume: file.containerPath + "/" + file.fileName
                 }
-
-                await createAudit(user, {user: user.id, action:'Update docker service', resource: `${data.name}`})
-                resolve(response.data);
-            } else {
-                reject(response);
-            }
-
-
-        } catch (e) {
-            const message = e.message + ". " + (e.response?.data ? e.response.data : '');
-            reject(message);
+            })]
         }
 
-    })
+        //ELIMINA DUPLICADOS
+        environmentService.volumes = [...new Set(environmentService.volumes.map(a => JSON.stringify({ hostVolume: a.hostVolume, containerVolume: a.containerVolume })))].map(a => JSON.parse(a))
+
+        const serviceName = environmentService.name ? environmentService.name : environmentService.service.name
+        const fullServiceName = environmentService.stack.name + "_" + serviceName
+
+        // envService limits
+        environmentService.limits.memoryReservation = parseFloat(environmentService.limits.memoryReservation * 1048576)
+        environmentService.limits.memoryLimit = parseFloat(environmentService.limits.memoryLimit * 1048576)
+
+        environmentService.limits.CPUReservation = parseFloat(environmentService.limits.CPUReservation * 1000000000)
+        environmentService.limits.CPULimit = parseFloat(environmentService.limits.CPULimit * 1000000000)
+
+        // data mapping for POST request to fortes
+        const data = {
+            name: fullServiceName,
+            stack: environmentService.stack.name,
+            image: environmentService.image,
+            replicas: environmentService.replicas,
+            volumes: environmentService.volumes ? environmentService.volumes : [],
+            ports: environmentService.ports ? environmentService.ports : [],
+            envs: environmentService.envs ? environmentService.envs : [],
+            labels: environmentService.labels ? environmentService.labels : [],
+            constraints: environmentService.constraints ? environmentService.constraints : [],
+            limits: environmentService.limits ? environmentService.limits : {},
+            preferences: environmentService.preferences ? environmentService.preferences : [],
+            networks: environmentService.networks ? environmentService.networks : [],
+        }
+
+        const URL = dockerApiUrl + '/api/docker/service'
+        const response = await axios.post(URL, data, headers);
+
+        if (response.status = 200) {
+            await createAudit(authUser, { user: authUser.id, action: 'Deploy docker service', resource: data.name, description: JSON.stringify(data) })
+            return response.data
+        } else {
+            throw new Error(response);
+        }
+
+    } catch (error) {
+        const message = error.message + ". " + (error.response?.data ? error.response.data : '')
+        throw message
+    }
+}
+
+
+export const updateDockerService = async function (id, targetImage = null, user) {
+    try {
+        const { environmentService, dockerApiUrl, headers, createFoldersURL } = await getDockerApiConfig(id)
+        const verifiedFolders = createVerifiedFolders(environmentService)
+        const filesURL = dockerApiUrl + '/api/docker/files'
+
+        if (! await canUserDeploy(user, environmentService.environment.type)) throw new Error("El usuario no tiene permiso para actualizar este servicio")
+        
+        await axios.post(createFoldersURL, verifiedFolders, headers)
+
+        if (environmentService.files) {
+            //files are sent to fortes as volumes
+            await axios.post(filesURL, environmentService.files, headers)
+
+            environmentService.volumes = [...environmentService.volumes, ...environmentService.files.map(file => {
+                return {
+                    hostVolume: file.hostPath + "/" + file.fileName,
+                    containerVolume: file.containerPath + "/" + file.fileName
+                }
+            })]
+        }
+
+        //ELIMINA DUPLICADOS
+        environmentService.volumes = [...new Set(environmentService.volumes.map(a => JSON.stringify({ hostVolume: a.hostVolume, containerVolume: a.containerVolume })))].map(a => JSON.parse(a))
+
+        const dockerService = await findDockerService(id)
+        if (!dockerService) throw new Error("DockerService not found. ID:" + id)
+
+        const serviceName = environmentService.name ? environmentService.name : environmentService.service.name
+        const fullServiceName = environmentService.stack.name + "_" + serviceName
+
+        const limits = {
+            memoryReservation: parseFloat(environmentService.limits.memoryReservation * 1048576),
+            memoryLimit: parseFloat(environmentService.limits.memoryLimit * 1048576),
+            CPUReservation: parseFloat(environmentService.limits.CPUReservation * 1000000000),
+            CPULimit: parseFloat(environmentService.limits.CPULimit * 1000000000)
+        }
+
+        const data = {
+            name: fullServiceName,
+            stack: environmentService.stack.name,
+            image: targetImage ? targetImage : environmentService.image,
+            replicas: environmentService.replicas,
+            volumes: environmentService.volumes ? environmentService.volumes : [],
+            ports: environmentService.ports ? environmentService.ports : [],
+            envs: environmentService.envs ? environmentService.envs : [],
+            labels: environmentService.labels ? environmentService.labels : [],
+            constraints: environmentService.constraints ? environmentService.constraints : [],
+            limits: environmentService.limits ? limits : {},
+            preferences: environmentService.preferences ? environmentService.preferences : [],
+            networks: environmentService.networks ? environmentService.networks : [],
+        }
+
+        const URL = dockerApiUrl + '/api/docker/service/' + dockerService.id
+        const response = await axios.put(URL, data, headers)
+        if (response.status = 200) {
+            if (response?.data?.image?.fullname) {
+                environmentService.image = response?.data?.image?.fullname
+                await environmentService.save()
+            }
+
+            await createAudit(user, { user: user.id, action: 'Update docker service', resource: `${data.name}` })
+            return response.data
+        } else {
+            throw new Error(response)
+        }
+
+    } catch (error) {
+        const message = error.message + ". " + (error.response?.data ? error.response.data : '')
+        throw new Error(message)
+    }
 }
 

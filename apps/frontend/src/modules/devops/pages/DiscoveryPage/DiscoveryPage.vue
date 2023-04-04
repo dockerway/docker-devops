@@ -9,11 +9,7 @@
             <environment-combobox v-model="environment"></environment-combobox>
           </v-card-text>
           <v-card-actions>
-            <v-btn
-                x-large class="red" dark
-                @click="startDiscovery"
-                :loading="loading"
-            >
+            <v-btn x-large class="red" dark @click="startDiscovery" :loading="loading">
               START
             </v-btn>
           </v-card-actions>
@@ -23,20 +19,16 @@
       </v-col>
 
 
-      <v-col cols="12" v-if="disconvery && disconvery.servicesDiscovered">
+      <v-col cols="12" v-if="discovery && discovery.servicesDiscovered">
         <v-card>
           <v-card-actions>
             <v-btn @click="selectAll" class="teal white--text">select all</v-btn>
           </v-card-actions>
           <v-card-text>
-            <v-data-table
-                :items="disconvery.servicesDiscovered"
-                :headers="discoveredHeaders"
-                show-select v-model="selectedServicesDiscovered"
-                item-key="keyName"
-            >
+            <v-data-table :items="discovery.servicesDiscovered" :headers="discoveredHeaders" show-select
+              v-model="selectedServicesDiscovered" item-key="keyName">
 
-              <template v-slot:item.namespace="{item}">
+              <template v-slot:item.namespace="{ item }">
 
                 <span v-if="item.namespace">{{ item.namespace }}</span>
 
@@ -50,11 +42,7 @@
           </v-card-text>
 
           <v-card-actions>
-            <v-btn
-                x-large class="blue" dark
-                @click="createDiscovery"
-                :loading="loading"
-            >
+            <v-btn x-large class="blue" dark @click="createDiscovery" :loading="loading">
               Create
             </v-btn>
           </v-card-actions>
@@ -132,12 +120,12 @@ import PlatformCombobox from "@/modules/devops/components/PlatformCombobox/Platf
 
 export default {
   name: "DiscoveryPage",
-  components: {PlatformCombobox, EnvironmentCombobox},
+  components: { PlatformCombobox, EnvironmentCombobox },
   data() {
     return {
       loading: false,
       environment: null,
-      disconvery: [],
+      discovery: [],
       selectedServicesDiscovered: [],
       created: null
     }
@@ -145,11 +133,11 @@ export default {
   computed: {
     discoveredHeaders() {
       return [
-        {text: 'keyName', value: 'keyName'},
-        {text: this.$t('devops.service.labels.name'), value: 'name'},
-        {text: this.$t('devops.service.labels.image'), value: 'imageName'},
-        {text: this.$t('devops.service.labels.platform'), value: 'namespace'},
-        {text: this.$t('devops.environmentService.labels.stack'), value: 'stack'},
+        { text: 'keyName', value: 'keyName' },
+        { text: this.$t('devops.service.labels.name'), value: 'name' },
+        { text: this.$t('devops.service.labels.image'), value: 'imageName' },
+        { text: this.$t('devops.service.labels.platform'), value: 'namespace' },
+        { text: this.$t('devops.environmentService.labels.stack'), value: 'stack' },
       ]
     },
     getSelectedWithPlatform() {
@@ -158,34 +146,37 @@ export default {
   },
   methods: {
     selectAll() {
-      if (this.disconvery && this.disconvery.servicesDiscovered) {
-        this.selectedServicesDiscovered = this.disconvery.servicesDiscovered
+      if (this.discovery && this.discovery.servicesDiscovered) {
+        this.selectedServicesDiscovered = this.discovery.servicesDiscovered
       }
 
     },
-    createDiscovery() {
+    async createDiscovery() {
       if (this.getSelectedWithPlatform.length > 0) {
-        this.loading = true
-        DiscoveryProvider.createDiscovery(this.getSelectedWithPlatform)
-            .then(r => {
-              this.created = r.data.createDiscovery
-            })
-            .finally(() => this.loading = false)
+        try {
+          this.loading = true
+          const createDiscovery = await DiscoveryProvider.createDiscovery(this.getSelectedWithPlatform)
+          this.created = createDiscovery.data.createDiscovery
+        } catch (error) {
+          console.log(`An error happened when we tried to create the discovery '${error}'`)
+        } finally {
+          this.loading = false
+        }
       }
     },
-    startDiscovery() {
-      this.loading = true
-      DiscoveryProvider.startDiscovery(this.environment)
-          .then(r => {
-            this.disconvery = r.data.startDiscovery
-          })
-          .finally(() => this.loading = false)
+    async startDiscovery() {
+      try {
+        this.loading = true
+        this.discovery = (await DiscoveryProvider.startDiscovery(this.environment)).data.startDiscovery
+      } catch (error) {
+        console.log('An error happened when we started the discovery')
+      } finally {
+        this.loading = false
+      }
     }
   }
 
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

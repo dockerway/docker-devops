@@ -1,100 +1,68 @@
-import axios from 'axios'
-import {fetchRegistry, findRegistry} from "./RegistryService";
+import { fetchRegistry, findRegistry } from "./RegistryService";
+import axios from 'axios';
+
+export const fetchImage = async function (registryId, rows = 1000) {
+    try {
+        const registry = await findRegistry(registryId)
+        const URL = `${registry.url}/v2/_catalog`
+        console.log(`URL: '${URL}'`)
 
 
-export const fetchImage = function (registryId, rows = 1000) {
-    return new Promise(async (resolve, reject) => {
-        try {
+        const images = (await axios.get(URL, { params: { n: rows } })).data
+        return images.repositories.map(i => ({ name: i, tags: null }))
 
-            let registry = await findRegistry(registryId)
-
-            let path = '/v2/_catalog'
-            const URL = registry.url + path
-            const config = {
-                params: {
-                    n: rows
-                }
-            }
-
-            let response = await axios.get(URL, config)
-
-            if (response.status = 200) {
-                //console.log("fetchImage", response.data)
-                let r = response.data.repositories.map(i => ({name: i, tags: null}))
-                // console.log("fetchImage", r)
-                resolve(r)
-            }
-
-
-        } catch (e) {
-            reject(e)
-        }
-
-    })
+    } catch (error) {
+        console.log(`An error happened when we tried to get the registry '${registryId}'s images`)
+        throw (error)
+    }
 }
 
-export const imageTags = function (registryId, name) {
-    return new Promise(async (resolve, reject) => {
-        try {
+export const imageTags = async function (registryId, name) {
+    try {
+        const registry = await findRegistry(registryId)
 
-            let registry = await findRegistry(registryId)
+        const URL = `${registry.url}/v2/${name}/tags/list`
+        console.log(`URL: '${URL}'`)
 
-            let path = '/v2/' + name + '/tags/list'
-            const URL = registry.url + path
-            console.log("URL", URL)
-            const config = {}
+        const imageTags = (await axios.get(URL, {})).data
+        console.log(`Images tags: '${JSON.stringify(imageTags)}'`)
 
-            let response = await axios.get(URL, config)
-
-            if (response.status = 200) {
-                console.log("imageTags", response.data)
-                resolve(response.data)
-            }
-
-
-        } catch (e) {
-            reject(e)
-        }
-
-    })
+        return imageTags
+    } catch (error) {
+        console.log(`An error happened when we tried to get the image ${name}'s tags in the registry '${registryId}'`)
+        throw (error)
+    }
 }
 
 
-export const imageTagsByFullname = function (name) {
-    return new Promise(async (resolve, reject) => {
-        try {
+export const imageTagsByFullname = async function (name) {
+    try {
+        const searchRegistry = async (imageName) => {
+            const registries = await fetchRegistry()
 
-
-            async function searchRegistry(imageName) {
-                let registries = await fetchRegistry()
-                for (let registry of registries) {
-                    if (imageName.includes(registry.domain)) {
-                        return registry
-                    }
-                }
+            console.log(`About to iterate through registries: "${registries}"`)
+            for (let registry of registries) {
+                console.log(`current registry: "${registry}"`)
+                if (imageName.includes(registry.domain)) return registry
             }
-
-            function getImageBaseName(registry, imageName) {
-                return imageName.replace(registry.domain, "")
-            }
-
-            if (/:/.test(name)) {
-                name = name.split(":")[0]
-            }
-
-            let registry = await searchRegistry(name)
-
-            if (registry) {
-                let tags = imageTags(registry.id, getImageBaseName(registry,name))
-                resolve(tags)
-            }else{
-                reject(new Error("Registry not found"))
-            }
-
-
-        } catch (e) {
-            reject(e)
         }
 
-    })
+        const getImageBaseName = (registry, imageName) => (imageName.replace(registry.domain, ""))
+        if (/:/.test(name)) name = name.split(":")[0]
+        console.log(`name: "${name}"`)
+
+        const registry = await searchRegistry(name)
+        console.log(`registry: "${registry}"`)
+
+        if (registry) {
+            return imageTags(registry.id, getImageBaseName(registry, name))
+        } else {
+            throw (new Error("Registry not found"))
+        }
+
+
+    } catch (error) {
+        console.log(`An error happened when we tried to get the image "${name}'s tags by its full name"`)
+        throw (error)
+    }
 }
