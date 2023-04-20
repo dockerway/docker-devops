@@ -47,7 +47,7 @@ type EnvironmentService{
     id: ID!
     environment: Environment!
     service: Service!
-    stack: Stack!
+    stack: Stack
     image: String
     replicas: Int
     name: String
@@ -147,4 +147,5 @@ type Mutation {
     createEnvironmentService(input: EnvironmentServiceInput): EnvironmentService
     updateEnvironmentService(id: ID!, input: EnvironmentServiceInput): EnvironmentService
     deleteEnvironmentService(id: ID!): EnvironmentServiceDelete!
+    deleteEnvironmentServicesByStack(stackID: ID!): EnvironmentServiceDelete!
 }

@@ -41,13 +41,19 @@ class EnvironmentServiceProvider {
         })
     }
 
-     deleteEnvironmentService(id) {
+    deleteEnvironmentService(id) {
         return graphqlClient.mutate({
             mutation: require('./gql/EnvironmentService/deleteEnvironmentService.graphql'),
             variables: {id}
         })
     }
 
+    deleteEnvironmentServicesByStack(stackID) {
+        return graphqlClient.mutate({
+            mutation: require('./gql/EnvironmentService/deleteEnvironmentServicesByStack.graphql'),
+            variables: {stackID}
+        })
+    }
 }
 
 export default new EnvironmentServiceProvider()
