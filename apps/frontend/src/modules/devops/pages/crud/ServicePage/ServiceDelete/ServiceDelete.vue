@@ -1,10 +1,10 @@
 <template>
-      <crud-delete :open="open"
-                 :loading="loading"
-                 :title="title"
-                 :errorMessage="errorMessage"
-                 @delete="remove"
-                 @close="$emit('close')"
+    <crud-delete :open="open"
+        :loading="loading"
+        :title="title"
+        :errorMessage="errorMessage"
+        @delete="remove"
+        @close="$emit('close')"
     >
 
         <v-card-text>
@@ -22,6 +22,7 @@
 
 <script>
     //Provider  
+    import EnvironmentServiceProvider from "../../../../providers/EnvironmentServiceProvider";
     import ServiceProvider from "../../../../providers/ServiceProvider";
     
     //Show Data
@@ -50,20 +51,24 @@
             }
         },
         methods: {
-            remove() {
-                this.loading = true
-                ServiceProvider.deleteService(this.item.id).then(result => {
-                            if (result.data.deleteService.success) {
-                                this.$emit('itemDeleted',result.data.deleteService)
-                                this.$emit('close')
-                            }else{
-                                this.errorMessage = 'Error on Delete'
-                            }
-                        }
-                    ).catch(error =>{
-                        let clientError = new ClientError(error)
-                        this.errorMessage = clientError.showMessage
-                }).finally(() => this.loading = false)
+            async remove() {
+                try {
+                    this.loading = true
+                    await EnvironmentServiceProvider.deleteEnvironmentServicesByService(this.item.id)
+                    const deleteServiceResponse = (await ServiceProvider.deleteService(this.item.id)).data.deleteService
+
+                    if (deleteServiceResponse.success) {
+                        this.$emit('itemDeleted', deleteServiceResponse)
+                        this.$emit('close')
+                    }else{
+                        this.errorMessage = 'Error on Delete'
+                    }
+                } catch (error) {
+                    const clientError = new ClientError(error)
+                    this.errorMessage = clientError.showMessage
+                }finally{
+                    this.loading = false
+                }
             },
         },
     }
