@@ -23,7 +23,7 @@
 <script>
     //Provider  
     import EnvironmentServiceProvider from "../../../../providers/EnvironmentServiceProvider";
-import StackProvider from "../../../../providers/StackProvider";
+    import StackProvider from "../../../../providers/StackProvider";
     
     //Show Data
     import StackShowData from "../StackShow/StackShowData";
