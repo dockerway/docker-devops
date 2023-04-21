@@ -97,6 +97,8 @@ export const findStack = async function (id) {
 
 
   export const createStack = async function (authUser, {name, platform, environments}) {
+    if (!new RegExp(/^[^\s]*$/).test(name)) throw new Error('El nombre del stack no debe poseer espacios en blanco')
+
     const doc = new Stack({name, platform, environments})
     doc.id = doc._id
 
