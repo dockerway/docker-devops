@@ -132,12 +132,20 @@ async function getDockerApiConfig(id) {
 }
 
 function createVerifiedFolders(environmentService) {
-    if (environmentService.volumes) {
-        const verifiedVolumes = environmentService.volumes.map(function (vol) { return vol.hostVolume })
-        const verifiedFiles = environmentService.files.map(function (file) { return file.hostPath + "/" + file.fileName })
-        const verifiedFolders = verifiedVolumes.filter(elem => !elem.includes(verifiedFiles))
+    try {
+        if (environmentService.volumes) {
+            console.log('environmentService.volumes: ', environmentService.volumes)
 
-        return verifiedFolders
+            const verifiedVolumes = environmentService.volumes.map( volume => volume.hostVolume )
+            console.log('verifiedVolumes: ', verifiedVolumes)
+
+            return verifiedVolumes
+        }else{
+            throw new Error('The createVerifiedFolders functions needs an environment service as a parameter!')
+        }
+    } catch (error) {
+        console.error(`An error happened at the createVerifiedFolders function: '${error}'`)
+        throw error
     }
 }
 
@@ -148,11 +156,11 @@ export const createDockerService = async function (authUser, id) {
         const verifiedFolders = createVerifiedFolders(environmentService)
         const filesURL = dockerApiUrl + '/api/docker/files'
 
-        if (! await canUserDeploy(authUser, environmentService.environment.type)){
-            throw new Error("El usuario no tiene permiso para desplegar este servicio")
-        }
+        if (! await canUserDeploy(authUser, environmentService.environment.type)) throw new Error("El usuario no tiene permiso para desplegar este servicio")
 
-        await axios.post(createFoldersURL, verifiedFolders, headers)
+        console.log('verifiedFolders: ', verifiedFolders)
+        const createFolder = await axios.post(createFoldersURL, verifiedFolders, headers)
+        console.log('createFolder: ', createFolder.data)
 
         if (environmentService.files) { //files are sent to fortes as volumes
             await axios.post(filesURL, environmentService.files, headers)
@@ -192,7 +200,6 @@ export const createDockerService = async function (authUser, id) {
             limits: environmentService.limits ? environmentService.limits : {},
             preferences: environmentService.preferences ? environmentService.preferences : [],
             networks: environmentService.networks ? environmentService.networks : [],
-            command: environmentService.command
         }
 
         const URL = dockerApiUrl + '/api/docker/service'
@@ -219,8 +226,10 @@ export const updateDockerService = async function (id, targetImage = null, user)
         const filesURL = dockerApiUrl + '/api/docker/files'
 
         if (! await canUserDeploy(user, environmentService.environment.type)) throw new Error("El usuario no tiene permiso para actualizar este servicio")
-
-        await axios.post(createFoldersURL, verifiedFolders, headers)
+        
+        console.log(`verifiedFolders updateDocker: '${verifiedFolders}'`)
+        const createFolder = await axios.post(createFoldersURL, verifiedFolders, headers)
+        console.log(`createFolder: '${createFolder}'`)
 
         if (environmentService.files) {
             //files are sent to fortes as volumes
@@ -263,7 +272,6 @@ export const updateDockerService = async function (id, targetImage = null, user)
             limits: environmentService.limits ? limits : {},
             preferences: environmentService.preferences ? environmentService.preferences : [],
             networks: environmentService.networks ? environmentService.networks : [],
-            command: environmentService.command
         }
 
         const URL = dockerApiUrl + '/api/docker/service/' + dockerService.id
