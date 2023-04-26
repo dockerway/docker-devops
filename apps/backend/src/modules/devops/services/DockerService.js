@@ -134,8 +134,8 @@ async function getDockerApiConfig(id) {
 function createVerifiedFolders(environmentService) {
     try {
         if (environmentService.volumes) {
+            
             console.log('environmentService.volumes: ', environmentService.volumes)
-
             const verifiedVolumes = environmentService.volumes.map( volume => volume.hostVolume )
             console.log('verifiedVolumes: ', verifiedVolumes)
 
