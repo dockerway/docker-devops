@@ -164,3 +164,45 @@ export const deleteEnvironmentService = async function (authUser, id) {
         throw error
     }
 }
+
+export const deleteEnvironmentServicesByStack = async function (authUser, stackID) {
+    try {
+        const environmentServicesByStack = await EnvironmentService.find({stack: stackID})
+        
+        environmentServicesByStack.forEach(async (environmentService) => {
+            const environment = await findEnvironment(environmentService.environment)
+
+            if (!await canUserUpdate(authUser, environment.type)){
+                console.log(`El usuario no tiene permiso para eliminar el servicio '${JSON.stringify(environmentService, null, 2)}' del entorno '${environmentService.environment.type}'`)
+            }else{
+                await environmentService.delete()
+                await createAudit(authUser, { user: authUser.id, action: 'Delete environment service by stack', resource: `${environmentService.name}` })
+            }
+        })
+
+        return ({ id: stackID, success: true })
+    } catch (error) {
+        throw error
+    }
+}
+
+export const deleteEnvironmentServicesByService = async function (authUser, serviceID) {
+    try {
+        const environmentServicesByStack = await EnvironmentService.find({service: serviceID})
+        
+        environmentServicesByStack.forEach(async (environmentService) => {
+            const environment = await findEnvironment(environmentService.environment)
+
+            if (!await canUserUpdate(authUser, environment.type)){
+                console.log(`El usuario no tiene permiso para eliminar el servicio '${JSON.stringify(environmentService, null, 2)}' del entorno '${environmentService.environment.type}'`)
+            }else{
+                await environmentService.delete()
+                await createAudit(authUser, { user: authUser.id, action: 'Delete environment service by service', resource: `${environmentService.name}` })
+            }
+        })
+
+        return ({ id: serviceID, success: true })
+    } catch (error) {
+        throw error
+    }
+}

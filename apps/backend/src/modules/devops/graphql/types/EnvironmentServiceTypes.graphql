@@ -46,8 +46,8 @@ type FileEnvService{
 type EnvironmentService{
     id: ID!
     environment: Environment!
-    service: Service!
-    stack: Stack!
+    service: Service
+    stack: Stack
     image: String
     replicas: Int
     name: String
@@ -122,8 +122,8 @@ input FileEnvServiceInput{
 
 input EnvironmentServiceInput{
     environment: ID!
-    service: ID!
-    stack:  ID!
+    service: ID
+    stack:  ID
     image: String
     replicas: Int
     name: String
@@ -147,4 +147,6 @@ type Mutation {
     createEnvironmentService(input: EnvironmentServiceInput): EnvironmentService
     updateEnvironmentService(id: ID!, input: EnvironmentServiceInput): EnvironmentService
     deleteEnvironmentService(id: ID!): EnvironmentServiceDelete!
+    deleteEnvironmentServicesByStack(stackID: ID!): EnvironmentServiceDelete!
+    deleteEnvironmentServicesByService(serviceID: ID!): EnvironmentServiceDelete!
 }

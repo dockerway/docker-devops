@@ -1,10 +1,18 @@
 
-import { createEnvironmentService, updateEnvironmentService, deleteEnvironmentService,  findEnvironmentService, fetchEnvironmentService, paginateEnvironmentService} from '../../services/EnvironmentServiceService'
+import {
+    createEnvironmentService,
+    updateEnvironmentService,
+    deleteEnvironmentService,
+    findEnvironmentService,
+    fetchEnvironmentService,
+    paginateEnvironmentService,
+    deleteEnvironmentServicesByStack,
+    deleteEnvironmentServicesByService
+} from '../../services/EnvironmentServiceService'
 
 import {AuthenticationError, ForbiddenError} from "apollo-server-express";
 
 import {
-
     ENVIRONMENTSERVICE_SHOW,
     ENVIRONMENTSERVICE_UPDATE,
     ENVIRONMENTSERVICE_CREATE,
@@ -51,6 +59,19 @@ export default {
             if (!rbac.isAllowed(user.id, ENVIRONMENTSERVICE_DELETE)) throw new ForbiddenError("Not Authorized")
 
             return deleteEnvironmentService(user, id)
+        },
+
+        deleteEnvironmentServicesByStack: (_, {stackID}, {user,rbac}) => {
+            if (!user) throw new AuthenticationError("Unauthenticated")
+            if (!rbac.isAllowed(user.id, ENVIRONMENTSERVICE_DELETE)) throw new ForbiddenError("Not Authorized")
+
+            return deleteEnvironmentServicesByStack(user, stackID)
+        },
+        deleteEnvironmentServicesByService: (_, {serviceID}, {user,rbac}) => {
+            if (!user) throw new AuthenticationError("Unauthenticated")
+            if (!rbac.isAllowed(user.id, ENVIRONMENTSERVICE_DELETE)) throw new ForbiddenError("Not Authorized")
+
+            return deleteEnvironmentServicesByService(user, serviceID)
         },
     }
 

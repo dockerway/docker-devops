@@ -135,7 +135,7 @@ export const updateService = async function (authUser, id, {name, description, p
 
 export const deleteService = async function (user, id) {
     try {
-        const doc = await findService(id)
+        const doc = await getServiceById(id)
 
         await doc.delete()
         await createAudit(user, {user: user.id, action: 'Delete service', resource: doc.name})

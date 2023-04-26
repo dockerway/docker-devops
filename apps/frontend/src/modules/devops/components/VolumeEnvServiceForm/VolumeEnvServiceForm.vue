@@ -21,7 +21,7 @@
         :label="$t('devops.environmentService.labels.containerVolume')"
         :placeholder="$t('devops.environmentService.labels.containerVolume')"
         color="secondary"
-        :rules="rules"
+        :rules="linuxDirectoryRules"
     ></v-text-field>
   </v-col>
 
@@ -33,7 +33,8 @@ export default {
   name: "VolumeEnvServiceForm",
   data() {
     return {
-      rules: [ v => this.regexPaths.test(v) || 'Debe comenzar con /storage, /logs o /localdata y finalizar sin /' ]
+      rules: [ v => this.regexPaths.test(v) || 'Debe comenzar con /storage, /logs o /localdata y finalizar sin /' ],
+      linuxDirectoryRules: [path => this.isAValidLinuxDirectory(path)]
     }
   },
   props: {
@@ -58,6 +59,19 @@ export default {
         this.$emit('input', newVal)
       },
       deep: true
+    }
+  },
+  methods: {
+    isAValidLinuxDirectory(path) {
+      try {
+        /* eslint-disable no-useless-escape */
+        const linuxDirectoryRegex = new RegExp(/^\/(?:[a-zA-Z0-9_-]+\/)*(?![\/])[a-zA-Z0-9_-]+$/)
+        
+        return linuxDirectoryRegex.test(path) ? true : 'Debe ser un nombre de directorio Linux valido que NO finalice con un "/"'
+      } catch (error) {
+        console.error('An error happened when we tried to check if a path was a valid linux directory name')
+        throw error
+      }
     }
   },
 }
