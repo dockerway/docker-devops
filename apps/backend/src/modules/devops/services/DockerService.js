@@ -200,6 +200,7 @@ export const createDockerService = async function (authUser, id) {
             limits: environmentService.limits ? environmentService.limits : {},
             preferences: environmentService.preferences ? environmentService.preferences : [],
             networks: environmentService.networks ? environmentService.networks : [],
+            command: environmentService.command
         }
 
         const URL = dockerApiUrl + '/api/docker/service'
@@ -230,6 +231,7 @@ export const updateDockerService = async function (id, targetImage = null, user)
         console.log(`verifiedFolders updateDocker: '${verifiedFolders}'`)
         const createFolder = await axios.post(createFoldersURL, verifiedFolders, headers)
         console.log(`createFolder: '${createFolder}'`)
+
 
         if (environmentService.files) {
             //files are sent to fortes as volumes
@@ -272,6 +274,7 @@ export const updateDockerService = async function (id, targetImage = null, user)
             limits: environmentService.limits ? limits : {},
             preferences: environmentService.preferences ? environmentService.preferences : [],
             networks: environmentService.networks ? environmentService.networks : [],
+            command: environmentService.command
         }
 
         const URL = dockerApiUrl + '/api/docker/service/' + dockerService.id

@@ -32,7 +32,7 @@ const messages = {
                 containerPath: "Container path",
                 memoryReservation:"Memory Reservation",
                 memoryLimit:"Memory Limit",
-                CPUReservation:"CPU Reservation", 
+                CPUReservation:"CPU Reservation",
                 CPULimit:"CPU Limit",
                 variable: {
                     name: "Name",
@@ -41,7 +41,8 @@ const messages = {
                 },
                 image: "Image",
                 replicas: "Replicas",
-                name: "Name"
+                name: "Name",
+                command: "Command"
             },
 
           }
@@ -79,7 +80,7 @@ const messages = {
                 containerPath: "Container path",
                 memoryReservation:"Reserva de Memoria",
                 memoryLimit:"Límite de Memoria",
-                CPUReservation:"Reserva de CPU", 
+                CPUReservation:"Reserva de CPU",
                 CPULimit:"Límite de CPU",
                 variable: {
                     name: "Nombre",
@@ -88,7 +89,8 @@ const messages = {
                 },
                 image: "Imagen",
                 replicas: "Replicas",
-                name: "Nombre"
+                name: "Nombre",
+                command: "Comando"
             },
 
           }
@@ -126,7 +128,7 @@ const messages = {
                 containerPath: "Container arquivo",
                 memoryReservation:"Reserva de memória",
                 memoryLimit:"Limite de Memória",
-                CPUReservation:"Reserva de CPU", 
+                CPUReservation:"Reserva de CPU",
                 CPULimit:"Limite de CPU",
                 variable: {
                     name: "Name",
@@ -135,7 +137,8 @@ const messages = {
                 },
                 image: "Image",
                 replicas: "Replicas",
-                name: "Name"
+                name: "Name",
+                command: "Command"
             },
 
           }

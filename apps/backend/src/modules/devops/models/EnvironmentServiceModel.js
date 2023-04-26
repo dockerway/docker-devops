@@ -71,7 +71,8 @@ const EnvironmentServiceSchema = new Schema({
     labels: [LabelSchema],
     constraints: [ConstraintSchema],
     limits: LimitSchema,
-    preferences: [PreferenceSchema]
+    preferences: [PreferenceSchema],
+    command: {type: String, required: false, index: false}
 }, {timestamps: true});
 
 

@@ -44,7 +44,8 @@ export default {
           CPUReservation: 0,
           CPULimit: 0
         },
-        preferences: []
+        preferences: [],
+        command: null
       }
     }
   },

@@ -1,6 +1,6 @@
 ## Build Image
 * Reemplazar tagname por la version de la imagen (misma version que git)
-`docker build -t cincarnato/docker-devops:tagname .`
+`docker build -t sndregistry.sondeosglobal.com/dockerway/docker-devops:tagname .`
 
 ## PUSH Image
 
@@ -8,7 +8,7 @@
 
 ## Docker deploy development with run
 
-`docker run -it --network="host" -p 8888:5000 cincarnato/docker-devops`
+`docker run -it --network="host" -p 8888:5000 sndregistry.sondeosglobal.com/dockerway/docker-devops`
 
 ## Docker deploy with compose
 

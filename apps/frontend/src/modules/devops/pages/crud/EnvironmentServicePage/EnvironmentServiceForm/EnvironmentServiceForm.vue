@@ -7,12 +7,14 @@
       </v-col>
 
       <v-col cols="12" sm="4">
-        <stack-combobox v-model="form.stack" :input-errors="inputErrors" ></stack-combobox>
+        <stack-combobox v-model="form.stack" :input-errors="inputErrors"  ></stack-combobox>
       </v-col>
 
       <v-col cols="12" sm="4">
-        <service-combobox v-model="form.service" :input-errors="inputErrors"/>
+        <service-combobox v-model="form.service" :input-errors="inputErrors" @image="v => form.image = v"/>
       </v-col>
+
+
 
       <v-col cols="12" sm="6">
         <v-text-field
@@ -55,6 +57,19 @@
             :error-messages="getInputErrors('name')"
             color="secondary"
             :rules="required"
+        ></v-text-field>
+      </v-col>
+
+      <v-col cols="12" sm="12">
+        <v-text-field
+            prepend-icon="touch_app"
+            name="command"
+            v-model="form.command"
+            :label="$t('devops.environmentService.labels.command')"
+            :placeholder="$t('devops.environmentService.labels.command')"
+            :error="hasInputErrors('command')"
+            :error-messages="getInputErrors('command')"
+            color="secondary"
         ></v-text-field>
       </v-col>
 
@@ -341,11 +356,11 @@ export default {
     return {
       tab: 0,
       items: [
-        this.$t('devops.service.labels.port'), 
-        this.$t('devops.service.labels.volume'), 
+        this.$t('devops.service.labels.port'),
+        this.$t('devops.service.labels.volume'),
         this.$t('devops.service.labels.file'),
         'Envs',
-        'Labels', 
+        'Labels',
         this.$t('devops.service.labels.constraints'),
         this.$t('devops.service.labels.limits'),
         this.$t('devops.service.labels.preferences')

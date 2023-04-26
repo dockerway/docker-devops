@@ -44,6 +44,11 @@
               <show-field :value="item.image" :label="$t('devops.environmentService.labels.image')" icon="album" />
 
             </v-col>
+
+            <v-col cols="12">
+              <show-field :value="item.command" :label="$t('devops.environmentService.labels.command')" icon="touch_app" />
+
+            </v-col>
           </v-row>
         </v-tab-item>
 
