@@ -55,5 +55,6 @@ query findEnvironmentService($id:ID!){
             name
             value
         }
+        command
     }
 }

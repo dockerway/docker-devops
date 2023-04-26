@@ -50,7 +50,8 @@ export default {
         labels: this.item.labels ? this.item.labels : [],
         constraints: this.item.constraints ?  this.item.constraints : [],
         limits: this.item.limits ?  this.item.limits : {},
-        preferences: this.item.preferences ? this.item.preferences : []
+        preferences: this.item.preferences ? this.item.preferences : [],
+        command: this.item.command
       }
     }
   },

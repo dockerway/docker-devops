@@ -59,6 +59,7 @@ type EnvironmentService{
     constraints: [ConstraintService]
     limits: LimitService
     preferences: [PreferenceService]
+    command: String
 }
 
 type EnvironmentServicePaginated{
@@ -134,6 +135,7 @@ input EnvironmentServiceInput{
     constraints: [ConstraintServiceInput]
     limits: LimitServiceInput
     preferences: [PreferenceServiceInput]
+    command: String
 }
 
 type EnvironmentServiceDelete{
