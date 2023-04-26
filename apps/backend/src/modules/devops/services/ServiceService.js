@@ -82,9 +82,9 @@ export async function paginateServices(pageNumber = 1, itemsPerPage = 5, search 
       totalItems: result.totalDocs,
       page: result.page,
     }
-    
+
   }
-  
+
 
 
 export const createService = async function (authUser, {name, description, platform, image, repository, volumes, ports, envs, files, constraints, limits, preferences}) {
@@ -107,7 +107,7 @@ export const createService = async function (authUser, {name, description, platf
 }
 
 export const updateService = async function (authUser, id, {name, description, platform, image, repository, volumes, ports, envs, files, constraints, limits, preferences}) {
-    const serviceOriginalName = (await findService(id)).name
+    const serviceOriginalName = (await getServiceById(id)).name
 
     try {
         const doc = await Service.findOneAndUpdate(
