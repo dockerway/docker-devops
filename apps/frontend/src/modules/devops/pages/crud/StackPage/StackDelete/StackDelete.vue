@@ -22,7 +22,6 @@
 
 <script>
     //Provider  
-    import EnvironmentServiceProvider from "../../../../providers/EnvironmentServiceProvider";
     import StackProvider from "../../../../providers/StackProvider";
     
     //Show Data
@@ -51,24 +50,20 @@
             }
         },
         methods: {
-            async remove() {
+            remove() {
                 this.loading = true
-
-                try {
-                    await EnvironmentServiceProvider.deleteEnvironmentServicesByStack(this.item.id)
-                    const stackDeletionResult = (await StackProvider.deleteStack(this.item.id)).data.deleteStack
-                    
-                    this.$emit('itemDeleted', stackDeletionResult)
-                    this.$emit('close')
-                } catch (error) {
-                    this.errorMessage = 'Error on Delete'
-
-                    const clientError = new ClientError(error)
-                    this.errorMessage = clientError.showMessage
-
-                } finally{
-                    this.loading = false
-                }
+                StackProvider.deleteStack(this.item.id).then(result => {
+                            if (result.data.deleteStack.success) {
+                                this.$emit('itemDeleted',result.data.deleteStack)
+                                this.$emit('close')
+                            }else{
+                                this.errorMessage = 'Error on Delete'
+                            }
+                        }
+                    ).catch(error =>{
+                        let clientError = new ClientError(error)
+                        this.errorMessage = clientError.showMessage
+                }).finally(() => this.loading = false)
             },
         },
     }

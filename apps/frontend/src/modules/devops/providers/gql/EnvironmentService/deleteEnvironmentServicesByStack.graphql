@@ -1,7 +1,0 @@
-mutation deleteEnvironmentServicesByStack($stackID: ID!){
-    deleteEnvironmentServicesByStack(stackID: $stackID){
-        id
-        success
-    }
-}
-

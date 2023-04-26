@@ -169,7 +169,7 @@ export default {
         this.loading = true
         this.discovery = (await DiscoveryProvider.startDiscovery(this.environment)).data.startDiscovery
       } catch (error) {
-        console.log(`An error happened when we started the discovery: ${error}`)
+        console.log('An error happened when we started the discovery')
       } finally {
         this.loading = false
       }
