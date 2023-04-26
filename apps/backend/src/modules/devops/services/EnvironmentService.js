@@ -94,10 +94,6 @@ function getOperator(operator) {
     }
 }
 
-
-
-
-
 export const createEnvironment = async function (authUser, { name, dockerApiUrl, dockerApiToken, type }) {
     dockerApiUrl = dockerApiUrl.replace(/\/+$/, '')
 
