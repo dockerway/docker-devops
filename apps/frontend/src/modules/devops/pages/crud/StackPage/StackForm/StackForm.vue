@@ -13,8 +13,8 @@
                                 :error="hasInputErrors('name')"
                                 :error-messages="getInputErrors('name')"
                                 color="secondary"
-                                :rules="required.concat(noWhiteSpacesRule)"
-                        />
+                                :rules="required"
+                        ></v-text-field>
                     </v-col>
 
 
@@ -57,7 +57,7 @@ EnvironmentCombobox,},
            form: {
                 get() { return this.value },
                 set(val) {this.$emit('input', val)}
-            },
+            }
         },
          watch: {
             form: {
@@ -70,17 +70,11 @@ EnvironmentCombobox,},
         methods: {
             validate(){
               return this.$refs.form.validate()
-            },
-            checkIfStackNameHaveSpaces(stackName) {
-                /* eslint-disable no-useless-escape */
-                const noWhiteSpacesRegex = new RegExp(/^[^\s]*$/)
-                
-                return (noWhiteSpacesRegex.test(stackName)) ? true : 'El nombre del stack no debe poseer espacios en blanco'
             }
         },
         data(){
             return {
-                noWhiteSpacesRule: [stackName => this.checkIfStackNameHaveSpaces(stackName)]
+
             }
         }
     }

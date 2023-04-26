@@ -1,7 +1,0 @@
-mutation deleteEnvironmentServicesByService($serviceID: ID!){
-    deleteEnvironmentServicesByService(serviceID: $serviceID){
-        id
-        success
-    }
-}
-
