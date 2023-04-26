@@ -53,6 +53,7 @@ mutation createEnvironmentService($input: EnvironmentServiceInput){
             name
             value
         }
+        command
     }
 }
 

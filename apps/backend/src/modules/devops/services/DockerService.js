@@ -192,6 +192,7 @@ export const createDockerService = async function (authUser, id) {
             limits: environmentService.limits ? environmentService.limits : {},
             preferences: environmentService.preferences ? environmentService.preferences : [],
             networks: environmentService.networks ? environmentService.networks : [],
+            command: environmentService.command
         }
 
         const URL = dockerApiUrl + '/api/docker/service'
@@ -218,7 +219,7 @@ export const updateDockerService = async function (id, targetImage = null, user)
         const filesURL = dockerApiUrl + '/api/docker/files'
 
         if (! await canUserDeploy(user, environmentService.environment.type)) throw new Error("El usuario no tiene permiso para actualizar este servicio")
-        
+
         await axios.post(createFoldersURL, verifiedFolders, headers)
 
         if (environmentService.files) {
@@ -262,6 +263,7 @@ export const updateDockerService = async function (id, targetImage = null, user)
             limits: environmentService.limits ? limits : {},
             preferences: environmentService.preferences ? environmentService.preferences : [],
             networks: environmentService.networks ? environmentService.networks : [],
+            command: environmentService.command
         }
 
         const URL = dockerApiUrl + '/api/docker/service/' + dockerService.id

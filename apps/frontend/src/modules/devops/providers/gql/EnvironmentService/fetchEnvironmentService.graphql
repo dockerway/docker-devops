@@ -33,6 +33,7 @@ query fetchEnvironmentService{
             name
             value
         }
+        command
     }
 }
 
