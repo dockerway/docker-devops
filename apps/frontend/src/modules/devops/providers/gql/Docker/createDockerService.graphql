@@ -1,5 +1,5 @@
-mutation createDockerService($id: ID!){
-    createDockerService(id: $id){
+mutation createDockerService($id: ID!, $targetImage: String){
+    createDockerService(id: $id, targetImage: $targetImage){
         id
         name
         stack

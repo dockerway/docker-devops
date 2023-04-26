@@ -36,11 +36,11 @@ export default {
         },
     },
     Mutation: {
-        createDockerService: (_, {id}, {user,rbac}) => {
+        createDockerService: (_, {id, targetImage}, {user,rbac}) => {
             if (!user) throw new AuthenticationError("Unauthenticated")
             if (!rbac.isAllowed(user.id, ENVIRONMENTSERVICE_CREATE)) throw new ForbiddenError("Not Authorized")
-            
-            return createDockerService(user, id)
+
+            return createDockerService(user, id, targetImage)
         },
         updateDockerService: (_, {id, targetImage}, {user,rbac}) => {
             if (!user) throw new AuthenticationError("Unauthenticated")

@@ -77,7 +77,7 @@
 
     <v-card outlined>
 
-      <v-card-actions v-if="id" class="py-1 my-0">
+      <v-card-actions  class="py-1 my-0">
         <v-spacer></v-spacer>
         <v-btn x-small color="blue" @click="getFromService">GET FROM SERVICE</v-btn>
         <v-btn x-small color="green" @click="getFromEnvironment">GET FROM ENVIRONMENT</v-btn>

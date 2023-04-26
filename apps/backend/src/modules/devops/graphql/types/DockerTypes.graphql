@@ -124,6 +124,6 @@ input LabelInput{
 
 
 type Mutation {
-    createDockerService(id: ID!): DockerService
+    createDockerService(id: ID!, targetImage: String): DockerService
     updateDockerService(id: ID!, targetImage: String): DockerService
 }

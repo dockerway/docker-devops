@@ -1,22 +1,24 @@
 <template>
-  <v-autocomplete
-      prepend-icon="tag"
-      :items="getItems"
-      v-model="item"
-      label="Tags"
-      :loading="loading"
-      color="secondary"
-      item-color="secondary"
-      :rules="isRequired ? required : []"
-      :multiple="multiple"
-      :chips="chips"
-      :solo="solo"
-      :disabled="disabled"
-      :readonly="readonly"
-      :clearable="clearable"
-      :outlined="outlined"
-      :hide-details="hideDetails"
-  ></v-autocomplete>
+      <v-autocomplete
+          v-if="getItems && getItems.length > 0"
+          prepend-icon="tag"
+          :items="getItems"
+          v-model="item"
+          label="Image Tags"
+          :loading="loading"
+          color="secondary"
+          item-color="secondary"
+          :rules="isRequired ? required : []"
+          :multiple="multiple"
+          :chips="chips"
+          :solo="solo"
+          :disabled="disabled"
+          :readonly="readonly"
+          :clearable="clearable"
+          :outlined="outlined"
+          :hide-details="hideDetails"
+      ></v-autocomplete>
+      <v-text-field v-else label="Image Tag" v-model="value"  :loading="loading"></v-text-field>
 
 </template>
 
@@ -47,20 +49,24 @@ export default {
   },
   data() {
     return {
-      data: {
-        name: null,
-        tags: []
-      },
+      data: null,
       loading: false
     }
   },
   computed: {
-    getItems(){
-      if(this.showName){
-        return this.data.tags ? this.data.tags.map(tag => ({text:this.data.name+":"+tag, value: tag})).sort((a, b) => b.value.localeCompare(a.value)) : []
-      }else{
-        return this.data.tags ? this.data.tags.map(tag => ({text:tag, value: tag})).sort((a, b) => b.value.localeCompare(a.value)) : []
+    getItems() {
+
+      if (this.data && this.data.tags && this.data.tags.length > 0) {
+
+        return this.data.tags
+            .map(tag => ({
+              text: this.showName ? this.data.name + ":" + tag : tag,
+              value: tag
+            }))
+            .sort((a, b) => b.value.localeCompare(a.value))
       }
+
+      return []
     },
     item: {
       get() {
@@ -87,16 +93,20 @@ export default {
     },
     fetchImageTags() {
       this.loading = true
-      ImageProvider.imageTags(this.registry, this.name).then(r => {
-        this.data = r.data.imageTags
-      }).catch(err => console.error(err))
+      ImageProvider.imageTags(this.registry, this.name)
+          .then(r => {
+            this.data = r.data.imageTags
+          })
+          .catch(err => console.error(err))
           .finally(() => this.loading = false)
     },
     fetchImageTagsByFullname() {
       this.loading = true
-      ImageProvider.imageTagsByFullname(this.name).then(r => {
-        this.data = r.data.imageTagsByFullname
-      }).catch(err => console.error(err))
+      ImageProvider.imageTagsByFullname(this.name)
+          .then(r => {
+            this.data = r.data.imageTagsByFullname
+          })
+          .catch(err => console.error(err))
           .finally(() => this.loading = false)
     }
 
