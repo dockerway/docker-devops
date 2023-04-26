@@ -1,6 +1,5 @@
 <template>
-<v-row>
-
+<v-row class="my-2">
   <v-col cols="12" sm="6">
     <v-text-field
         prepend-icon="task"
@@ -26,13 +25,12 @@
   </v-col>
 
   <v-col cols="12" sm="12">
-    <v-expansion-panels>
-      <v-expansion-panel
-      >
+    <v-expansion-panels >
+      <v-expansion-panel >
         <v-expansion-panel-header>
           {{form.fileName}}
         </v-expansion-panel-header>
-        <v-expansion-panel-content>
+        <v-expansion-panel-content >
           <v-textarea
             outlined
             auto-grow
@@ -45,7 +43,6 @@
       </v-expansion-panel>
     </v-expansion-panels>
   </v-col>
-
 </v-row>
 </template>
 
@@ -54,8 +51,8 @@ export default {
   name: "FileServiceForm",
   data() {
     return {
-      rules: [ v => this.regexPathsFiles.test(v) || 'Debe comenzar con /storage, /logs o /localdata y finalizar sin /' ],
-      rulesFileName: [ 
+      rules: [ v => this.regexPathsFiles.test(v) || 'Expresión regular requierda: '+ this.regexPathsFiles.toString() ],
+      rulesFileName: [
         v => this.regexFileName.test(v) || 'No debe contenter barras (/)',
         v => this.regexDuplicatedFiles(v) || 'Nombre del archivo ya existente con el mismo path'
       ]

@@ -66,8 +66,8 @@ export default {
   name: "FileEnvServiceForm",
   data() {
     return {
-      rules: [ v => this.regexPathsFiles.test(v) || 'Debe comenzar con /storage y finalizar sin /' ],
-      rulesFileName: [ 
+      rules: [ v => this.regexPathsFiles.test(v) || 'Expresión regular requerida: '+ this.regexPathsFiles.toString() ],
+      rulesFileName: [
         v => this.regexFileName.test(v) || 'No debe contenter barras (/)',
         v => this.regexDuplicatedFiles(v) || 'Nombre del archivo ya existente con el mismo path'
       ]

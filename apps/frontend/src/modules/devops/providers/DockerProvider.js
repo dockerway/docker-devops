@@ -26,10 +26,10 @@ class DockerProvider {
         })
     }
 
-    createDockerService(id) {
+    createDockerService(id, targetImage) {
         return graphqlClient.mutate({
             mutation: require('./gql/Docker/createDockerService.graphql'),
-            variables: {id}
+            variables: {id, targetImage}
         })
     }
 

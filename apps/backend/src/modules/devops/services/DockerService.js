@@ -134,7 +134,7 @@ async function getDockerApiConfig(id) {
 function createVerifiedFolders(environmentService) {
     try {
         if (environmentService.volumes) {
-            
+
             console.log('environmentService.volumes: ', environmentService.volumes)
             const verifiedVolumes = environmentService.volumes.map( volume => volume.hostVolume )
             console.log('verifiedVolumes: ', verifiedVolumes)
@@ -150,7 +150,7 @@ function createVerifiedFolders(environmentService) {
 }
 
 
-export const createDockerService = async function (authUser, id) {
+export const createDockerService = async function (authUser, id, targetImage) {
     try {
         const { environmentService, dockerApiUrl, headers, createFoldersURL } = await getDockerApiConfig(id)
         const verifiedFolders = createVerifiedFolders(environmentService)
@@ -190,7 +190,7 @@ export const createDockerService = async function (authUser, id) {
         const data = {
             name: fullServiceName,
             stack: environmentService.stack.name,
-            image: environmentService.image,
+            image: targetImage ? targetImage : environmentService.image,
             replicas: environmentService.replicas,
             volumes: environmentService.volumes ? environmentService.volumes : [],
             ports: environmentService.ports ? environmentService.ports : [],
@@ -226,7 +226,7 @@ export const updateDockerService = async function (id, targetImage = null, user)
         const filesURL = dockerApiUrl + '/api/docker/files'
 
         if (! await canUserDeploy(user, environmentService.environment.type)) throw new Error("El usuario no tiene permiso para actualizar este servicio")
-        
+
         console.log(`verifiedFolders updateDocker: '${verifiedFolders}'`)
         const createFolder = await axios.post(createFoldersURL, verifiedFolders, headers)
         console.log(`createFolder: '${createFolder}'`)

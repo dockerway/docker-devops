@@ -89,7 +89,7 @@
       </v-toolbar>
 
 
-      <v-card-text class="overflow-y-auto" :style="{height:'300px'}">
+      <v-card-text class="overflow-y-auto fill-height" >
 
         <v-tabs-items :value="tab">
           <!--PORTS-->
@@ -311,8 +311,8 @@ export default {
     return {
       tab: 0,
       items: [
-        this.$t('devops.service.labels.port'), 
-        this.$t('devops.service.labels.volume'), 
+        this.$t('devops.service.labels.port'),
+        this.$t('devops.service.labels.volume'),
         this.$t('devops.service.labels.file'),
         'Envs',
         this.$t('devops.service.labels.constraints'),

@@ -15,7 +15,7 @@
 
     <v-card-text v-if="created" class="pa-0">
       <v-alert type="success" dense>
-        Service deployed with id: {{ envServiceCreated.id }}
+        Service deployed with id: {{ envServiceDeployed.id }}
       </v-alert>
 
     </v-card-text>
@@ -28,6 +28,8 @@
 
 
     <v-card-actions v-else-if="!created" class="justify-center">
+      <image-tag-combobox show-name :name="getBaseImage" v-model="targetImage"></image-tag-combobox>
+      <v-spacer></v-spacer>
       <v-btn :loading="loading" class="teal white--text" @click="createDockerService">DEPLOY</v-btn>
     </v-card-actions>
 
@@ -36,7 +38,6 @@
 </template>
 
 <script>
-import EnvironmentServiceProvider from "@/modules/devops/providers/EnvironmentServiceProvider";
 import { SimpleDialog } from "@dracul/common-frontend"
 import DockerProvider from "@/modules/devops/providers/DockerProvider";
 import EnvironmentServiceShowData
@@ -44,21 +45,20 @@ import EnvironmentServiceShowData
 import ImageTagCombobox from "@/modules/registry/components/ImageTagCombobox/ImageTagCombobox";
 
 export default {
-  name: "EnvironmentServiceDockerCreate",
+  name: "EnvironmentServiceDockerDeploy",
   components: { ImageTagCombobox, EnvironmentServiceShowData, SimpleDialog },
   props: {
-    serviceId: { type: String },
+    envService: { type: Object },
     value: { type: Boolean }
   },
   data() {
     return {
       loading: false,
-      envService: null,
       created: false,
       updated: false,
-      envServiceCreated: null,
+      envServiceDeployed: null,
       errors: [],
-      targetImage: null
+      targetImage: this.envService?.service?.image
     }
   },
   computed: {
@@ -69,59 +69,17 @@ export default {
       return this.targetImage ? this.envService.service.image + ":" + this.targetImage : null
     }
   },
-  async created() {
-    await this.findEnvironmentService()
-    await this.findDockerService()
-  },
   methods: {
-    async findEnvironmentService() {
-      this.loading = true
-      try {
-        const environmentService = (await EnvironmentServiceProvider.findEnvironmentService(this.serviceId)).data.findEnvironmentService
-        this.envService = environmentService
-
-      } catch (error) {
-        console.log(`An error happened when we tried to find the environment service '${this.serviceId}': '${error}'`)
-        throw error
-
-      } finally {
-        this.loading = false
-      }
-    },
-    async findDockerService() {
-      this.loading = true
-
-      try {
-        const dockerService = (await DockerProvider.findDockerService(this.serviceId)).data.findDockerService
-
-        if (dockerService && dockerService.id) {
-          this.created = true
-          this.envServiceCreated = dockerService
-        }
-
-        return dockerService
-
-      } catch (error) {
-        if(! error.message.includes('404')){
-          console.log(`An error happened when we tried to find the service '${this.serviceId}': '${error}'`)
-          throw error
-        }
-      } finally {
-        this.loading = false
-      }
-    },
     async createDockerService() {
       console.log("CREATE DOCKER SERVICE")
       this.errors = []
       this.loading = true
 
       try {
-        const serviceCreated = (await DockerProvider.createDockerService(this.serviceId)).data.createDockerService
-
+        const createDockerServiceResponse = await DockerProvider.createDockerService(this.envService.id, this.getTargetImage)
         this.created = true
-        this.envServiceCreated = serviceCreated
-
-        return serviceCreated
+        this.envServiceDeployed = createDockerServiceResponse.data.createDockerService
+        return this.envServiceDeployed
       } catch (error) {
         this.errors = error.graphQLErrors.map(i => (! i.message.includes('404') ? i.message : null))
         throw error
@@ -135,14 +93,15 @@ export default {
       this.loading = true
 
       try {
-        const updatedDockerService = await DockerProvider.updateDockerService(this.serviceId, this.getTargetImage)
+        const updatedDockerServiceResponse = await DockerProvider.updateDockerService(this.envService.id, this.getTargetImage)
 
         this.updated = true
-        this.envServiceCreated = updatedDockerService.data.updateDockerService
-        this.envService.image = updatedDockerService.data.updateDockerService.image.fullname
+        this.envServiceDeployed = updatedDockerServiceResponse.data.updateDockerService
+        //Update Image to the view
+        this.envService.image = updatedDockerServiceResponse.data.updateDockerService.image.fullname
 
-        console.log(`updatedDockerService.data.updateDockerService: '${JSON.stringify(updatedDockerService.data.updateDockerService)}'`)
-        return updatedDockerService.data.updateDockerService
+        console.log(`updatedDockerService.data.updateDockerService: '${JSON.stringify(this.envServiceDeployed)}'`)
+        return this.envServiceDeployed
       } catch (error) {
         this.errors = error.graphQLErrors.map(i => (! i.message.includes('404') ? i.message : null))
         throw error

@@ -77,7 +77,7 @@
 
     <v-card outlined>
 
-      <v-card-actions v-if="id" class="py-1 my-0">
+      <v-card-actions  class="py-1 my-0">
         <v-spacer></v-spacer>
         <v-btn x-small color="blue" @click="getFromService">GET FROM SERVICE</v-btn>
         <v-btn x-small color="green" @click="getFromEnvironment">GET FROM ENVIRONMENT</v-btn>
@@ -324,7 +324,7 @@ export default {
     async getFromService() {
       let service = await this.findService()
       this.form.envs = service.envs ? service.envs.map(v => ({name: v.name, value: v.defaultValue})) : []
-      this.form.ports = service.ports ? service.ports.map(p => ({hostPort: p, containerPort: ''})) : []
+      this.form.ports = service.ports ? service.ports.map(p => ({hostPort: '', containerPort: p})) : []
       this.form.volumes = service.volumes ? service.volumes.map(v => ({hostVolume: v, containerVolume: ''})) : []
       this.form.files = service.files ? service.files.map(v => ({hostPath: v, containerPath: '', fileName: '', fileContent: ''})) : []
       this.form.constraints = service.constraints ? service.constraints.map(v => ({name: v.name, operation: v.operation, value: v.defaultValue})) : []
