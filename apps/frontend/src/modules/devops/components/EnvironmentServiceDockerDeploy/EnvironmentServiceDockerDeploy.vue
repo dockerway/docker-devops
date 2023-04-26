@@ -69,7 +69,27 @@ export default {
       return this.targetImage ? this.envService.service.image + ":" + this.targetImage : null
     }
   },
+  created(){
+    this.findDockerService()
+  },
   methods: {
+    findDockerService() {
+      console.log("finding DockerService:",this.envService.id)
+      return new Promise((resolve) => {
+        this.loading = true
+        DockerProvider.findDockerService(this.envService.id)
+            .then(r => {
+              let dockerService = r.data.findDockerService
+              if (dockerService && dockerService.id) {
+                this.created = true
+                this.envServiceDeployed = r.data.findDockerService
+              }
+              resolve(r.data.findDockerService)
+            })
+            .catch(err => console.error(err))
+            .finally(() => this.loading = false)
+      })
+    },
     async createDockerService() {
       console.log("CREATE DOCKER SERVICE")
       this.errors = []
