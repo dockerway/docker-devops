@@ -200,6 +200,7 @@ export const createDockerService = async function (authUser, id, targetImage) {
             limits: environmentService.limits ? environmentService.limits : {},
             preferences: environmentService.preferences ? environmentService.preferences : [],
             networks: environmentService.networks ? environmentService.networks : [],
+            command: environmentService.command
         }
 
         const URL = dockerApiUrl + '/api/docker/service'
@@ -272,6 +273,7 @@ export const updateDockerService = async function (id, targetImage = null, user)
             limits: environmentService.limits ? limits : {},
             preferences: environmentService.preferences ? environmentService.preferences : [],
             networks: environmentService.networks ? environmentService.networks : [],
+            command: environmentService.command
         }
 
         const URL = dockerApiUrl + '/api/docker/service/' + dockerService.id
