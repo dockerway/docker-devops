@@ -162,6 +162,9 @@ export const createDockerService = async function (authUser, id, targetImage) {
         const createFolder = await axios.post(createFoldersURL, verifiedFolders, headers)
         console.log('createFolder: ', createFolder.data)
 
+        const notMountedMessage = 'The needed directories are not mounted; please contact your infrastructure team!' //has to match the agent's notMountedMessage
+        if(createFolder.data === notMountedMessage) throw new Error(notMountedMessage)
+
         if (environmentService.files) { //files are sent to fortes as volumes
             await axios.post(filesURL, environmentService.files, headers)
 
