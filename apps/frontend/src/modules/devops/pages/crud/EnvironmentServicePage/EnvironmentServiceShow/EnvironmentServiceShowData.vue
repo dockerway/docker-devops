@@ -26,7 +26,7 @@
 
             <v-col cols="12" sm="6" md="4">
               <v-list>
-                <show-field :value="item.service.name" :label="$t('devops.environmentService.labels.service')"
+                <show-field :value="item.service.name" :label="$t('devops.environmentService.labels.serviceTemplate')"
                   icon="design_services" />
                 <show-field :value="item.stack.name" :label="$t('devops.environmentService.labels.stack')"
                   icon="table_rows" />
@@ -144,14 +144,14 @@ export default {
       tab: 0,
       tabItems: [
         this.$t('devops.environmentService.labels.main'),
-        this.$t('devops.service.labels.port'),
-        this.$t('devops.service.labels.volume'),
-        this.$t('devops.service.labels.file'),
+        this.$t('devops.serviceTemplate.labels.port'),
+        this.$t('devops.serviceTemplate.labels.volume'),
+        this.$t('devops.serviceTemplate.labels.file'),
         'Envs',
         'Labels',
-        this.$t('devops.service.labels.constraints'),
-        this.$t('devops.service.labels.limits'),
-        this.$t('devops.service.labels.preferences')
+        this.$t('devops.serviceTemplate.labels.constraints'),
+        this.$t('devops.serviceTemplate.labels.limits'),
+        this.$t('devops.serviceTemplate.labels.preferences')
       ]
     }
   },
@@ -159,15 +159,15 @@ export default {
     fetchLabel(i) {
       switch (i) {
         case "memoryReservation":
-          return this.$t('devops.service.labels.memoryReservation')
+          return this.$t('devops.serviceTemplate.labels.memoryReservation')
         case "memoryLimit":
-          return this.$t('devops.service.labels.memoryLimit')
+          return this.$t('devops.serviceTemplate.labels.memoryLimit')
         case "CPUReservation":
-          return this.$t('devops.service.labels.CPUReservation')
+          return this.$t('devops.serviceTemplate.labels.CPUReservation')
         case "CPULimit":
-          return this.$t('devops.service.labels.CPULimit')
+          return this.$t('devops.serviceTemplate.labels.CPULimit')
         default:
-          return this.$t('devops.service.labels.limits')
+          return this.$t('devops.serviceTemplate.labels.limits')
       }
     }
   }

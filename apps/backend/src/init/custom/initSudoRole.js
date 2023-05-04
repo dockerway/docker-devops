@@ -63,12 +63,12 @@ import {
 } from '../../modules/devops/permissions/Stack'
 
 import {
-    SERVICE_MENU,
-    SERVICE_SHOW,
-    SERVICE_CREATE,
-    SERVICE_DELETE,
-    SERVICE_UPDATE
-} from '../../modules/devops/permissions/Service'
+    SERVICE_TEMPLATE_MENU,
+    SERVICE_TEMPLATE_SHOW,
+    SERVICE_TEMPLATE_CREATE,
+    SERVICE_TEMPLATE_DELETE,
+    SERVICE_TEMPLATE_UPDATE
+} from '../../modules/devops/permissions/ServiceTemplate'
 
 import {
     ENVIRONMENT_MENU,
@@ -149,11 +149,11 @@ module.exports = {
         STACK_DELETE,
         STACK_CREATE,
         STACK_UPDATE,
-        SERVICE_MENU,
-        SERVICE_SHOW,
-        SERVICE_CREATE,
-        SERVICE_DELETE,
-        SERVICE_UPDATE,
+        SERVICE_TEMPLATE_MENU,
+        SERVICE_TEMPLATE_SHOW,
+        SERVICE_TEMPLATE_CREATE,
+        SERVICE_TEMPLATE_DELETE,
+        SERVICE_TEMPLATE_UPDATE,
         ENVIRONMENT_MENU,
         ENVIRONMENT_SHOW,
         ENVIRONMENT_UPDATE,

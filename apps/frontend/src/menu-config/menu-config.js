@@ -33,10 +33,10 @@ export default [
             },
             {
                 icon: 'design_services',
-                text: 'menu.service',
+                text: 'menu.serviceTemplate',
                 link: {name: "ServicePage"},
                 panel: false,
-                permission: 'SERVICE_MENU'
+                permission: 'SERVICE_TEMPLATE_MENU'
             },
             {
                 icon: 'tune',

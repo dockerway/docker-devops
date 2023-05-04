@@ -32,7 +32,7 @@ input ServiceDiscoveredInput{
 
 type CreateDiscoveryResult{
     platformsCreated: [Platform]
-    servicesCreated: [Service]
+    serviceCreated: [ServiceTemplate]
     stacksCreated: [Stack]
     environmentServicesCreated: [EnvironmentService]
 }

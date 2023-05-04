@@ -1,6 +1,6 @@
 import { fetchEnvironment, findEnvironment } from "./EnvironmentService";
 import { fetchDockerService } from "./DockerService";
-import { createService, getServiceByNameAndPlatform } from "./ServiceService";
+import { createServiceTemplate, getServiceTemplateByNameAndPlatform } from "./ServiceTemplateService";
 import { createPlatform, findPlatformByName } from "./PlatformService";
 import {
     createEnvironmentService,
@@ -59,7 +59,7 @@ export const startDiscovery = async function (environmentId) {
                     console.log("PLATFORM NEW:", serviceDiscovered)
                     addServiceDiscovered(serviceDiscovered)
                 } else {
-                    const service = await getServiceByNameAndPlatform(serviceDiscovered.imageName, platform.id)
+                    const service = await getServiceTemplateByNameAndPlatform(serviceDiscovered.imageName, platform.id)
                     if (!service) {
                         console.log("SERVICE NEW:", serviceDiscovered)
                         addServiceDiscovered(serviceDiscovered)
@@ -110,11 +110,11 @@ const getDockerService = async (service) => {
     }
 }
 
-async function findOrCreateServiceByNameAndPlatform(serviceDiscovered, platformId, user) {
+async function findOrcreateServiceTemplateByNameAndPlatform(serviceDiscovered, platformId, user) {
 
 
     const dockerService = await getDockerService(serviceDiscovered)
-    let service = await getServiceByNameAndPlatform(serviceDiscovered.imageName, platformId)
+    let service = await getServiceTemplateByNameAndPlatform(serviceDiscovered.imageName, platformId)
 
     if (!service) {
         let serviceEnvs = []
@@ -141,7 +141,7 @@ async function findOrCreateServiceByNameAndPlatform(serviceDiscovered, platformI
         serviceLimits.CPUReservation = serviceLimits?.CPUReservation ? parseFloat(serviceLimits.CPUReservation / 1000000000) : 0
         serviceLimits.CPULimit = serviceLimits?.CPULimit ? parseFloat(serviceLimits.CPULimit / 1000000000) : 0
 
-        service = await createService(user, {
+        service = await createServiceTemplate(user, {
             name: serviceDiscovered.imageName,
             platform: platformId,
             image: baseImage,
@@ -174,7 +174,7 @@ export const createDiscovery = async function (servicesDiscovered, user) {
                 platform = await createPlatform(user, { name: serviceDiscovered.namespace })
                 platformsCreated.push(platform)
             }
-            const service = await findOrCreateServiceByNameAndPlatform(serviceDiscovered, platform.id, user)
+            const service = await findOrcreateServiceTemplateByNameAndPlatform(serviceDiscovered, platform.id, user)
             servicesCreated.push(service)
 
             if (!serviceDiscovered.stack) serviceDiscovered.stack = "-"

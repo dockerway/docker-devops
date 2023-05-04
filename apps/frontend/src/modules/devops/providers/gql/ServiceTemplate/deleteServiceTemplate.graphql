@@ -1,0 +1,7 @@
+mutation deleteServiceTemplate($id: ID!){
+    deleteServiceTemplate(id: $id){
+        id
+        success
+    }
+}
+

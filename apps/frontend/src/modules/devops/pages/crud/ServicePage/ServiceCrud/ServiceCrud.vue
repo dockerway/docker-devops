@@ -11,7 +11,7 @@
             />
         </template>
         
-         <add-button v-if="$store.getters.hasPermission('SERVICE_CREATE')" @click="create"></add-button>
+         <add-button v-if="$store.getters.hasPermission('SERVICE_TEMPLATE_CREATE')" @click="create"></add-button>
       
         <service-create v-if="creating" 
                         :open="creating"
@@ -66,8 +66,8 @@
         },
         data() {
             return {
-                title: 'devops.service.title',
-                subtitle: 'devops.service.subtitle',
+                title: 'devops.serviceTemplate.title',
+                subtitle: 'devops.serviceTemplate.subtitle',
                 flash: null,
                 creating: false,
                 updating: false,

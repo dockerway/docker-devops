@@ -55,6 +55,6 @@ ServiceSchema.index({ name: 1, platform: 1}, { unique: true });
 ServiceSchema.plugin(mongoosePaginate);
 ServiceSchema.plugin(uniqueValidator, {message: 'validation.unique'});
 
-const Service = mongoose.model('Service', ServiceSchema);
+const Service = mongoose.model('ServiceTemplate', ServiceSchema);
 
 module.exports = Service;

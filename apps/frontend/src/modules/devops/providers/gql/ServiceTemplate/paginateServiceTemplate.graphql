@@ -1,5 +1,5 @@
-query paginateService( $pageNumber: Int, $itemsPerPage:Int, $search: String, $filters: [FilterInput], $orderBy: String, $orderDesc: Boolean){
-    paginateService( pageNumber: $pageNumber, itemsPerPage: $itemsPerPage, search: $search, filters: $filters, orderBy: $orderBy, orderDesc: $orderDesc){
+query paginateServiceTemplate( $pageNumber: Int, $itemsPerPage:Int, $search: String, $filters: [FilterInput], $orderBy: String, $orderDesc: Boolean){
+    paginateServiceTemplate( pageNumber: $pageNumber, itemsPerPage: $itemsPerPage, search: $search, filters: $filters, orderBy: $orderBy, orderDesc: $orderDesc){
         totalItems
         page
         items{

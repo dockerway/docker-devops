@@ -13,9 +13,9 @@ import {
 } from '../../modules/devops/permissions/Stack'
 
 import {
-    SERVICE_MENU,
-    SERVICE_SHOW
-} from '../../modules/devops/permissions/Service'
+    SERVICE_TEMPLATE_MENU,
+    SERVICE_TEMPLATE_SHOW
+} from '../../modules/devops/permissions/ServiceTemplate'
 
 import {
     ENVIRONMENT_MENU,
@@ -57,8 +57,8 @@ module.exports = {
         PLATFORM_SHOW,
         STACK_MENU,
         STACK_SHOW,
-        SERVICE_MENU,
-        SERVICE_SHOW,
+        SERVICE_TEMPLATE_MENU,
+        SERVICE_TEMPLATE_SHOW,
         ENVIRONMENT_MENU,
         ENVIRONMENT_SHOW,
         ENVIRONMENTSERVICE_MENU,

@@ -21,12 +21,12 @@ import {
 } from '../../modules/devops/permissions/Stack'
 
 import {
-    SERVICE_CREATE,
-    SERVICE_DELETE,
-    SERVICE_MENU,
-    SERVICE_SHOW,
-    SERVICE_UPDATE
-} from '../../modules/devops/permissions/Service'
+    SERVICE_TEMPLATE_CREATE,
+    SERVICE_TEMPLATE_DELETE,
+    SERVICE_TEMPLATE_MENU,
+    SERVICE_TEMPLATE_SHOW,
+    SERVICE_TEMPLATE_UPDATE
+} from '../../modules/devops/permissions/ServiceTemplate'
 
 
 import {
@@ -80,11 +80,11 @@ export default [
     PLATFORM_MENU,
     PLATFORM_SHOW,
     PLATFORM_UPDATE,
-    SERVICE_CREATE,
-    SERVICE_DELETE,
-    SERVICE_MENU,
-    SERVICE_SHOW,
-    SERVICE_UPDATE,
+    SERVICE_TEMPLATE_CREATE,
+    SERVICE_TEMPLATE_DELETE,
+    SERVICE_TEMPLATE_MENU,
+    SERVICE_TEMPLATE_SHOW,
+    SERVICE_TEMPLATE_UPDATE,
     ENVIRONMENT_CREATE,
     ENVIRONMENT_DELETE,
     ENVIRONMENT_MENU,

@@ -14,7 +14,7 @@ const messages = {
             labels: {
                 main: 'Main',
                 environment: 'Environment',
-                service: 'Service',
+                serviceTemplate: 'Service Template',
                 stack: 'Stack',
                 volumes: 'Volumes',
                 volume: 'Volume',
@@ -62,7 +62,7 @@ const messages = {
             labels: {
                 main: 'Principal',
                 environment: 'Entorno',
-                service: 'Servicio',
+                serviceTemplate: 'Plantilla de Servicio',
                 stack: 'Stack',
                 volumes: 'Volúmenes',
                 volume: 'Volúmen',
@@ -110,7 +110,7 @@ const messages = {
             labels: {
                 main: 'Main',
                 environment: 'Environment',
-                service: 'Service',
+                serviceTemplate: 'Service Template',
                 stack: 'Stack',
                 volumes: 'Volúmenes',
                 volume: 'Volúmen',

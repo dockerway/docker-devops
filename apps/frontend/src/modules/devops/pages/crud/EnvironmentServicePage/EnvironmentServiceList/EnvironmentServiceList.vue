@@ -146,7 +146,7 @@ export default {
         //Entity Headers
         {text: this.$t('devops.environmentService.labels.environment'), value: 'environment'},
         {text: this.$t('devops.environmentService.labels.stack'), value: 'stack'},
-        {text: this.$t('devops.environmentService.labels.service'), value: 'service'},
+        {text: this.$t('devops.environmentService.labels.serviceTemplate'), value: 'service'},
         {text: this.$t('devops.environmentService.labels.name'), value: 'name'},
         {text: this.$t('devops.environmentService.labels.image'), value: 'image'},
         //{text: this.$t('devops.environmentService.labels.replicas'), value: 'replicas'},

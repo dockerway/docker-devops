@@ -30,7 +30,7 @@ export default {
 
   data() {
     return {
-      title: 'devops.service.creating',
+      title: 'devops.serviceTemplate.creating',
       errorMessage: '',
       inputErrors: {},
       loading: false,
@@ -60,9 +60,9 @@ export default {
     create() {
       if (this.$refs.form.validate()) {
         this.loading = true
-        ServiceProvider.createService(this.form).then(r => {
+        ServiceProvider.createServiceTemplate(this.form).then(r => {
               if (r) {
-                this.$emit('itemCreated', r.data.createService)
+                this.$emit('itemCreated', r.data.createServiceTemplate)
                 this.$emit('close')
               }
             }

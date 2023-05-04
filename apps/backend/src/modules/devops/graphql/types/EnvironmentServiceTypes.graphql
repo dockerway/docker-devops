@@ -46,7 +46,7 @@ type FileEnvService{
 type EnvironmentService{
     id: ID!
     environment: Environment!
-    service: Service
+    service: ServiceTemplate
     stack: Stack
     image: String
     replicas: Int
@@ -91,7 +91,7 @@ input ConstraintServiceInput {
     value: String
 }
 
-type LimitServiceInput{
+input LimitServiceInput{
     memoryReservation: Float
     memoryLimit: Float
     CPUReservation: Float

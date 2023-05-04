@@ -1,5 +1,5 @@
-query findService($id:ID!){
-    findService(id:$id){
+mutation updateServiceTemplate($id: ID!, $input: ServiceTemplateInput){
+    updateServiceTemplate(id: $id, input: $input){
         id
         name
         description
@@ -37,3 +37,4 @@ query findService($id:ID!){
         }
     }
 }
+

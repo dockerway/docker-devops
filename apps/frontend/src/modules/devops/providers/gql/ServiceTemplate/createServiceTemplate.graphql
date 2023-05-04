@@ -1,5 +1,5 @@
-mutation createService($input: ServiceInput){
-    createService(input: $input){
+mutation createServiceTemplate($input: ServiceTemplateInput){
+    createServiceTemplate(input: $input){
         id
         name
         description

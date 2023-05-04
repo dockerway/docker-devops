@@ -44,7 +44,7 @@ export default {
       return error => {
         if (error.extensions && error.extensions.code) {
           switch (error.extensions.code) {
-            case "SERVICE_NOT_FOUND_ERROR":
+            case "SERVICE_TEMPLATE_NOT_FOUND_ERROR":
               return "yellow darken-2"
             default:
               return "red"

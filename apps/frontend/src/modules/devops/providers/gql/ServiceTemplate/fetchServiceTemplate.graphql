@@ -1,5 +1,5 @@
-mutation updateService($id: ID!, $input: ServiceInput){
-    updateService(id: $id, input: $input){
+query fetchServiceTemplate{
+    fetchServiceTemplate{
         id
         name
         description
@@ -20,7 +20,7 @@ mutation updateService($id: ID!, $input: ServiceInput){
             name
             defaultValue
         }
-        constraints{
+        constraints {
             name
             operation
             defaultValue

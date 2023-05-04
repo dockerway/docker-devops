@@ -2,15 +2,15 @@
 const messages = {
     en: {
        devops: {
-          service: {
-            name: 'Service',
-            title: 'Service management',
-            subtitle: 'View, search, create, edit and delete Service',
-            creating: 'Creating Service',
-            editing: 'Editing Service',
-            deleting: 'Deleting Service',
-            showing: 'Showing Service',
-            menu: 'Service',
+          serviceTemplate: {
+            name: 'Service Templates',
+            title: 'Service Templates management',
+            subtitle: 'Service Templates CRUD',
+            creating: 'Creating Service Template',
+            editing: 'Editing Service Template',
+            deleting: 'Deleting Service Template',
+            showing: 'Showing Service Template',
+            menu: 'Service Template',
             labels: {
                 main: 'Main',
                 name: 'Name',
@@ -43,15 +43,15 @@ const messages = {
     },
     es: {
        devops: {
-          service: {
-            name: 'Service',
-            title: 'Administración de Service',
-            subtitle: 'Ver, buscar, crear, editar, y borrar Service',
-            creating: 'Creando Service',
-            editing: 'Modificando Service',
-            deleting: 'Eliminando Service',
-            showing: 'Detalles de Service',
-            menu: 'Service',
+          serviceTemplate: {
+            name: 'Service template',
+            title: 'Administración de plantillas de servicios',
+            subtitle: 'ABM de plantillas de servicios',
+            creating: 'Creando plantillas de servicios',
+            editing: 'Modificando plantilla de servicios',
+            deleting: 'Eliminando plantilla de servicios',
+            showing: 'Detalles de plantilla de servicios',
+            menu: 'Plantillas de servicios',
             labels: {
                 name: 'Nombre',
                 description: 'Descripción',

@@ -1,0 +1,111 @@
+type EnvServiceTemplate{
+    name: String!
+    defaultValue: String
+}
+
+type ConstraintServiceTemplate {
+    name: String!
+    operation: String
+    defaultValue: String
+}
+
+type FileServiceTemplate{
+    fileName: String
+    fileContent: String
+    containerPath: String
+}
+
+type LimitServiceTemplate {
+    memoryReservation: Float
+    memoryLimit: Float
+    CPUReservation: Float
+    CPULimit: Float
+}
+
+type PreferenceServiceTemplate{
+    name: String!
+    defaultValue: String
+}
+
+type ServiceTemplate{
+    id: ID!
+    name: String!
+    description: String
+    image: String
+    repository: String
+    platform: Platform!
+    volumes: [String]
+    files: [FileServiceTemplate]
+    ports: [Int]
+    envs: [EnvServiceTemplate]
+    constraints: [ConstraintServiceTemplate]
+    limits: LimitServiceTemplate
+    preferences: [PreferenceServiceTemplate]
+}
+
+type ServiceTemplatePaginated{
+    totalItems: Int!
+    page: Int!
+    items: [ServiceTemplate!]
+}
+
+type Query {
+    findServiceTemplate(id:ID!): ServiceTemplate
+    fetchServiceTemplate: [ServiceTemplate]
+    paginateServiceTemplate( pageNumber: Int, itemsPerPage: Int, search: String, filters: [FilterInput],orderBy: String, orderDesc: Boolean): ServiceTemplatePaginated
+}
+
+input EnvServiceTemplateInput{
+    name: String!
+    defaultValue: String
+}
+
+input ConstraintServiceTemplateInput{
+    name: String!
+    operation: String
+    defaultValue: String
+}
+
+input FileServiceTemplateInput{
+    fileName: String
+    fileContent: String
+    containerPath: String
+}
+
+input LimitServiceTemplateInput{
+    memoryReservation: Float
+    memoryLimit: Float
+    CPUReservation: Float
+    CPULimit: Float
+}
+
+input PreferenceServiceTemplateInput{
+    name: String!
+    defaultValue: String
+}
+
+input ServiceTemplateInput{
+    name: String!
+    description: String
+    platform: ID!
+    image: String
+    repository: String
+    volumes: [String]
+    files: [FileServiceTemplateInput]
+    ports: [Int]
+    envs: [EnvServiceTemplateInput]
+    constraints: [ConstraintServiceTemplateInput]
+    limits: LimitServiceTemplateInput
+    preferences: [PreferenceServiceTemplateInput]
+}
+
+type ServiceTemplateDelete{
+    id: ID!
+    success: Boolean!
+}
+
+type Mutation {
+    createServiceTemplate(input: ServiceTemplateInput): ServiceTemplate
+    updateServiceTemplate(id: ID!, input: ServiceTemplateInput): ServiceTemplate
+    deleteServiceTemplate(id: ID!): ServiceTemplateDelete!
+}

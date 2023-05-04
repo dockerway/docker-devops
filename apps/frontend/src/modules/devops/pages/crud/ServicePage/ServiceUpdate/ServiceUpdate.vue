@@ -31,7 +31,7 @@ export default {
   },
   data() {
     return {
-      title: 'devops.service.editing',
+      title: 'devops.serviceTemplate.editing',
       errorMessage: '',
       inputErrors: {},
       loading: false,
@@ -56,9 +56,9 @@ export default {
     update() {
       if (this.$refs.form.validate()) {
         this.loading = true
-        ServiceProvider.updateService(this.id, this.form).then(r => {
+        ServiceProvider.updateServiceTemplate(this.id, this.form).then(r => {
               if (r) {
-                this.$emit('itemUpdated', r.data.updateService)
+                this.$emit('itemUpdated', r.data.updateServiceTemplate)
                 this.$emit('close')
               }
             }

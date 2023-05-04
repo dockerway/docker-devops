@@ -1,24 +1,24 @@
 import graphqlClient from "../../../apollo";
 
-class ServiceProvider {
+class ServiceTemplateProvider {
 
     findService(id) {
         return graphqlClient.query({
-            query: require('./gql/Service/findService.graphql'),
+            query: require('./gql/ServiceTemplate/findServiceTemplate.graphql'),
             variables: {id:id}
         })
     }
 
     fetchService() {
         return graphqlClient.query({
-            query: require('./gql/Service/fetchService.graphql'),
+            query: require('./gql/ServiceTemplate/fetchServiceTemplate.graphql'),
             fetchPolicy: "network-only"
         })
     }
 
     paginateService(pageNumber, itemsPerPage, search = null, filters = null,  orderBy = null, orderDesc = false) {
         return graphqlClient.query({
-            query: require('./gql/Service/paginateService.graphql'),
+            query: require('./gql/ServiceTemplate/paginateServiceTemplate.graphql'),
             variables: {pageNumber, itemsPerPage, search, filters, orderBy, orderDesc},
             fetchPolicy: "network-only"
         })
@@ -26,29 +26,29 @@ class ServiceProvider {
 
 
 
-    createService(input) {
+    createServiceTemplate(input) {
         return graphqlClient.mutate({
-            mutation: require('./gql/Service/createService.graphql'),
+            mutation: require('./gql/ServiceTemplate/createServiceTemplate.graphql'),
             variables: {input}
         })
     }
 
-    updateService(id,input) {
+    updateServiceTemplate(id,input) {
         return graphqlClient.mutate({
-            mutation: require('./gql/Service/updateService.graphql'),
+            mutation: require('./gql/ServiceTemplate/updateServiceTemplate.graphql'),
             variables: {id, input}
         })
     }
 
-     deleteService(id) {
+     deleteServiceTemplate(id) {
         return graphqlClient.mutate({
-            mutation: require('./gql/Service/deleteService.graphql'),
+            mutation: require('./gql/ServiceTemplate/deleteServiceTemplate.graphql'),
             variables: {id}
         })
     }
 
 }
 
-export default new ServiceProvider()
+export default new ServiceTemplateProvider()
 
 

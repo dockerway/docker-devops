@@ -44,7 +44,7 @@
         data() {
             return {
                 modal: false,
-                title: 'devops.service.deleting',
+                title: 'devops.serviceTemplate.deleting',
                 areYouSure: this.$t('common.areYouSureDeleteRecord'),
                 errorMessage: '',
                 loading: false,
@@ -55,10 +55,10 @@
                 try {
                     this.loading = true
                     await EnvironmentServiceProvider.deleteEnvironmentServicesByService(this.item.id)
-                    const deleteServiceResponse = (await ServiceProvider.deleteService(this.item.id)).data.deleteService
+                    const deleteServiceTemplateResponse = (await ServiceProvider.deleteServiceTemplate(this.item.id)).data.deleteServiceTemplate
 
-                    if (deleteServiceResponse.success) {
-                        this.$emit('itemDeleted', deleteServiceResponse)
+                    if (deleteServiceTemplateResponse.success) {
+                        this.$emit('itemDeleted', deleteServiceTemplateResponse)
                         this.$emit('close')
                     }else{
                         this.errorMessage = 'Error on Delete'

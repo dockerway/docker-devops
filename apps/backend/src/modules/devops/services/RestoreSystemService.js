@@ -1,5 +1,5 @@
 import Platform from '../models/PlatformModel'
-import Service from '../models/ServiceModel'
+import ServiceTemplate from '../models/ServiceTemplateModel'
 import Stack from '../models/StackModel'
 import EnvironmentService from '../models/EnvironmentServiceModel'
 import { createAudit } from '@dracul/audit-backend'
@@ -9,7 +9,7 @@ export const restoreSystem = function (authUser) {
         try {
 
             await Platform.deleteMany({})
-            await Service.deleteMany({})
+            await ServiceTemplate.deleteMany({})
             await Stack.deleteMany({})
             await EnvironmentService.deleteMany({})
 

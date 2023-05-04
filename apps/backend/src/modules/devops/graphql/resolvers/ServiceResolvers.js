@@ -1,54 +1,54 @@
-import { createService, updateService, deleteService,  getAllServices, getServiceById, paginateServices} from '../../services/ServiceService'
+import { createServiceTemplate, updateServiceTemplate, deleteServiceTemplate,  getAllServiceTemplates, getServiceTemplateById, paginateServiceTemplates} from '../../services/ServiceTemplateService'
 import {AuthenticationError, ForbiddenError} from "apollo-server-express";
 
 import {
 
-    SERVICE_SHOW,
-    SERVICE_UPDATE,
-    SERVICE_CREATE,
-    SERVICE_DELETE
-} from "../../permissions/Service";
+    SERVICE_TEMPLATE_SHOW,
+    SERVICE_TEMPLATE_UPDATE,
+    SERVICE_TEMPLATE_CREATE,
+    SERVICE_TEMPLATE_DELETE
+} from "../../permissions/ServiceTemplate";
 
 export default {
     Query: {
-        findService: (_, {id}, {user,rbac}) => {
+        findServiceTemplate: (_, {id}, {user,rbac}) => {
             if (!user) throw new AuthenticationError("Unauthenticated")
-            if(!rbac.isAllowed(user.id, SERVICE_SHOW)) throw new ForbiddenError("Not Authorized")
+            if(!rbac.isAllowed(user.id, SERVICE_TEMPLATE_SHOW)) throw new ForbiddenError("Not Authorized")
 
-            return getServiceById(id)
+            return getServiceTemplateById(id)
         },
-        fetchService: (_, {}, {user,rbac}) => {
+        fetchServiceTemplate: (_, {}, {user,rbac}) => {
             if (!user) throw new AuthenticationError("Unauthenticated")
-            if(!rbac.isAllowed(user.id, SERVICE_SHOW)) throw new ForbiddenError("Not Authorized")
+            if(!rbac.isAllowed(user.id, SERVICE_TEMPLATE_SHOW)) throw new ForbiddenError("Not Authorized")
 
-            return getAllServices()
+            return getAllServiceTemplates()
         },
-        paginateService: (_, {pageNumber, itemsPerPage, search, filters, orderBy, orderDesc}, {user,rbac}) => {
+        paginateServiceTemplate: (_, {pageNumber, itemsPerPage, search, filters, orderBy, orderDesc}, {user,rbac}) => {
             if (!user) throw new AuthenticationError("Unauthenticated")
-            if(!rbac.isAllowed(user.id, SERVICE_SHOW)) throw new ForbiddenError("Not Authorized")
+            if(!rbac.isAllowed(user.id, SERVICE_TEMPLATE_SHOW)) throw new ForbiddenError("Not Authorized")
 
-            return paginateServices(pageNumber, itemsPerPage, search, filters, orderBy, orderDesc)
+            return paginateServiceTemplates(pageNumber, itemsPerPage, search, filters, orderBy, orderDesc)
         },
         
     },
     Mutation: {
-        createService: (_, {input}, {user,rbac}) => {
+        createServiceTemplate: (_, {input}, {user,rbac}) => {
             if (!user) throw new AuthenticationError("Unauthenticated")
-            if (!rbac.isAllowed(user.id, SERVICE_CREATE)) throw new ForbiddenError("Not Authorized")
+            if (!rbac.isAllowed(user.id, SERVICE_TEMPLATE_CREATE)) throw new ForbiddenError("Not Authorized")
             
-            return createService(user, input)
+            return createServiceTemplate(user, input)
         },
-        updateService: (_, {id, input}, {user,rbac}) => {
+        updateServiceTemplate: (_, {id, input}, {user,rbac}) => {
             if (!user) throw new AuthenticationError("Unauthenticated")
-            if (!rbac.isAllowed(user.id, SERVICE_UPDATE)) throw new ForbiddenError("Not Authorized")
+            if (!rbac.isAllowed(user.id, SERVICE_TEMPLATE_UPDATE)) throw new ForbiddenError("Not Authorized")
             
-            return updateService(user, id, input)
+            return updateServiceTemplate(user, id, input)
         },
-        deleteService: (_, {id}, {user,rbac}) => {
+        deleteServiceTemplate: (_, {id}, {user,rbac}) => {
             if (!user) throw new AuthenticationError("Unauthenticated")
-            if (!rbac.isAllowed(user.id, SERVICE_DELETE)) throw new ForbiddenError("Not Authorized")
+            if (!rbac.isAllowed(user.id, SERVICE_TEMPLATE_DELETE)) throw new ForbiddenError("Not Authorized")
             
-            return deleteService(user, id)
+            return deleteServiceTemplate(user, id)
         },
     }
 

@@ -356,14 +356,14 @@ export default {
     return {
       tab: 0,
       items: [
-        this.$t('devops.service.labels.port'),
-        this.$t('devops.service.labels.volume'),
-        this.$t('devops.service.labels.file'),
+        this.$t('devops.serviceTemplate.labels.port'),
+        this.$t('devops.serviceTemplate.labels.volume'),
+        this.$t('devops.serviceTemplate.labels.file'),
         'Envs',
         'Labels',
-        this.$t('devops.service.labels.constraints'),
-        this.$t('devops.service.labels.limits'),
-        this.$t('devops.service.labels.preferences')
+        this.$t('devops.serviceTemplate.labels.constraints'),
+        this.$t('devops.serviceTemplate.labels.limits'),
+        this.$t('devops.serviceTemplate.labels.preferences')
       ]
     }
   }

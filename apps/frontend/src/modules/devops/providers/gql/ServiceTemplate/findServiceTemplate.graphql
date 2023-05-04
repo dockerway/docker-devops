@@ -1,5 +1,5 @@
-query fetchService{
-    fetchService{
+query findServiceTemplate($id:ID!){
+    findServiceTemplate(id:$id){
         id
         name
         description
@@ -20,7 +20,7 @@ query fetchService{
             name
             defaultValue
         }
-        constraints {
+        constraints{
             name
             operation
             defaultValue
@@ -37,4 +37,3 @@ query fetchService{
         }
     }
 }
-

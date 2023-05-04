@@ -22,7 +22,7 @@ const routes = [
         component: ServicePage,  
         meta: {
             requiresAuth: true,
-            permission: "SERVICE_SHOW"
+            permission: "SERVICE_TEMPLATE_SHOW"
         }
      },
    

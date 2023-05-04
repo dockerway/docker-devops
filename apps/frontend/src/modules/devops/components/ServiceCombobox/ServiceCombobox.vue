@@ -5,7 +5,7 @@
       :item-text="'name'"
       :item-value="'id'"
       v-model="item"
-      :label="$t('devops.environmentService.labels.service')"
+      :label="$t('devops.environmentService.labels.serviceTemplate')"
       :loading="loading"
       :error="hasInputErrors('service')"
       :error-messages="getInputErrors('service')"
