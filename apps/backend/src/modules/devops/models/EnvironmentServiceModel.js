@@ -59,7 +59,7 @@ const EnvironmentServiceSchema = new Schema({
         unique: false,
         index: false
     },
-    service: {type: mongoose.Schema.Types.ObjectId, ref: "Service", required: true, unique: false, index: false},
+    serviceTemplate: {type: mongoose.Schema.Types.ObjectId, ref: "ServiceTemplate", required: true, unique: false, index: false},
     stack: {type: mongoose.Schema.Types.ObjectId, ref: "Stack", required: true, unique: false, index: false},
     image: {type: String, required: true, index: false},
     name: {type: String, required: true, index: false},
