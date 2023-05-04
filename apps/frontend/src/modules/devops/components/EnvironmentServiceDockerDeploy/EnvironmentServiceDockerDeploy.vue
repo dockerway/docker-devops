@@ -58,7 +58,7 @@ export default {
       updated: false,
       envServiceDeployed: null,
       errors: [],
-      targetImage: this.envService?.service?.image
+      targetImage: null
     }
   },
   computed: {
