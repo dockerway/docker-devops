@@ -44,7 +44,7 @@
         data() {
             return {
                 modal: false,
-                title: 'devops.service.deleting',
+                title: 'devops.serviceTemplate.deleting',
                 areYouSure: this.$t('common.areYouSureDeleteRecord'),
                 errorMessage: '',
                 loading: false,

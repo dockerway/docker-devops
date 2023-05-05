@@ -43,7 +43,7 @@
         data() {
             return {
                 modal: false,
-                title: 'devops.environmentService.deleting',
+                title: 'devops.service.deleting',
                 areYouSure: this.$t('common.areYouSureDeleteRecord'),
                 errorMessage: '',
                 loading: false,

@@ -5,7 +5,7 @@
                 :item-text="'name'"
                 :item-value="'id'"
                 v-model="item"
-                :label="$t('devops.environmentService.labels.environment')"
+                :label="$t('devops.service.labels.environment')"
                 :loading="loading"
                 :error="hasInputErrors('environment')"
                 :error-messages="getInputErrors('environment')"

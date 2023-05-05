@@ -5,7 +5,7 @@
       :item-text="'name'"
       :item-value="'id'"
       v-model="item"
-      :label="$t('devops.environmentService.labels.service')"
+      :label="$t('devops.service.labels.serviceTemplate')"
       :loading="loading"
       :error="hasInputErrors('service')"
       :error-messages="getInputErrors('service')"
@@ -74,12 +74,15 @@ export default {
     validate() {
       return this.$refs.form.validate()
     },
-    fetch() {
-      this.loading = true
-      ServiceProvider.fetchService().then(r => {
-        this.items = r.data.fetchService
-      }).catch(err => console.error(err))
-          .finally(() => this.loading = false)
+    async fetch() {
+      try {
+        this.loading = true
+        this.items = (await ServiceProvider.fetchService()).data.fetchService
+      } catch (error) {
+        console.error(`An error happened when we tried to fetch Services`)
+      }finally{
+        this.loading = false
+      }
     }
 
   }

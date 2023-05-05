@@ -21,7 +21,7 @@
         },
         data() {
             return {
-                title: 'devops.environmentService.showing',
+                title: 'devops.service.showing',
             }
         },
     }

@@ -21,7 +21,7 @@
         },
         data() {
             return {
-                title: 'devops.service.showing',
+                title: 'devops.serviceTemplate.showing',
             }
         },
     }

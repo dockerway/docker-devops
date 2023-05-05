@@ -9,8 +9,8 @@
             name="memoryReservation"
             type="number"
             v-model.number="limits.memoryReservation"
-            :label="$t('devops.environmentService.labels.memoryReservation')"
-            :placeholder="$t('devops.environmentService.labels.memoryReservation')"
+            :label="$t('devops.service.labels.memoryReservation')"
+            :placeholder="$t('devops.service.labels.memoryReservation')"
             color="secondary"
         ></v-text-field>
       </v-col>
@@ -24,8 +24,8 @@
             name="memoryLimit"
             type="number"
             v-model.number="limits.memoryLimit"
-            :label="$t('devops.environmentService.labels.memoryLimit')"
-            :placeholder="$t('devops.environmentService.labels.memoryLimit')"
+            :label="$t('devops.service.labels.memoryLimit')"
+            :placeholder="$t('devops.service.labels.memoryLimit')"
             color="secondary"
         ></v-text-field>
       </v-col>
@@ -39,8 +39,8 @@
           name="CPUReservation"
           v-model.number="limits.CPUReservation"
           color="orange"
-          :label="$t('devops.environmentService.labels.CPUReservation')"
-          :placeholder="$t('devops.environmentService.labels.CPUReservation')"
+          :label="$t('devops.service.labels.CPUReservation')"
+          :placeholder="$t('devops.service.labels.CPUReservation')"
           min="0"
           max="8"
           thumb-label="always"
@@ -56,8 +56,8 @@
           name="CPULimit"
           v-model.number="limits.CPULimit"
           color="orange"
-          :label="$t('devops.environmentService.labels.CPULimit')"
-          :placeholder="$t('devops.environmentService.labels.CPULimit')"
+          :label="$t('devops.service.labels.CPULimit')"
+          :placeholder="$t('devops.service.labels.CPULimit')"
           min="0"
           max="8"
           thumb-label="always"

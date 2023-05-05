@@ -18,8 +18,8 @@
       v-model="form.operation"
       prepend-icon="calculate"
       :items="['==','!=']"
-      :label="$t('devops.environmentService.labels.variable.operation')"
-      :placeholder="$t('devops.environmentService.labels.variable.operation')"
+      :label="$t('devops.service.labels.variable.operation')"
+      :placeholder="$t('devops.service.labels.variable.operation')"
       color="secondary"
     ></v-select>
   </v-col>

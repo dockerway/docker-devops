@@ -1,10 +1,11 @@
 <template>
-  <crud-update :open="open"
-               :loading="loading"
-               :title="title"
-               :errorMessage="errorMessage"
-               @update="update"
-               @close="$emit('close')" fullscreen
+  <crud-update 
+    :open="open"
+    :loading="loading"
+    :title="title"
+    :errorMessage="errorMessage"
+    @update="update"
+    @close="$emit('close')" fullscreen
   >
     <environment-service-form ref="form" v-model="form" :id="id" :input-errors="inputErrors"/>
   </crud-update>
@@ -31,7 +32,7 @@ export default {
 
   data() {
     return {
-      title: 'devops.environmentService.editing',
+      title: 'devops.service.editing',
       errorMessage: '',
       inputErrors: {},
       loading: false,
@@ -73,6 +74,9 @@ export default {
       }
 
     }
+  },
+  mounted () {
+    console.log(JSON.stringify(this.item, null, 2))
   },
 }
 </script>

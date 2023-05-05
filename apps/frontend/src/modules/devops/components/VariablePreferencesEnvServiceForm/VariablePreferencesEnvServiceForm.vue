@@ -18,8 +18,8 @@
         prepend-icon="task"
         name="value"
         v-model="form.value"
-        :label="$t('devops.environmentService.labels.variable.value')"
-        :placeholder="$t('devops.environmentService.labels.variable.value')"
+        :label="$t('devops.service.labels.variable.value')"
+        :placeholder="$t('devops.service.labels.variable.value')"
         color="secondary"
     ></v-text-field>
   </v-col>

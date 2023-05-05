@@ -6,8 +6,8 @@
         prepend-icon="description"
         name="name"
         v-model="form.hostVolume"
-        :label="$t('devops.environmentService.labels.hostVolume')"
-        :placeholder="$t('devops.environmentService.labels.hostVolume')"
+        :label="$t('devops.service.labels.hostVolume')"
+        :placeholder="$t('devops.service.labels.hostVolume')"
         color="secondary"
         :rules="rules"
     ></v-text-field>
@@ -18,8 +18,8 @@
         prepend-icon="task"
         name="value"
         v-model="form.containerVolume"
-        :label="$t('devops.environmentService.labels.containerVolume')"
-        :placeholder="$t('devops.environmentService.labels.containerVolume')"
+        :label="$t('devops.service.labels.containerVolume')"
+        :placeholder="$t('devops.service.labels.containerVolume')"
         color="secondary"
         :rules="linuxDirectoryRules"
     ></v-text-field>

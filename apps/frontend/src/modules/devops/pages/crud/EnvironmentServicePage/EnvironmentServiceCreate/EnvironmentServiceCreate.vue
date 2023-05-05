@@ -21,7 +21,7 @@ export default {
 
   data() {
     return {
-      title: 'devops.environmentService.creating',
+      title: 'devops.service.creating',
       errorMessage: '',
       inputErrors: {},
       loading: false,

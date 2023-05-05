@@ -31,7 +31,7 @@ export default {
   },
   data() {
     return {
-      title: 'devops.service.editing',
+      title: 'devops.serviceTemplate.editing',
       errorMessage: '',
       inputErrors: {},
       loading: false,

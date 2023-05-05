@@ -22,8 +22,8 @@
             prepend-icon="image"
             name="image"
             v-model="form.image"
-            :label="$t('devops.environmentService.labels.image')"
-            :placeholder="$t('devops.environmentService.labels.image')"
+            :label="$t('devops.serviceTemplate.labels.image')"
+            :placeholder="$t('devops.serviceTemplate.labels.image')"
             :error="hasInputErrors('image')"
             :error-messages="getInputErrors('image')"
             color="secondary"
@@ -37,8 +37,8 @@
             prepend-icon="double_arrow"
             name="replicas"
             v-model="form.replicas"
-            :label="$t('devops.environmentService.labels.replicas')"
-            :placeholder="$t('devops.environmentService.labels.replicas')"
+            :label="$t('devops.service.labels.replicas')"
+            :placeholder="$t('devops.service.labels.replicas')"
             :error="hasInputErrors('replicas')"
             :error-messages="getInputErrors('replicas')"
             color="secondary"
@@ -51,8 +51,8 @@
             prepend-icon="title"
             name="name"
             v-model="form.name"
-            :label="$t('devops.environmentService.labels.name')"
-            :placeholder="$t('devops.environmentService.labels.name')"
+            :label="$t('devops.serviceTemplate.labels.name')"
+            :placeholder="$t('devops.serviceTemplate.labels.name')"
             :error="hasInputErrors('name')"
             :error-messages="getInputErrors('name')"
             color="secondary"
@@ -65,8 +65,8 @@
             prepend-icon="touch_app"
             name="command"
             v-model="form.command"
-            :label="$t('devops.environmentService.labels.command')"
-            :placeholder="$t('devops.environmentService.labels.command')"
+            :label="$t('devops.service.labels.command')"
+            :placeholder="$t('devops.service.labels.command')"
             :error="hasInputErrors('command')"
             :error-messages="getInputErrors('command')"
             color="secondary"
@@ -356,14 +356,14 @@ export default {
     return {
       tab: 0,
       items: [
-        this.$t('devops.service.labels.port'),
-        this.$t('devops.service.labels.volume'),
-        this.$t('devops.service.labels.file'),
+        this.$t('devops.serviceTemplate.labels.port'),
+        this.$t('devops.serviceTemplate.labels.volume'),
+        this.$t('devops.serviceTemplate.labels.file'),
         'Envs',
         'Labels',
-        this.$t('devops.service.labels.constraints'),
-        this.$t('devops.service.labels.limits'),
-        this.$t('devops.service.labels.preferences')
+        this.$t('devops.serviceTemplate.labels.constraints'),
+        this.$t('devops.serviceTemplate.labels.limits'),
+        this.$t('devops.serviceTemplate.labels.preferences')
       ]
     }
   }

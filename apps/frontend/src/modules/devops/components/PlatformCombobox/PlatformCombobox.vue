@@ -5,7 +5,7 @@
       :item-text="'name'"
       :item-value="itemValue"
       v-model="item"
-      :label="$t('devops.service.labels.platform')"
+      :label="$t('devops.serviceTemplate.labels.platform')"
       :loading="loading"
       :error="hasInputErrors('platform')"
       :error-messages="getInputErrors('platform')"
