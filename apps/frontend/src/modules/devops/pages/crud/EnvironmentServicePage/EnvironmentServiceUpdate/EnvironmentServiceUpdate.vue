@@ -74,10 +74,7 @@ export default {
       }
 
     }
-  },
-  mounted () {
-    console.log(JSON.stringify(this.item, null, 2))
-  },
+  }
 }
 </script>
 
