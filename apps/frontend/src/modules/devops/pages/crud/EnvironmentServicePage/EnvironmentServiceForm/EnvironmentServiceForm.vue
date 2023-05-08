@@ -7,7 +7,7 @@
       </v-col>
 
       <v-col cols="12" sm="4">
-        <stack-combobox v-model="form.stack" :input-errors="inputErrors"  ></stack-combobox>
+        <stack-combobox v-model="form.stack" :input-errors="inputErrors"></stack-combobox>
       </v-col>
 
       <v-col cols="12" sm="4">
@@ -77,29 +77,23 @@
 
     <v-card outlined>
 
-      <v-card-actions  class="py-1 my-0">
+      <v-card-actions class="py-1 my-0">
         <v-spacer></v-spacer>
-        <v-btn x-small color="blue" @click="getFromService">GET FROM SERVICE</v-btn>
-        <v-btn x-small color="green" @click="getFromEnvironment">GET FROM ENVIRONMENT</v-btn>
+        <v-btn x-small color="blue" @click="getFormValuesFromServiceOrServiceTemplate(false)">GET FROM SERVICE</v-btn>
+        <v-btn x-small color="green" @click="getFormValuesFromServiceOrServiceTemplate(true)">GET FROM ENVIRONMENT</v-btn>
       </v-card-actions>
       <v-toolbar flat dense>
-        <v-tabs
-            v-model="tab"
-            align-with-title
-        >
+        <v-tabs v-model="tab" align-with-title>
           <v-tabs-slider color="yellow"></v-tabs-slider>
 
-          <v-tab
-              v-for="item in items"
-              :key="item"
-          >
+          <v-tab v-for="item in items" :key="item">
             {{ item }}
           </v-tab>
         </v-tabs>
       </v-toolbar>
 
 
-      <v-card-text class="overflow-y-auto" :style="{height:'300px'}">
+      <v-card-text class="overflow-y-auto" :style="{ height: '300px' }">
 
         <v-tabs-items :value="tab">
           <!--PORTS-->
@@ -253,7 +247,7 @@
 
 <script>
 
-import {InputErrorsByProps, RequiredRule} from '@dracul/common-frontend'
+import { InputErrorsByProps, RequiredRule } from '@dracul/common-frontend'
 
 import EnvironmentCombobox from "../../../../components/EnvironmentCombobox";
 import ServiceCombobox from "../../../../components/ServiceCombobox";
@@ -286,8 +280,8 @@ export default {
     VariablePreferencesEnvServiceForm
   },
   props: {
-    value: {type: Object, required: true},
-    id: {type: String}
+    value: { type: Object, required: true },
+    id: { type: String }
   },
   computed: {
     form: {
@@ -311,43 +305,154 @@ export default {
     validate() {
       return this.$refs.form.validate()
     },
-    async getFromEnvironment() {
-      let service = await this.findDockerService()
-      this.form.envs = service.envs ? service.envs.map(v => ({name: v.name, value: v.value})) : []
-      this.form.ports = service.ports ? service.ports.map(p => ({hostPort: p.hostPort, containerPort: p.containerPort})) : []
-      this.form.volumes = service.volumes ? service.volumes.map(v => ({hostVolume: v.hostVolume, containerVolume: v.containerVolume})) : []
-      this.form.files = service.files ? service.files.map(v => ({hostPath: v.hostPath, containerPath: v.containerPath, fileName: v.fileName, fileContent: v.fileContent})) : []
-      this.form.constraints = service.constraints ? service.constraints.map(v => ({name: v.name, operation: v.operation, value: v.value})) : []
-      this.form.limits = service.limits ? service.limits.map(v => ({ memoryReservation:v.memoryReservation, memoryLimit:v.memoryLimit, CPUReservation:v.CPUReservation, CPULimit:v.CPULimit})) : {}
-      this.form.preferences = service.preferences ? service.preferences.map(p => ({name: p.name, value: p.value})) : []
+    async getFormValuesFromServiceOrServiceTemplate(fromService) {
+      try {
+        let service = null
+
+        console.log(`fromService: '${fromService}'`)
+
+        if (fromService) {
+          service = await this.findDockerService()
+          console.log(`service from findDockerService`)
+        } else {
+          service = await this.findService()
+          console.log(`service from findService`)
+        }
+
+        console.log(`service:'${JSON.stringify(service, null, 2)}'`)
+
+        if (service.envs) {
+          service.envs.forEach(env => {
+            if (!fromService && env && !this.form.envs.find(e => e.name === env.name)) { //service environment variable is not empty AND it doesnt already exists in the form
+              const envObject = {
+                name: env.name,
+                value: env.defaultValue
+              }
+
+              this.form.envs.push(envObject)
+            } else if (fromService && env && !this.form.envs.find(e => e.name === env.name)) {
+              const envObject = {
+                name: env.name,
+                value: env.value
+              }
+
+              this.form.envs.push(envObject)
+            }
+          })
+        }
+
+        if (service.ports && !(this.form.ports.length === service.ports.length)) { //si, en el service, NO existe la misma cantidad de puertos que existen en el form
+          service.ports.forEach(port => {
+            if (!fromService && port && !this.form.ports.find(formPort => formPort.containerPort ? formPort.containerPort == port : false)) {
+              const portObject = {
+                hostPort: '',
+                containerPort: port
+              }
+
+              this.form.ports.push(portObject)
+            } else if (fromService && port && !this.form.ports.find(formPort => formPort.containerPort ? formPort.containerPort == port.containerPort : false)) {
+              const portObject = {
+                hostPort: port.hostPort,
+                containerPort: port.containerPort
+              }
+
+              this.form.ports.push(portObject)
+            }
+          })
+        }
+
+        if (service.volumes) {
+          service.volumes.forEach(volume => {
+            if (!fromService && volume && !this.form.volumes.find(formVolume => formVolume.containerVolume == volume)) { //if volume doesnt already exists in form and info is got from service template
+              const volumeObject = {
+                hostVolume: '',
+                containerVolume: volume
+              }
+
+              this.form.volumes.push(volumeObject)
+            } else if (fromService && volume && !this.form.volumes.find(formVolume => formVolume.containerVolume == volume.containerVolume)) { //if volume doesnt already exists in form and info is got from deployed service
+              const volumeObject = {
+                hostVolume: volume.hostVolume,
+                containerVolume: volume.containerVolume
+              }
+
+              this.form.volumes.push(volumeObject)
+            }
+          })
+        }
+
+        if (service.files) {
+          service.files.forEach(file => {
+            if (file) {
+              const existingFile = this.form.files.find(f => f.containerPath === file.containerPath)
+              if (!existingFile) this.form.files.push({ hostPath: file.hostPath, containerPath: file.containerPath, fileName: file.fileName, fileContent: file.fileContent })
+            }
+          })
+        }
+
+        if (service.constraints) {
+          service.constraints.forEach(constraint => {
+            if (constraint) {
+              const existingConstraint = this.form.constraints.find(c => c.name === constraint.name)
+              if (!existingConstraint) this.form.constraints.push({ name: constraint.name, operation: constraint.operation, value: constraint.value })
+            }
+          })
+        }
+
+        if (service.limits) {
+          for (let index = 0; index < Object.keys(service.limits).length; index++) {
+            const currentLimit = service.limits[Object.keys(service.limits)[index]]
+            const currentFormLimit = this.form.limits[Object.keys(this.form.limits)[index]]
+
+            if (currentLimit && !currentFormLimit) this.form.limits[Object.keys(this.form.limits)[index]] = currentLimit
+          }
+        }
+
+        if (service.preferences) {
+          service.preferences.forEach(preference => {
+            if (preference) {
+              switch (fromService) {
+                case true: //Info is got from deployed service
+                  if (!this.form.preferences.find(formPreference => formPreference.name == preference.name || formPreference.value == preference.value)) {//preference doesnt already exists in form
+                    this.form.preferences.push({
+                      name: preference.name,
+                      value: preference.value
+                    })
+                  }
+                  break;
+                case false: //Info is got from service template
+                  if (!this.form.preferences.find(formPreference => formPreference.name == preference.name || formPreference.value == preference.defaultValue)) {//preference doesnt already exists in form
+                    this.form.preferences.push({
+                      name: preference.name,
+                      value: preference.defaultValue
+                    })
+                  }
+                  break;
+              }
+            }
+          })
+        }
+        } catch (error) {
+          console.error(`An error happened at findService: '${error}'`)
+          throw error
+        }
+
     },
-    async getFromService() {
-      let service = await this.findService()
-      this.form.envs = service.envs ? service.envs.map(v => ({name: v.name, value: v.defaultValue})) : []
-      this.form.ports = service.ports ? service.ports.map(p => ({hostPort: '', containerPort: p})) : []
-      this.form.volumes = service.volumes ? service.volumes.map(v => ({hostVolume: '', containerVolume: v})) : []
-      this.form.files = service.files ? service.files.map(f => ({hostPath: '', containerPath: f.containerPath, fileName: f.fileName, fileContent: f.fileContent})) : []
-      this.form.constraints = service.constraints ? service.constraints.map(v => ({name: v.name, operation: v.operation, value: v.defaultValue})) : []
-      this.form.limits = service.limits ? service.limits.map(v => ({ memoryReservation:v.memoryReservation, memoryLimit:v.memoryLimit, CPUReservation:v.CPUReservation, CPULimit:v.CPULimit})) : {}
-      this.form.preferences = service.preferences ? service.preferences.map(p => ({name: p.name, value: p.defaultValue})) : []
+    async findService() {
+      try {
+        return (await ServiceProvider.findService(this.form.service)).data.findService
+      } catch (error) {
+        console.error(`An error happened at findService: '${error}'`)
+        throw error
+      }
     },
-    findService() {
-      return new Promise((resolve, reject) => {
-        ServiceProvider.findService(this.form.service)
-            .then(r => {
-              resolve(r.data.findService)
-            })
-            .catch(err => reject(err))
-      })
-    },
-    findDockerService() {
-      return new Promise((resolve, reject) => {
-        DockerProvider.findDockerService(this.id)
-            .then(r => {
-              resolve(r.data.findDockerService)
-            })
-            .catch(err => reject(err))
-      })
+    async findDockerService() {
+      try {
+        return (await DockerProvider.findDockerService(this.id)).data.findDockerService
+      } catch (error) {
+        console.error(`An error happened at getFormValuesFromServiceOrServiceTemplate: '${error}'`)
+        throw error
+      }
     },
 
 
@@ -370,7 +475,5 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
 
