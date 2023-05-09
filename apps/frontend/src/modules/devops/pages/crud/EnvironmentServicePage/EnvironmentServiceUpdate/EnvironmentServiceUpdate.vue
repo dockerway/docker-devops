@@ -14,20 +14,18 @@
 <script>
 
 import EnvironmentServiceProvider from "../../../../providers/EnvironmentServiceProvider";
-
-import {CrudUpdate, ClientError} from '@dracul/common-frontend'
-
+import { CrudUpdate, ClientError } from '@dracul/common-frontend';
 import EnvironmentServiceForm from "../EnvironmentServiceForm";
 
 
 export default {
   name: "EnvironmentServiceUpdate",
 
-  components: {EnvironmentServiceForm, CrudUpdate},
+  components: { EnvironmentServiceForm, CrudUpdate },
 
   props: {
-    open: {type: Boolean, default: true},
-    item: {type: Object, required: true}
+    open: { type: Boolean, default: true },
+    item: { type: Object, required: true }
   },
 
   data() {
@@ -49,36 +47,35 @@ export default {
         ports: this.item.ports ? this.item.ports : [],
         envs: this.item.envs ? this.item.envs : [],
         labels: this.item.labels ? this.item.labels : [],
-        constraints: this.item.constraints ?  this.item.constraints : [],
-        limits: this.item.limits ?  this.item.limits : {},
+        constraints: this.item.constraints ? this.item.constraints : [],
+        limits: this.item.limits ? this.item.limits : {},
         preferences: this.item.preferences ? this.item.preferences : [],
         command: this.item.command
       }
     }
   },
   methods: {
-    update() {
+    async update() {
       if (this.$refs.form.validate()) {
-        this.loading = true
-        EnvironmentServiceProvider.updateEnvironmentService(this.id, this.form).then(r => {
-              if (r) {
-                this.$emit('itemUpdated', r.data.updateEnvironmentService)
-                this.$emit('close')
-              }
-            }
-        ).catch(error => {
-          let clientError = new ClientError(error)
+        try {
+          this.loading = true
+
+          const updatedItem = (await EnvironmentServiceProvider.updateEnvironmentService(this.id, this.form)).data.updateEnvironmentService
+          this.$emit('itemUpdated', updatedItem)
+          this.$emit('close')
+        } catch (error) {
+          const clientError = new ClientError(error)
           this.inputErrors = clientError.inputErrors
           this.errorMessage = clientError.i18nMessage
-        }).finally(() => this.loading = false)
-      }
+        } finally {
+          this.loading = false
+        }
 
+      }
     }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
 
