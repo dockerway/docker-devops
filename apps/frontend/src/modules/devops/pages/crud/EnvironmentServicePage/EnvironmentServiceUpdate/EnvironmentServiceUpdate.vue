@@ -14,8 +14,11 @@
 <script>
 
 import EnvironmentServiceProvider from "../../../../providers/EnvironmentServiceProvider";
+import ServiceProvider from "../../../../providers/ServiceProvider";
 import { CrudUpdate, ClientError } from '@dracul/common-frontend';
 import EnvironmentServiceForm from "../EnvironmentServiceForm";
+import ServiceTemplateComparer from "../../../../../../helpers/ServiceTemplateComparer";
+// import ObjectComparer from "../../../../../../helpers/objectComparer.js"
 
 
 export default {
@@ -60,6 +63,9 @@ export default {
         try {
           this.loading = true
 
+          console.log(`this.form: ${JSON.stringify(this.form, null, 2)}`)
+          console.log(`this.form: ${this.form}`)
+
           const updatedItem = (await EnvironmentServiceProvider.updateEnvironmentService(this.id, this.form)).data.updateEnvironmentService
           this.$emit('itemUpdated', updatedItem)
           this.$emit('close')
@@ -73,7 +79,16 @@ export default {
 
       }
     }
-  }
+  },
+
+  async mounted () {
+    const serviceTemplate = (await ServiceProvider.findService(this.item.service.id)).data.findService
+    const service = (await EnvironmentServiceProvider.findEnvironmentService(this.id)).data.findEnvironmentService
+    console.log(`serviceTemplate: '${JSON.stringify(serviceTemplate, null, 2)}' | service: '${JSON.stringify(service, null, 2)}'`)
+    
+    const serviceTemplateComparer = new ServiceTemplateComparer(serviceTemplate, service)
+    console.log(`there is any difference between the deployed service and the service template: '${serviceTemplateComparer.serviceIsDifferent}'`)
+  },
 }
 </script>
 
