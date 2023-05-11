@@ -18,13 +18,13 @@ export default class ServiceTemplateComparer {
      * An array of fields to compare between the template and the service.
      * @type {Array<string>}
     */
-    static fieldsToCompare = ['volumes', 'files', 'ports', 'envs', 'constraints']
+    fieldsToCompare = ['volumes', 'files', 'ports', 'envs', 'constraints']
 
     /**
      * Converts the `template` object into a `templateToServiceFormat` object that has the `service` object format and only has the propertie values listed in `fieldsToCompare`.
      * @type {Object}
     */
-    get templateToServiceObject() {
+    get templateToServiceFormat() {
         const templateToServiceFormat = {
             volumes: [],
             files: [],
@@ -60,24 +60,70 @@ export default class ServiceTemplateComparer {
         return templateToServiceFormat
     }
 
+    get serviceWithoutUselessInfo() {
+        const serviceWithoutUselessInfo = {...this.service}
+
+        Object.keys(serviceWithoutUselessInfo).forEach((property) => {
+            if (!this.fieldsToCompare.includes(property)) {
+                delete serviceWithoutUselessInfo[property]
+            } else {
+                switch (property) {
+                    case "volumes":
+                        serviceWithoutUselessInfo["volumes"].forEach(volume => delete volume["hostVolume"])
+                        break;
+                    case "files":
+                        serviceWithoutUselessInfo["files"].forEach(file => {
+                            delete file["hostPath"]
+                            delete file["fileContent"]
+                        })
+                        break;
+                    case "ports":
+                        serviceWithoutUselessInfo["ports"].forEach(port => {
+                            delete port["hostPort"]
+                        })
+                        break;
+                    case "envs":
+                        serviceWithoutUselessInfo["envs"].forEach(env => {
+                            delete env["value"]
+                        })
+                        break;
+
+                    case "constraints":
+                        serviceWithoutUselessInfo["constraints"].forEach(constraint => {
+                            delete constraint["value"]
+                        })
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        })
+
+        return serviceWithoutUselessInfo
+    }
+
+
     /**
      * Determines whether the `service` object is different from the `template` object only taking into account the properties listed in `fieldsToCompare` 
      * @type {boolean}
     */
     get serviceIsDifferent() {
-        const templateToServiceObject = this.templateToServiceObject
         let isDifferent = false
 
-        ServiceTemplateComparer.fieldsToCompare.forEach(field => {
-            const templateField = JSON.stringify(templateToServiceObject[field])
-            const serviceField = JSON.stringify(this.service[field])
+        this.fieldsToCompare.forEach(field => {
+            const templateField = JSON.stringify(this.templateToServiceFormat[field])
+            const serviceField = JSON.stringify(this.serviceWithoutUselessInfo[field])
 
+            console.log(`templateField: '${templateField}' |  serviceField '${serviceField}'`)
 
-            if (templateField !== serviceField) {
-                console.log(`templateField: '${templateField}'`)
-                console.log(`serviceField: '${serviceField}'`)
-                isDifferent = true
-            }
+            const templateSubset = templateField.startsWith('[') ? templateField.slice(1, -1) : templateField
+            const serviceSubset = serviceField.startsWith('[') ? serviceField.slice(1, -1) : serviceField
+
+            console.log(`templateSubset: '${templateSubset}' |  serviceSubset '${serviceSubset}'`)
+            console.log(`serviceIncludesTemplate: '${serviceSubset.includes(templateSubset)}'`)
+
+            if (!serviceSubset.includes(templateSubset)) isDifferent = true
         })
 
         return isDifferent

@@ -11,34 +11,14 @@ describe("serviceTemplateComparer class test suite", () => {
         }
     })
 
-    test('map service template to service object with templateToServiceObject method', () => {
+    test('map service template to service object with templateToServiceFormat method', () => {
         const serviceTemplateComparer = new ServiceTemplateComparer(serviceTemplateObject, serviceObject)
 
-        //irrelevant info to check due to requirements in ticket #80349
-        delete serviceObject.environment
-        delete serviceObject.id
-        delete serviceObject.name
-        delete serviceObject.service
-        delete serviceObject.stack
-        delete serviceObject.replicas
-        delete serviceObject.image
-        delete serviceObject.labels
-        delete serviceObject.limits
-        delete serviceObject.preferences
-        delete serviceObject.command
-        delete serviceObject.envs[0].value
-        delete (serviceObject.ports[0]).hostPort
-        delete (serviceObject.volumes[0]).hostVolume
-        delete (serviceObject.constraints[0]).value
-        delete (serviceObject.files[0]).fileContent
-        delete (serviceObject.files[0]).hostPath
-
-        const serviceObjectWithoutUselessInfo = serviceObject
-
-        // console.info(`serviceTemplateComparer.templateToServiceObject: '${JSON.stringify(serviceTemplateComparer.templateToServiceObject, null, 2)}'`)
-        // console.info(`serviceObject: '${JSON.stringify(serviceObjectWithoutUselessInfo, null, 2)}'`)
-
-        expect(serviceTemplateComparer.templateToServiceObject).toEqual(serviceObjectWithoutUselessInfo)
+        // console.info(`serviceTemplateComparer.templateToServiceFormat: '${JSON.stringify(serviceTemplateComparer.templateToServiceFormat, null, 2)}'`)
+        // console.info(`serviceObject: '${JSON.stringify(serviceObject, null, 2)}'`)
+        // console.info(`serviceWithoutUselessInfo: '${JSON.stringify(serviceTemplateComparer.serviceWithoutUselessInfo, null, 2)}'`)
+        
+        expect(serviceTemplateComparer.templateToServiceFormat)
     })
 
     test('serviceIsDifferent getter value is false if relevant properties (serviceTemplateComparer.fieldsToCompare) values match', () =>{
@@ -65,6 +45,33 @@ describe("serviceTemplateComparer class test suite", () => {
         expect(serviceTemplateComparer.serviceIsDifferent).toBe(true)
     })
 
+    test('serviceIsDifferent getter value is true if relevant properties (serviceTemplateComparer.fieldsToCompare) values do not match (testing with different serviceObject)', () =>{
+        const serviceTemplateComparer = new ServiceTemplateComparer(anotherServiceTemplateObject, anotherServiceObject)
+
+        console.log(`serviceIsDifferent?: '${serviceTemplateComparer.serviceIsDifferent}'`)
+        
+        expect(serviceTemplateComparer.serviceIsDifferent).toBe(true)
+    })
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

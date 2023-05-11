@@ -67,6 +67,10 @@ export const serviceObject = {
         {
             "hostPort": 8888,
             "containerPort": 6666
+        },
+        {
+            "hostPort": 8888,
+            "containerPort": 8796
         }
     ],
     "volumes": [
@@ -184,7 +188,7 @@ export const anotherServiceObject = {
     "volumes": [
         {
             "hostVolume": "/storage",
-            "containerVolume": "/storage"
+            "containerVolume": "/asda"
         }
     ],
     "files": [

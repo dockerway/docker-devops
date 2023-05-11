@@ -84,7 +84,6 @@ export default {
   async mounted () {
     const serviceTemplate = (await ServiceProvider.findService(this.item.service.id)).data.findService
     const service = (await EnvironmentServiceProvider.findEnvironmentService(this.id)).data.findEnvironmentService
-    console.log(`serviceTemplate: '${JSON.stringify(serviceTemplate, null, 2)}' | service: '${JSON.stringify(service, null, 2)}'`)
     
     const serviceTemplateComparer = new ServiceTemplateComparer(serviceTemplate, service)
     console.log(`there is any difference between the deployed service and the service template: '${serviceTemplateComparer.serviceIsDifferent}'`)
