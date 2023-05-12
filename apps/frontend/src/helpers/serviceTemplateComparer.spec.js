@@ -27,6 +27,17 @@ describe("serviceTemplateComparer class test suite", () => {
         expect((new ServiceTemplateComparer(unorderedServiceTemplateObject, unorderedServiceObject)).serviceIsDifferent).toBe(false)
     })
 
+    test('If serviceIsDifferent getter value is true then the differences getter is not an empty array', () => {
+        const serviceTemplateComparer = new ServiceTemplateComparer(anotherServiceTemplateObject, anotherServiceObject)
+        if(serviceTemplateComparer.serviceIsDifferent) expect(serviceTemplateComparer.differences.length).toBeGreaterThan(0)
+    })
+    
+    test('If serviceIsDifferent is true then the differencesText getter is not an empty string', () => {
+        const serviceTemplateComparer = new ServiceTemplateComparer(anotherServiceTemplateObject, anotherServiceObject)
+        if(serviceTemplateComparer.serviceIsDifferent) expect(serviceTemplateComparer.differencesText).not.toBe('')
+        console.log(`serviceTemplateComparer.differencesText: '${serviceTemplateComparer.differencesText}'`)
+    })
+
 })
 
 

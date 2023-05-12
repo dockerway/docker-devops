@@ -224,15 +224,6 @@ export const anotherServiceObject = {
 }
 
 export const unorderedServiceTemplateObject = {
-    "id": "645969d694196768f91c800f",
-    "name": "httpd",
-    "description": null,
-    "image": "httpd",
-    "repository": null,
-    "platform": {
-        "id": "64587f9e94196768f91bdd34",
-        "name": "infratest"
-    },
     "volumes": [
         "/storage"
     ],
@@ -259,36 +250,11 @@ export const unorderedServiceTemplateObject = {
             "operation": "==",
             "defaultValue": "worker"
         }
-    ],
-    "limits": {
-        "memoryReservation": 0,
-        "memoryLimit": 0,
-        "CPUReservation": 0,
-        "CPULimit": 0
-    },
-    "preferences": []
+    ]
 }
 
 
 export const unorderedServiceObject = {
-    "id": "645969d794196768f91c802a",
-    "name": "test",
-    "environment": {
-        "id": "64587f8394196768f91bd4c2",
-        "name": "DEV",
-        "type": "DEV"
-    },
-    "service": {
-        "id": "645969d694196768f91c800f",
-        "name": "httpd",
-        "image": "httpd"
-    },
-    "stack": {
-        "id": "64587f9f94196768f91bdd4c",
-        "name": "infratest"
-    },
-    "image": "httpd:httpd",
-    "replicas": 1,
     "ports": [
 
         {
@@ -326,20 +292,11 @@ export const unorderedServiceObject = {
             "value": "34268194"
         }
     ],
-    "labels": [],
     "constraints": [
         {
             "name": "node.role",
             "operation": "==",
             "value": null
         }
-    ],
-    "limits": {
-        "memoryReservation": null,
-        "memoryLimit": null,
-        "CPUReservation": null,
-        "CPULimit": null
-    },
-    "preferences": [],
-    "command": null
+    ]
 }
