@@ -79,8 +79,8 @@
 
       <v-card-actions class="py-1 my-0">
         <v-spacer></v-spacer>
-        <v-btn x-small color="blue" @click="getFormValuesFromServiceOrServiceTemplate(false)">GET FROM SERVICE</v-btn>
-        <v-btn x-small color="green" @click="getFormValuesFromServiceOrServiceTemplate(true)">GET FROM ENVIRONMENT</v-btn>
+        <v-btn x-small color="blue" @click="getFormValuesFromServiceOrServiceTemplate(false)">Get from template</v-btn>
+        <v-btn x-small color="green" @click="getFormValuesFromServiceOrServiceTemplate(true)">Get from service</v-btn>
       </v-card-actions>
       <v-toolbar flat dense>
         <v-tabs v-model="tab" align-with-title>
