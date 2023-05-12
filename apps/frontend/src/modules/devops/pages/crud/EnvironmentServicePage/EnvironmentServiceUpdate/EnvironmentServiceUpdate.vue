@@ -8,6 +8,16 @@
     @close="$emit('close')" fullscreen
   >
     <environment-service-form ref="form" v-model="form" :id="id" :input-errors="inputErrors"/>
+    <v-alert
+      v-model="differenceAlert"
+      v-if="differenceMessage"
+      type="warning"
+      dismissible
+      dense
+      text
+      >
+      {{differenceMessage}}
+    </v-alert>
   </crud-update>
 </template>
 
@@ -18,8 +28,6 @@ import ServiceProvider from "../../../../providers/ServiceProvider";
 import { CrudUpdate, ClientError } from '@dracul/common-frontend';
 import EnvironmentServiceForm from "../EnvironmentServiceForm";
 import ServiceTemplateComparer from "../../../../../../helpers/ServiceTemplateComparer";
-// import ObjectComparer from "../../../../../../helpers/objectComparer.js"
-
 
 export default {
   name: "EnvironmentServiceUpdate",
@@ -54,7 +62,9 @@ export default {
         limits: this.item.limits ? this.item.limits : {},
         preferences: this.item.preferences ? this.item.preferences : [],
         command: this.item.command
-      }
+      },
+      differenceAlert: false,
+      differenceMessage: '',
     }
   },
   methods: {
@@ -86,7 +96,10 @@ export default {
     const service = (await EnvironmentServiceProvider.findEnvironmentService(this.id)).data.findEnvironmentService
     
     const serviceTemplateComparer = new ServiceTemplateComparer(serviceTemplate, service)
-    console.log(`there is any difference between the deployed service and the service template: '${serviceTemplateComparer.serviceIsDifferent}'`)
+    if (serviceTemplateComparer.serviceIsDifferent){
+      this.differenceAlert = true
+      this.differenceMessage = serviceTemplateComparer.differencesText
+    }
   },
 }
 </script>
