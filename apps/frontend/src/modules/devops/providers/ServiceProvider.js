@@ -5,7 +5,8 @@ class ServiceProvider {
     findService(id) {
         return graphqlClient.query({
             query: require('./gql/Service/findService.graphql'),
-            variables: {id:id}
+            fetchPolicy: "no-cache",
+            variables: {id}
         })
     }
 
@@ -33,7 +34,7 @@ class ServiceProvider {
         })
     }
 
-    updateService(id,input) {
+    updateService(id, input) {
         return graphqlClient.mutate({
             mutation: require('./gql/Service/updateService.graphql'),
             variables: {id, input}
