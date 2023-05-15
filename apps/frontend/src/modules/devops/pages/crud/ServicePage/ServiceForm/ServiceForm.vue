@@ -13,8 +13,8 @@
             prepend-icon="fingerprint"
             name="name"
             v-model="form.name"
-            :label="$t('devops.service.labels.name')"
-            :placeholder="$t('devops.service.labels.name')"
+            :label="$t('devops.serviceTemplate.labels.name')"
+            :placeholder="$t('devops.serviceTemplate.labels.name')"
             :error="hasInputErrors('name')"
             :error-messages="getInputErrors('name')"
             color="secondary"
@@ -29,8 +29,8 @@
             prepend-icon="label"
             name="description"
             v-model="form.description"
-            :label="$t('devops.service.labels.description')"
-            :placeholder="$t('devops.service.labels.description')"
+            :label="$t('devops.serviceTemplate.labels.description')"
+            :placeholder="$t('devops.serviceTemplate.labels.description')"
             :error="hasInputErrors('description')"
             :error-messages="getInputErrors('description')"
             color="secondary"
@@ -45,8 +45,8 @@
             prepend-icon="album"
             name="image"
             v-model="form.image"
-            :label="$t('devops.service.labels.image')"
-            :placeholder="$t('devops.service.labels.image')"
+            :label="$t('devops.serviceTemplate.labels.image')"
+            :placeholder="$t('devops.serviceTemplate.labels.image')"
             :error="hasInputErrors('image')"
             :error-messages="getInputErrors('image')"
             color="secondary"
@@ -60,8 +60,8 @@
             prepend-icon="source"
             name="repository"
             v-model="form.repository"
-            :label="$t('devops.service.labels.repository')"
-            :placeholder="$t('devops.service.labels.repository')"
+            :label="$t('devops.serviceTemplate.labels.repository')"
+            :placeholder="$t('devops.serviceTemplate.labels.repository')"
             :error="hasInputErrors('repository')"
             :error-messages="getInputErrors('repository')"
             color="secondary"
@@ -106,8 +106,8 @@
                         name="ports"
                         type="number"
                         v-model.number="form.ports[index]"
-                        :label="$t('devops.service.labels.port')"
-                        :placeholder="$t('devops.service.labels.port')"
+                        :label="$t('devops.serviceTemplate.labels.port')"
+                        :placeholder="$t('devops.serviceTemplate.labels.port')"
                         :error="hasInputErrors('ports')"
                         :error-messages="getInputErrors('ports')"
                         color="secondary"
@@ -138,8 +138,8 @@
                         icon="storage"
                         name="volumes"
                         v-model="form.volumes[index]"
-                        :label="$t('devops.service.labels.volume')"
-                        :placeholder="$t('devops.service.labels.volume')"
+                        :label="$t('devops.serviceTemplate.labels.volume')"
+                        :placeholder="$t('devops.serviceTemplate.labels.volume')"
                         :error="hasInputErrors('volumes')"
                         :error-messages="getInputErrors('volumes')"
                         color="secondary"
@@ -311,13 +311,13 @@ export default {
     return {
       tab: 0,
       items: [
-        this.$t('devops.service.labels.port'),
-        this.$t('devops.service.labels.volume'),
-        this.$t('devops.service.labels.file'),
+        this.$t('devops.serviceTemplate.labels.port'),
+        this.$t('devops.serviceTemplate.labels.volume'),
+        this.$t('devops.serviceTemplate.labels.file'),
         'Envs',
-        this.$t('devops.service.labels.constraints'),
-        this.$t('devops.service.labels.limits'),
-        this.$t('devops.service.labels.preferences')
+        this.$t('devops.serviceTemplate.labels.constraints'),
+        this.$t('devops.serviceTemplate.labels.limits'),
+        this.$t('devops.serviceTemplate.labels.preferences')
       ],
       rules: [ v => this.regexPaths.test(v) || 'Debe comenzar con /storage, /logs o /localdata y finalizar sin /' ]
     }

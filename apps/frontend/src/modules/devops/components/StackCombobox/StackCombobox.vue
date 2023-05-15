@@ -5,7 +5,7 @@
       :item-text="'name'"
       :item-value="'id'"
       v-model="item"
-      :label="$t('devops.environmentService.labels.stack')"
+      :label="$t('devops.service.labels.stack')"
       :loading="loading"
       :error="hasInputErrors('stack')"
       :error-messages="getInputErrors('stack')"

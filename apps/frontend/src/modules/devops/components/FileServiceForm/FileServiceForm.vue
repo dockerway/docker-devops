@@ -5,8 +5,8 @@
         prepend-icon="task"
         name="value"
         v-model="form.containerPath"
-        :label="$t('devops.environmentService.labels.containerPath')"
-        :placeholder="$t('devops.environmentService.labels.containerPath')"
+        :label="$t('devops.service.labels.containerPath')"
+        :placeholder="$t('devops.service.labels.containerPath')"
         color="secondary"
         :rules="rules"
     ></v-text-field>
@@ -17,8 +17,8 @@
         prepend-icon="description"
         name="name"
         v-model="form.fileName"
-        :label="$t('devops.environmentService.labels.fileName')"
-        :placeholder="$t('devops.environmentService.labels.fileName')"
+        :label="$t('devops.service.labels.fileName')"
+        :placeholder="$t('devops.service.labels.fileName')"
         color="secondary"
         :rules="rulesFileName"
     ></v-text-field>
@@ -37,7 +37,7 @@
             filed
             v-model="form.fileContent"
             name="input-7-4"
-            :label="$t('devops.environmentService.labels.fileContent')"
+            :label="$t('devops.service.labels.fileContent')"
           ></v-textarea>
         </v-expansion-panel-content>
       </v-expansion-panel>

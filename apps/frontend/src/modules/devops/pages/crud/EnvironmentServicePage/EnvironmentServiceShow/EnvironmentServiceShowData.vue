@@ -17,18 +17,18 @@
           <v-row>
             <v-col cols="12" sm="6" md="4">
               <v-list>
-                <show-field :value="item.environment.name" :label="$t('devops.environmentService.labels.environment')"
+                <show-field :value="item.environment.name" :label="$t('devops.service.labels.environment')"
                   icon="tune" />
                 <show-field :value="item.replicas ? item.replicas.toString() : ''"
-                  :label="$t('devops.environmentService.labels.replicas')" icon="double_arrow" />
+                  :label="$t('devops.service.labels.replicas')" icon="double_arrow" />
               </v-list>
             </v-col>
 
             <v-col cols="12" sm="6" md="4">
               <v-list>
-                <show-field :value="item.service.name" :label="$t('devops.environmentService.labels.service')"
+                <show-field :value="item.service.name" :label="$t('devops.service.labels.serviceTemplate')"
                   icon="design_services" />
-                <show-field :value="item.stack.name" :label="$t('devops.environmentService.labels.stack')"
+                <show-field :value="item.stack.name" :label="$t('devops.service.labels.stack')"
                   icon="table_rows" />
 
               </v-list>
@@ -36,17 +36,17 @@
 
             <v-col cols="12" sm="6" md="4">
               <v-list>
-                <show-field :value="item.name" :label="$t('devops.environmentService.labels.name')" icon="title" />
+                <show-field :value="item.name" :label="$t('devops.service.labels.name')" icon="title" />
               </v-list>
             </v-col>
 
             <v-col cols="12">
-              <show-field :value="item.image" :label="$t('devops.environmentService.labels.image')" icon="album" />
+              <show-field :value="item.image" :label="$t('devops.service.labels.image')" icon="album" />
 
             </v-col>
 
             <v-col cols="12">
-              <show-field :value="item.command" :label="$t('devops.environmentService.labels.command')" icon="touch_app" />
+              <show-field :value="item.command" :label="$t('devops.service.labels.command')" icon="touch_app" />
 
             </v-col>
           </v-row>
@@ -143,15 +143,15 @@ export default {
     return {
       tab: 0,
       tabItems: [
-        this.$t('devops.environmentService.labels.main'),
-        this.$t('devops.service.labels.port'),
-        this.$t('devops.service.labels.volume'),
-        this.$t('devops.service.labels.file'),
+        this.$t('devops.service.labels.main'),
+        this.$t('devops.serviceTemplate.labels.port'),
+        this.$t('devops.serviceTemplate.labels.volume'),
+        this.$t('devops.serviceTemplate.labels.file'),
         'Envs',
         'Labels',
-        this.$t('devops.service.labels.constraints'),
-        this.$t('devops.service.labels.limits'),
-        this.$t('devops.service.labels.preferences')
+        this.$t('devops.serviceTemplate.labels.constraints'),
+        this.$t('devops.serviceTemplate.labels.limits'),
+        this.$t('devops.serviceTemplate.labels.preferences')
       ]
     }
   },
@@ -159,15 +159,15 @@ export default {
     fetchLabel(i) {
       switch (i) {
         case "memoryReservation":
-          return this.$t('devops.service.labels.memoryReservation')
+          return this.$t('devops.serviceTemplate.labels.memoryReservation')
         case "memoryLimit":
-          return this.$t('devops.service.labels.memoryLimit')
+          return this.$t('devops.serviceTemplate.labels.memoryLimit')
         case "CPUReservation":
-          return this.$t('devops.service.labels.CPUReservation')
+          return this.$t('devops.serviceTemplate.labels.CPUReservation')
         case "CPULimit":
-          return this.$t('devops.service.labels.CPULimit')
+          return this.$t('devops.serviceTemplate.labels.CPULimit')
         default:
-          return this.$t('devops.service.labels.limits')
+          return this.$t('devops.serviceTemplate.labels.limits')
       }
     }
   }

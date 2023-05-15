@@ -7,8 +7,8 @@
         name="name"
         type="number"
         v-model.number="form.hostPort"
-        :label="$t('devops.environmentService.labels.hostPort')"
-        :placeholder="$t('devops.environmentService.labels.hostPort')"
+        :label="$t('devops.service.labels.hostPort')"
+        :placeholder="$t('devops.service.labels.hostPort')"
         color="secondary"
     ></v-text-field>
   </v-col>
@@ -19,8 +19,8 @@
         name="value"
         type="number"
         v-model.number="form.containerPort"
-        :label="$t('devops.environmentService.labels.containerPort')"
-        :placeholder="$t('devops.environmentService.labels.containerPort')"
+        :label="$t('devops.service.labels.containerPort')"
+        :placeholder="$t('devops.service.labels.containerPort')"
         color="secondary"
     ></v-text-field>
   </v-col>

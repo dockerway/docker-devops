@@ -6,9 +6,9 @@ const messages = {
             customization: 'Customization',
             administration: 'Administration',
             platform: "Platform",
-            service: "Service",
+            serviceTemplate: "Service Template",
             environment: "Environment",
-            environmentService: "EnvironmentService",
+            service: "Services",
             cruds: "Cruds",
             sauron: "Sauron",
             stack: "Stack",
@@ -19,15 +19,15 @@ const messages = {
             audit:"Audit"
         }
     },
-    es: {
+   es: {
         menu: {
             userdashboard: 'Tablero de Usuarios',
             customization: 'Personalización',
             administration: 'Administración',
             platform: "Plataforma",
-            service: "Servicio",
+            serviceTemplate: "Plantillas de Servicio",
             environment: "Entorno",
-            environmentService: "Entorno Servicio",
+            service: "Servicios",
             cruds: "ABM",
             sauron: "Sauron",
             stack: "Stack",
@@ -45,9 +45,9 @@ const messages = {
             customization: 'Costumização',
             administration: 'administração',
             platform: "Platform",
-            service: "Service",
+            serviceTemplate: "Service Template",
             environment: "Environment",
-            environmentService: "EnvironmentService",
+            service: "EnvironmentService",
             cruds: "Cruds",
             sauron: "Sauron",
             stack: "Stack",

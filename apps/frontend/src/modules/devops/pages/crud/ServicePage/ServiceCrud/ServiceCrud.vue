@@ -66,8 +66,8 @@
         },
         data() {
             return {
-                title: 'devops.service.title',
-                subtitle: 'devops.service.subtitle',
+                title: 'devops.serviceTemplate.title',
+                subtitle: 'devops.serviceTemplate.subtitle',
                 flash: null,
                 creating: false,
                 updating: false,

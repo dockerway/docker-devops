@@ -1,37 +1,47 @@
 <template>
-  <crud-update :open="open"
-               :loading="loading"
-               :title="title"
-               :errorMessage="errorMessage"
-               @update="update"
-               @close="$emit('close')" fullscreen
+  <crud-update 
+    :open="open"
+    :loading="loading"
+    :title="title"
+    :errorMessage="errorMessage"
+    @update="update"
+    @close="$emit('close')" fullscreen
   >
     <environment-service-form ref="form" v-model="form" :id="id" :input-errors="inputErrors"/>
+    <v-alert
+      v-model="differenceAlert"
+      v-if="differenceMessage"
+      type="warning"
+      dismissible
+      dense
+      text
+      >
+      {{differenceMessage}}
+    </v-alert>
   </crud-update>
 </template>
 
 <script>
 
 import EnvironmentServiceProvider from "../../../../providers/EnvironmentServiceProvider";
-
-import {CrudUpdate, ClientError} from '@dracul/common-frontend'
-
+import ServiceProvider from "../../../../providers/ServiceProvider";
+import { CrudUpdate, ClientError } from '@dracul/common-frontend';
 import EnvironmentServiceForm from "../EnvironmentServiceForm";
-
+import ServiceTemplateComparer from "../../../../../../helpers/ServiceTemplateComparer";
 
 export default {
   name: "EnvironmentServiceUpdate",
 
-  components: {EnvironmentServiceForm, CrudUpdate},
+  components: { EnvironmentServiceForm, CrudUpdate },
 
   props: {
-    open: {type: Boolean, default: true},
-    item: {type: Object, required: true}
+    open: { type: Boolean, default: true },
+    item: { type: Object, required: true }
   },
 
   data() {
     return {
-      title: 'devops.environmentService.editing',
+      title: 'devops.service.editing',
       errorMessage: '',
       inputErrors: {},
       loading: false,
@@ -48,36 +58,51 @@ export default {
         ports: this.item.ports ? this.item.ports : [],
         envs: this.item.envs ? this.item.envs : [],
         labels: this.item.labels ? this.item.labels : [],
-        constraints: this.item.constraints ?  this.item.constraints : [],
-        limits: this.item.limits ?  this.item.limits : {},
+        constraints: this.item.constraints ? this.item.constraints : [],
+        limits: this.item.limits ? this.item.limits : {},
         preferences: this.item.preferences ? this.item.preferences : [],
         command: this.item.command
-      }
+      },
+      differenceAlert: false,
+      differenceMessage: '',
     }
   },
   methods: {
-    update() {
+    async update() {
       if (this.$refs.form.validate()) {
-        this.loading = true
-        EnvironmentServiceProvider.updateEnvironmentService(this.id, this.form).then(r => {
-              if (r) {
-                this.$emit('itemUpdated', r.data.updateEnvironmentService)
-                this.$emit('close')
-              }
-            }
-        ).catch(error => {
-          let clientError = new ClientError(error)
+        try {
+          this.loading = true
+
+          console.log(`this.form: ${JSON.stringify(this.form, null, 2)}`)
+          console.log(`this.form: ${this.form}`)
+
+          const updatedItem = (await EnvironmentServiceProvider.updateEnvironmentService(this.id, this.form)).data.updateEnvironmentService
+          this.$emit('itemUpdated', updatedItem)
+          this.$emit('close')
+        } catch (error) {
+          const clientError = new ClientError(error)
           this.inputErrors = clientError.inputErrors
           this.errorMessage = clientError.i18nMessage
-        }).finally(() => this.loading = false)
-      }
+        } finally {
+          this.loading = false
+        }
 
+      }
+    }
+  },
+
+  async mounted () {
+    const serviceTemplate = (await ServiceProvider.findService(this.item.service.id)).data.findService
+    const service = (await EnvironmentServiceProvider.findEnvironmentService(this.id)).data.findEnvironmentService
+    
+    const serviceTemplateComparer = new ServiceTemplateComparer(serviceTemplate, service)
+    if (serviceTemplateComparer.serviceIsDifferent){
+      this.differenceAlert = true
+      this.differenceMessage = serviceTemplateComparer.differencesText
     }
   },
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
 

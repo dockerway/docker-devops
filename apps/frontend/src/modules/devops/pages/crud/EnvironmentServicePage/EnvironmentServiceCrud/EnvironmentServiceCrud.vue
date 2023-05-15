@@ -11,7 +11,7 @@
             />
         </template>
         
-         <add-button v-if="$store.getters.hasPermission('ENVIRONMENTSERVICE_CREATE')" @click="create"></add-button>
+        <add-button v-if="$store.getters.hasPermission('ENVIRONMENTSERVICE_CREATE')" @click="create"></add-button>
       
         <environment-service-create v-if="creating" 
                         :open="creating"
@@ -66,8 +66,8 @@
         },
         data() {
             return {
-                title: 'devops.environmentService.title',
-                subtitle: 'devops.environmentService.subtitle',
+                title: 'devops.service.title',
+                subtitle: 'devops.service.subtitle',
                 flash: null,
                 creating: false,
                 updating: false,

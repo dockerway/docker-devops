@@ -33,7 +33,7 @@ export default [
             },
             {
                 icon: 'design_services',
-                text: 'menu.service',
+                text: 'menu.serviceTemplate',
                 link: {name: "ServicePage"},
                 panel: false,
                 permission: 'SERVICE_MENU'
@@ -54,7 +54,7 @@ export default [
             },
             {
                 icon: 'tune',
-                text: 'menu.environmentService',
+                text: 'menu.service',
                 link: {name: "EnvironmentServicePage"},
                 panel: false,
                 permission: 'ENVIRONMENTSERVICE_MENU'

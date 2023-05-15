@@ -101,11 +101,11 @@ export default {
     headers() {
       return [
         //Entity Headers
-        {text: this.$t('devops.service.labels.name'), value: 'name'},
-        {text: this.$t('devops.service.labels.platform'), value: 'platform'},
-        {text: this.$t('devops.service.labels.image'), value: 'image'},
-        //{text: this.$t('devops.service.labels.volumes'), value: 'volumes'},
-        {text: this.$t('devops.service.labels.ports'), value: 'ports'},
+        {text: this.$t('devops.serviceTemplate.labels.name'), value: 'name'},
+        {text: this.$t('devops.serviceTemplate.labels.platform'), value: 'platform'},
+        {text: this.$t('devops.serviceTemplate.labels.image'), value: 'image'},
+        //{text: this.$t('devops.serviceTemplate.labels.volumes'), value: 'volumes'},
+        {text: this.$t('devops.serviceTemplate.labels.ports'), value: 'ports'},
         //Actions
         {text: this.$t('common.actions'), value: 'action', sortable: false},
       ]

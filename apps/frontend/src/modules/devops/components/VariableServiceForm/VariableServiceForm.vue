@@ -6,8 +6,8 @@
         prepend-icon="description"
         name="name"
         v-model="form.name"
-        :label="$t('devops.service.labels.variable.name')"
-        :placeholder="$t('devops.service.labels.variable.name')"
+        :label="$t('devops.serviceTemplate.labels.variable.name')"
+        :placeholder="$t('devops.serviceTemplate.labels.variable.name')"
         color="secondary"
     ></v-text-field>
   </v-col>
@@ -18,8 +18,8 @@
       v-model="form.operation"
       prepend-icon="calculate"
       :items="['==','!=']"
-      :label="$t('devops.environmentService.labels.variable.operation')"
-      :placeholder="$t('devops.environmentService.labels.variable.operation')"
+      :label="$t('devops.service.labels.variable.operation')"
+      :placeholder="$t('devops.service.labels.variable.operation')"
       color="secondary"
     ></v-select>
   </v-col>
@@ -29,8 +29,8 @@
         prepend-icon="task"
         name="defaultValue"
         v-model="form.defaultValue"
-        :label="$t('devops.service.labels.variable.defaultValue')"
-        :placeholder="$t('devops.service.labels.variable.defaultValue')"
+        :label="$t('devops.serviceTemplate.labels.variable.defaultValue')"
+        :placeholder="$t('devops.serviceTemplate.labels.variable.defaultValue')"
         color="secondary"
     ></v-text-field>
   </v-col>
