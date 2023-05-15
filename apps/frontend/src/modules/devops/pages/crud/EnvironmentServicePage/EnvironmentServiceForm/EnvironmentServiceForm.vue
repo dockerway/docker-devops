@@ -309,17 +309,11 @@ export default {
       try {
         let service = null
 
-        console.log(`fromService: '${fromService}'`)
-
         if (fromService) {
           service = await this.findDockerService()
-          console.log(`service from findDockerService`)
         } else {
           service = await this.findService()
-          console.log(`service from findService`)
         }
-
-        console.log(`service:'${JSON.stringify(service, null, 2)}'`)
 
         if (service.envs) {
           service.envs.forEach(env => {
@@ -341,7 +335,7 @@ export default {
           })
         }
 
-        if (service.ports && !(this.form.ports.length === service.ports.length)) { //si, en el service, NO existe la misma cantidad de puertos que existen en el form
+        if (service.ports) { 
           service.ports.forEach(port => {
             if (!fromService && port && !this.form.ports.find(formPort => formPort.containerPort ? formPort.containerPort == port : false)) {
               const portObject = {

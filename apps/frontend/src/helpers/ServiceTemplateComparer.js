@@ -28,19 +28,21 @@ export default class ServiceTemplateComparer {
 
   get differencesText() {
     let differencesText = '';
-  
+
     if (this.differences.length > 1) {
-      differencesText = `There are differences between the service template and the service in the following fields: `
-  
+      differencesText = `Hay diferencias entre el servicio y la plantilla que utiliza, especificamente, en las siguientes secciones: `
+
       this.differences.forEach((difference, index) => {
         differencesText += `'${difference.field}'`
         if (index !== this.differences.length - 1) differencesText += ', '
       })
-    } else differencesText = `There is a difference between the service template and the service in the '${this.differences[0].field}' field`
+
+      differencesText += '.'
+    } else differencesText = `Hay una diferencia entre el servicio y la plantilla que utiliza, especificamente, en la seccion '${this.differences[0].field}'.`
 
     return differencesText
   }
-  
+
 
   /**
    * A getter that returns the service template object in a format that matches the format of the service object
@@ -174,9 +176,6 @@ export default class ServiceTemplateComparer {
       }
     })
 
-    console.log('Differences:', this.differences)
     return isDifferent
   }
-
-
 }
