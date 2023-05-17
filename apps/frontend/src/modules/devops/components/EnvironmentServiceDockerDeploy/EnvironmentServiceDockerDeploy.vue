@@ -66,28 +66,41 @@ export default {
       return this.envService.service.image
     },
     getTargetImage() {
-      return this.targetImage ? this.envService.service.image + ":" + this.targetImage : null
+
+      function stripVersionFromURL(url) {
+        const regex = /:(.*?)(?=[/?]|$)/;
+        const match = url.match(regex);
+
+        if (match) {
+          const strippedURL = url.replace(regex, '')
+          return strippedURL
+        } else {
+          return url
+        }
+      }
+
+      return this.targetImage ? stripVersionFromURL(this.envService.service.image) + ":" + this.targetImage : null
     }
   },
-  created(){
+  created() {
     this.findDockerService()
   },
   methods: {
     findDockerService() {
-      console.log("finding DockerService:",this.envService.id)
+      console.log("finding DockerService:", this.envService.id)
       return new Promise((resolve) => {
         this.loading = true
         DockerProvider.findDockerService(this.envService.id)
-            .then(r => {
-              let dockerService = r.data.findDockerService
-              if (dockerService && dockerService.id) {
-                this.created = true
-                this.envServiceDeployed = r.data.findDockerService
-              }
-              resolve(r.data.findDockerService)
-            })
-            .catch(err => console.error(err))
-            .finally(() => this.loading = false)
+          .then(r => {
+            let dockerService = r.data.findDockerService
+            if (dockerService && dockerService.id) {
+              this.created = true
+              this.envServiceDeployed = r.data.findDockerService
+            }
+            resolve(r.data.findDockerService)
+          })
+          .catch(err => console.error(err))
+          .finally(() => this.loading = false)
       })
     },
     async createDockerService() {
@@ -101,7 +114,7 @@ export default {
         this.envServiceDeployed = createDockerServiceResponse.data.createDockerService
         return this.envServiceDeployed
       } catch (error) {
-        this.errors = error.graphQLErrors.map(i => (! i.message.includes('404') ? i.message : null))
+        this.errors = error.graphQLErrors.map(i => (!i.message.includes('404') ? i.message : null))
         throw error
       } finally {
         this.loading = false
@@ -123,7 +136,7 @@ export default {
         console.log(`updatedDockerService.data.updateDockerService: '${JSON.stringify(this.envServiceDeployed)}'`)
         return this.envServiceDeployed
       } catch (error) {
-        this.errors = error.graphQLErrors.map(i => (! i.message.includes('404') ? i.message : null))
+        this.errors = error.graphQLErrors.map(i => (!i.message.includes('404') ? i.message : null))
         throw error
       } finally {
         this.loading = false
