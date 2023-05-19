@@ -23,14 +23,14 @@
     <v-card-actions v-if="created && !updated" class="justify-center">
       <image-tag-combobox show-name :name="getBaseImage" v-model="targetImage"></image-tag-combobox>
       <v-spacer></v-spacer>
-      <v-btn :loading="loading" class="teal white--text" @click="updateDockerService">UPDATE</v-btn>
+      <v-btn :disabled="buttonDisabledValue" :loading="loading" class="teal white--text" @click="updateDockerService">UPDATE</v-btn>
     </v-card-actions>
 
 
     <v-card-actions v-else-if="!created" class="justify-center">
       <image-tag-combobox show-name :name="getBaseImage" v-model="targetImage"></image-tag-combobox>
       <v-spacer></v-spacer>
-      <v-btn :loading="loading" class="teal white--text" @click="createDockerService">DEPLOY</v-btn>
+      <v-btn :disabled="buttonDisabledValue" :loading="loading" class="teal white--text" @click="createDockerService">DEPLOY</v-btn>
     </v-card-actions>
 
 
@@ -58,7 +58,8 @@ export default {
       updated: false,
       envServiceDeployed: null,
       errors: [],
-      targetImage: this.envService?.service?.image
+      targetImage: this.envService?.service?.image,
+      buttonDisabledValue: true
     }
   },
   computed: {
@@ -142,7 +143,16 @@ export default {
         this.loading = false
       }
     }
-  }
+  },
+  watch: {
+    targetImage(newValue) {
+      if (newValue){
+        this.buttonDisabledValue = false
+      }else{
+        this.buttonDisabledValue = true
+      }
+    }
+  },
 }
 </script>
 
