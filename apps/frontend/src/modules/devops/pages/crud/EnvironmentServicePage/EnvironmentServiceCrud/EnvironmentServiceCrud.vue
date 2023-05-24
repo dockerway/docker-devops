@@ -45,72 +45,72 @@
 </template>
 
 <script>
-    
-    import EnvironmentServiceCreate from "../EnvironmentServiceCreate";
-    import EnvironmentServiceUpdate from "../EnvironmentServiceUpdate";
-    import EnvironmentServiceDelete from "../EnvironmentServiceDelete";
-    import EnvironmentServiceShow from "../EnvironmentServiceShow";
-    import EnvironmentServiceList from "../EnvironmentServiceList";
-    
-     import {CrudLayout, AddButton, Snackbar} from "@dracul/common-frontend"
-     
-    export default {
-        name: "EnvironmentServiceCrud",
-        components: {
-            CrudLayout, AddButton, Snackbar,
-            EnvironmentServiceCreate, 
-            EnvironmentServiceUpdate, 
-            EnvironmentServiceDelete, 
-            EnvironmentServiceShow,
-            EnvironmentServiceList
-        },
-        data() {
-            return {
-                title: 'devops.service.title',
-                subtitle: 'devops.service.subtitle',
-                flash: null,
-                creating: false,
-                updating: false,
-                deleting: false,
-                showing: false,
-                itemToEdit: null,
-                itemToDelete: null,
-                itemToShow: null,
-            }
-        },
-        methods: {
-            //On
-            onItemCreated() {
-                this.$refs.list.fetch()
-                this.flash= "common.created"
-            },
-            onItemUpdated() {
-                this.$refs.list.fetch()
-                this.flash= "common.updated"
-            },
-            onItemDeleted() {
-                this.$refs.list.fetch()
-                this.flash= "common.deleted"
-            },
-            //Open
-            create() {
-                this.creating = true
-            },
-            update(item) {
-                this.updating = true
-                this.itemToEdit = item
-            },
-            show(item) {
-                this.showing = true
-                this.itemToShow = item
-            },
-            remove(item) {
-                this.deleting = true
-                this.itemToDelete = item
-            }
+
+import EnvironmentServiceCreate from "../EnvironmentServiceCreate";
+import EnvironmentServiceUpdate from "../EnvironmentServiceUpdate";
+import EnvironmentServiceDelete from "../EnvironmentServiceDelete";
+import EnvironmentServiceShow from "../EnvironmentServiceShow";
+import EnvironmentServiceList from "../EnvironmentServiceList";
+
+import { CrudLayout, AddButton, Snackbar } from "@dracul/common-frontend"
+
+export default {
+    name: "EnvironmentServiceCrud",
+    components: {
+        CrudLayout, AddButton, Snackbar,
+        EnvironmentServiceCreate,
+        EnvironmentServiceUpdate,
+        EnvironmentServiceDelete,
+        EnvironmentServiceShow,
+        EnvironmentServiceList
+    },
+    data() {
+        return {
+            title: 'devops.service.title',
+            subtitle: 'devops.service.subtitle',
+            flash: null,
+            creating: false,
+            updating: false,
+            deleting: false,
+            showing: false,
+            itemToEdit: null,
+            itemToDelete: null,
+            itemToShow: null,
         }
-        
+    },
+    methods: {
+        //On
+        onItemCreated() {
+            this.$refs.list.fetch()
+            this.flash = "common.created"
+        },
+        onItemUpdated() {
+            this.$refs.list.fetch()
+            this.flash = "common.updated"
+        },
+        onItemDeleted() {
+            this.$refs.list.fetch()
+            this.flash = "common.deleted"
+        },
+        //Open
+        create() {
+            this.creating = true
+        },
+        update(item) {
+            this.updating = true
+            this.itemToEdit = item
+        },
+        show(item) {
+            this.showing = true
+            this.itemToShow = item
+        },
+        remove(item) {
+            this.deleting = true
+            this.itemToDelete = item
+        }
     }
+
+}
 </script>
 
 

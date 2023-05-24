@@ -44,7 +44,7 @@ const messages = {
                 name: "Name",
                 command: "Command"
             },
-
+            status: 'Status'
           }
        }
     },
@@ -92,7 +92,7 @@ const messages = {
                 name: "Nombre",
                 command: "Comando"
             },
-
+            status: 'Estado'
           }
        }
     },
@@ -140,7 +140,7 @@ const messages = {
                 name: "Name",
                 command: "Command"
             },
-
+            status: 'Status'
           }
        }
     }

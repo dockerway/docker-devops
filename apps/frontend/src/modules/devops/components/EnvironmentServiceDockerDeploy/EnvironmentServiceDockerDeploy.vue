@@ -23,14 +23,16 @@
     <v-card-actions v-if="created && !updated" class="justify-center">
       <image-tag-combobox show-name :name="getBaseImage" v-model="targetImage"></image-tag-combobox>
       <v-spacer></v-spacer>
-      <v-btn :disabled="buttonDisabledValue" :loading="loading" class="teal white--text" @click="updateDockerService">UPDATE</v-btn>
+      <v-btn :disabled="buttonDisabledValue" :loading="loading" class="teal white--text"
+        @click="updateDockerService">UPDATE</v-btn>
     </v-card-actions>
 
 
     <v-card-actions v-else-if="!created" class="justify-center">
       <image-tag-combobox show-name :name="getBaseImage" v-model="targetImage"></image-tag-combobox>
       <v-spacer></v-spacer>
-      <v-btn :disabled="buttonDisabledValue" :loading="loading" class="teal white--text" @click="createDockerService">DEPLOY</v-btn>
+      <v-btn :disabled="buttonDisabledValue" :loading="loading" class="teal white--text"
+        @click="createDockerService">DEPLOY</v-btn>
     </v-card-actions>
 
 
@@ -87,22 +89,24 @@ export default {
     this.findDockerService()
   },
   methods: {
-    findDockerService() {
-      console.log("finding DockerService:", this.envService.id)
-      return new Promise((resolve) => {
+    async findDockerService() {
+      try {
         this.loading = true
-        DockerProvider.findDockerService(this.envService.id)
-          .then(r => {
-            let dockerService = r.data.findDockerService
-            if (dockerService && dockerService.id) {
-              this.created = true
-              this.envServiceDeployed = r.data.findDockerService
-            }
-            resolve(r.data.findDockerService)
-          })
-          .catch(err => console.error(err))
-          .finally(() => this.loading = false)
-      })
+
+        console.log("finding DockerService:", this.envService.id)
+        const dockerService = (await DockerProvider.findDockerService(this.envService.id)).data.findDockerService
+
+        if (dockerService && dockerService.id) {
+          this.created = true
+          this.envServiceDeployed = dockerService
+        }
+
+        return dockerService
+      } catch (error) {
+        console.error(`An error happened at the findDockerService method: '${error.message}'`)
+      } finally {
+        this.loading = false
+      }
     },
     async createDockerService() {
       console.log("CREATE DOCKER SERVICE")
@@ -146,9 +150,9 @@ export default {
   },
   watch: {
     targetImage(newValue) {
-      if (newValue){
+      if (newValue) {
         this.buttonDisabledValue = false
-      }else{
+      } else {
         this.buttonDisabledValue = true
       }
     }

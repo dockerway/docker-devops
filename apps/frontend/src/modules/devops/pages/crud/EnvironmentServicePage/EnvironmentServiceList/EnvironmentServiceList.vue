@@ -29,18 +29,17 @@
     <v-col cols="12">
 
       <v-data-table class="mt-3" :headers="headers" :items="items" :search="search" :single-expand="false"
-                    :server-items-length="totalItems" :loading="loading" :page.sync="pageNumber"
-                    :items-per-page.sync="itemsPerPage"
-                    :sort-by.sync="orderBy" :sort-desc.sync="orderDesc"
-                    :footer-props="{ itemsPerPageOptions: [5, 10, 25, 50] }"
-                    @update:page="fetch" @update:sort-by="fetch" @update:sort-desc="fetch"
-                    @update:items-per-page="fetch">
+          :server-items-length="totalItems" :loading="loading" :page.sync="pageNumber"
+          :items-per-page.sync="itemsPerPage"
+          :sort-by.sync="orderBy" :sort-desc.sync="orderDesc"
+          :footer-props="{ itemsPerPageOptions: [5, 10, 25, 50] }"
+          @update:page="fetch" @update:sort-by="fetch" @update:sort-desc="fetch"
+          @update:items-per-page="fetch">
 
 
         <template v-slot:item.environment="{ item }">
           {{ item.environment ? item.environment.name : '' }}
         </template>
-
 
         <template v-slot:item.service="{ item }">
           {{ item.service ? item.service.name : '' }}
@@ -61,6 +60,10 @@
 
         <template slot="loading">
           <div class="text-xs-center" v-t="'common.loading'"></div>
+        </template>
+
+        <template v-slot:item.status="{ item }">
+          <v-chip :color="item.status == 'running' ? 'green' : null">{{ item.status }}</v-chip>
         </template>
 
         <template v-slot:item.deploy="{ item }">
@@ -97,8 +100,9 @@
 
 <script>
 import EnvironmentServiceProvider from "../../../../providers/EnvironmentServiceProvider";
+import DockerProvider from "../../../../providers/DockerProvider";
 
-import {DeleteButton, EditButton, ShowButton, SearchInput} from "@dracul/common-frontend"
+import { DeleteButton, EditButton, ShowButton, SearchInput } from "@dracul/common-frontend"
 import StackCombobox from "@/modules/devops/components/StackCombobox/StackCombobox";
 import EnvironmentCombobox from "@/modules/devops/components/EnvironmentCombobox/EnvironmentCombobox";
 import EnvironmentServiceDockerDeploy
@@ -144,15 +148,16 @@ export default {
     headers() {
       return [
         //Entity Headers
-        {text: this.$t('devops.service.labels.environment'), value: 'environment'},
-        {text: this.$t('devops.service.labels.stack'), value: 'stack'},
-        {text: this.$t('devops.service.labels.serviceTemplate'), value: 'service'},
-        {text: this.$t('devops.service.labels.name'), value: 'name'},
-        {text: this.$t('devops.service.labels.image'), value: 'image'},
+        { text: this.$t('devops.service.labels.environment'), value: 'environment' },
+        { text: this.$t('devops.service.labels.stack'), value: 'stack' },
+        { text: this.$t('devops.service.labels.serviceTemplate'), value: 'service' },
+        { text: this.$t('devops.service.labels.name'), value: 'name' },
+        { text: this.$t('devops.service.labels.image'), value: 'image' },
         //{text: this.$t('devops.service.labels.replicas'), value: 'replicas'},
+        { text: this.$t('devops.service.status'), value: 'status', sortable: false },
         //Actions
-        {text: 'deploy', value: 'deploy', sortable: false},
-        {text: this.$t('common.actions'), value: 'action', sortable: false},
+        { text: 'deploy', value: 'deploy', sortable: false },
+        { text: this.$t('common.actions'), value: 'action', sortable: false },
       ]
     },
     getOrderBy() {
@@ -184,14 +189,18 @@ export default {
       this.loading = true
 
       try {
-        const {items, totalItems} = (await EnvironmentServiceProvider.paginateEnvironmentService(
-            this.pageNumber,
-            this.itemsPerPage,
-            this.search,
-            this.filters,
-            this.getOrderBy,
-            this.getOrderDesc
+        const { items, totalItems } = (await EnvironmentServiceProvider.paginateEnvironmentService(
+          this.pageNumber,
+          this.itemsPerPage,
+          this.search,
+          this.filters,
+          this.getOrderBy,
+          this.getOrderDesc
         )).data.paginateEnvironmentService
+        
+        for (let index = 0; index < items.length; index++) {
+          items[index].status = (await DockerProvider.findDockerService(items[index].id)).data.findDockerService ? 'running' : 'inactive'
+        }
 
         this.items = items
         this.totalItems = totalItems
