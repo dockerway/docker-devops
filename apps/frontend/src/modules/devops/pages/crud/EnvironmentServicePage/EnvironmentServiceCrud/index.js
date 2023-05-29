@@ -1,3 +1,3 @@
-import EnvironmentServiceCrud from './EnvironmentServiceCrud'
+import EnvironmentServiceCrud from './EnvironmentServiceCrud.vue'
 export {EnvironmentServiceCrud}
 export default EnvironmentServiceCrud
