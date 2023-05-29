@@ -21,7 +21,7 @@
         :label="$t('devops.service.labels.containerVolume')"
         :placeholder="$t('devops.service.labels.containerVolume')"
         color="secondary"
-        :rules="linuxDirectoryRules"
+        :rules="volumesRules"
     ></v-text-field>
   </v-col>
 
@@ -34,7 +34,7 @@ export default {
   data() {
     return {
       rules: [ v => this.regexPaths.test(v) || 'Expresion regular requerida: '+ this.regexPaths.toString() ],
-      linuxDirectoryRules: [path => this.isAValidLinuxDirectory(path)]
+      volumesRules: [path => this.isAValidVolume(path)]
     }
   },
   props: {
@@ -65,13 +65,28 @@ export default {
     isAValidLinuxDirectory(path) {
       try {
         /* eslint-disable no-useless-escape */
-        const linuxDirectoryRegex = new RegExp(/^\/(?:[a-zA-Z0-9_-]+\/)*(?![\/])[a-zA-Z0-9_-]+$/)
+        const linuxDirectoryRegex = new RegExp(this.$store.getters.getSettingValue("regexPaths"), 'i')
 
         return linuxDirectoryRegex.test(path) ? true : 'Debe ser un nombre de directorio Linux valido que NO finalice con un "/"'
       } catch (error) {
-        console.error('An error happened when we tried to check if a path was a valid linux directory name')
+        console.error(`An error happened when we tried to check if a path was a valid linux directory name: '${error.message}'`)
         throw error
       }
+    },
+    isAValidFilename(path){
+      try {
+        const filenameRegex = new RegExp(this.$store.getters.getSettingValue("regexFileAbsolutePath"), 'i')
+
+        return filenameRegex.test(path) ? true : 'Debe ser un path absoluto correspondiente a un fichero linux valido'
+      } catch (error) {
+        console.error(`An error happened when we tried to check if a filename was valid: '${error.message}'`)
+        throw error
+      }
+    },
+    isAValidVolume(path){
+      const userInputIsAValidAbsolutePath = this.isAValidFilename(path)
+      
+      return userInputIsAValidAbsolutePath ? userInputIsAValidAbsolutePath : this.isAValidLinuxDirectory(path)
     }
   },
 }
