@@ -180,28 +180,34 @@ async function createFolders(verifiedFolders, headers, createFoldersURL){
 }
 
 function normalizeEnvironmentServiceData(fullServiceName, environmentService, targetImage){
-    const limits = {
-        memoryReservation: parseFloat(environmentService.limits.memoryReservation * 1048576),
-        memoryLimit: parseFloat(environmentService.limits.memoryLimit * 1048576),
-        CPUReservation: parseFloat(environmentService.limits.CPUReservation * 1000000000),
-        CPULimit: parseFloat(environmentService.limits.CPULimit * 1000000000)
+    try {
+        const limits = {
+            memoryReservation: environmentService.limits.memoryReservation ? parseFloat(environmentService.limits.memoryReservation * 1048576) : null,
+            memoryLimit: environmentService.limits.memoryLimit ? parseFloat(environmentService.limits.memoryLimit * 1048576) : null,
+            CPUReservation: environmentService.limits.CPUReservation ? parseFloat(environmentService.limits.CPUReservation * 1000000000) : null,
+            CPULimit: environmentService.limits.CPULimit ? parseFloat(environmentService.limits.CPULimit * 1000000000) : null
+        }
+
+        return {
+            name: fullServiceName,
+            stack: environmentService.stack.name,
+            image: targetImage ? targetImage : environmentService.image,
+            replicas: environmentService.replicas,
+            volumes: environmentService.volumes ? environmentService.volumes : [],
+            ports: environmentService.ports ? environmentService.ports : [],
+            envs: environmentService.envs ? environmentService.envs : [],
+            labels: environmentService.labels ? environmentService.labels : [],
+            constraints: environmentService.constraints ? environmentService.constraints : [],
+            limits: environmentService.limits ? limits : {},
+            preferences: environmentService.preferences ? environmentService.preferences : [],
+            networks: environmentService.networks ? environmentService.networks : [],
+            command: environmentService.command
+        }        
+    } catch (error) {
+        console.error(`An error happened at the normalizeEnvironmentServiceData function: '${error.message}'`)
+        throw error
     }
 
-    return {
-        name: fullServiceName,
-        stack: environmentService.stack.name,
-        image: targetImage ? targetImage : environmentService.image,
-        replicas: environmentService.replicas,
-        volumes: environmentService.volumes ? environmentService.volumes : [],
-        ports: environmentService.ports ? environmentService.ports : [],
-        envs: environmentService.envs ? environmentService.envs : [],
-        labels: environmentService.labels ? environmentService.labels : [],
-        constraints: environmentService.constraints ? environmentService.constraints : [],
-        limits: environmentService.limits ? limits : {},
-        preferences: environmentService.preferences ? environmentService.preferences : [],
-        networks: environmentService.networks ? environmentService.networks : [],
-        command: environmentService.command
-    }
 }
 
 export const createDockerService = async function (authUser, id, targetImage) {
