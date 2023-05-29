@@ -24,6 +24,13 @@ const settings = [
         type: 'string',
         group: 'Devops',
         label: {en: 'File name regular expression', es: 'Nombre del archivo Expresión regular de rutas', pt: 'Nombre del archivo Expressão regular de rotas'}
+    },
+    {
+        key: 'regexFileAbsolutePath',
+        value: '^\/(?:[\w.-]+\/)*[\w.-]+$',
+        type: 'string',
+        group: 'Devops',
+        label: {en: 'Regular expression for a linux file absolute path', es: 'Regex para paths absolutos de ficheros linux', pt: 'Regex para paths absolutos de ficheros linux'}
     }
 ]
 

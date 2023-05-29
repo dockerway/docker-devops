@@ -125,7 +125,7 @@ export default {
       loading: false,
       orderBy: null,
       orderDesc: false,
-      itemsPerPage: 25,
+      itemsPerPage: 10,
       pageNumber: 1,
       search: '',
       filters: [
