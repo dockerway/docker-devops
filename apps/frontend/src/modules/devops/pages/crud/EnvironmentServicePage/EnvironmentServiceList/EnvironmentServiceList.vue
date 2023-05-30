@@ -199,7 +199,13 @@ export default {
         )).data.paginateEnvironmentService
         
         for (let index = 0; index < items.length; index++) {
-          items[index].status = (await DockerProvider.findDockerService(items[index].id)).data.findDockerService ? 'running' : 'inactive'
+          const dockerService = (await DockerProvider.findDockerService(items[index].id)).data.findDockerService
+          
+          if (dockerService && dockerService.id) {
+            items[index].status = 'running'
+          }else{
+            items[index].status = 'inactive'
+          }
         }
 
         this.items = items
