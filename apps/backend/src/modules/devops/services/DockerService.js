@@ -133,20 +133,15 @@ async function getDockerApiConfig(id) {
     }
 }
 
-function createVerifiedFolders(environmentService) {
+function getHostVolumes(environmentServiceVolumes) {
     try {
-        if (environmentService.volumes) {
-
-            console.log('environmentService.volumes: ', environmentService.volumes)
-            const verifiedVolumes = environmentService.volumes.map( volume => volume.hostVolume )
-            console.log('verifiedVolumes: ', verifiedVolumes)
-
-            return verifiedVolumes
+        if (environmentServiceVolumes && Array.isArray(environmentServiceVolumes)) {
+            return environmentServiceVolumes.map( volume => volume.hostVolume )
         }else{
-            throw new Error('The createVerifiedFolders functions needs an environment service as a parameter!')
+            return []
         }
     } catch (error) {
-        console.error(`An error happened at the createVerifiedFolders function: '${error}'`)
+        console.error(`An error happened at the getHostVolumes function: '${error}'`)
         throw error
     }
 }
@@ -213,12 +208,12 @@ function normalizeEnvironmentServiceData(fullServiceName, environmentService, ta
 export const createDockerService = async function (authUser, id, targetImage) {
     try {
         const { environmentService, dockerApiUrl, headers, createFoldersURL } = await getDockerApiConfig(id)
-        const verifiedFolders = createVerifiedFolders(environmentService)
+        const hostVolumes = getHostVolumes(environmentService.volumes)
         const filesURL = dockerApiUrl + '/api/docker/files'
 
         if (! await canUserDeploy(authUser, environmentService.environment.type)) throw new Error("El usuario no tiene permiso para desplegar este servicio")
         
-        if (verifiedFolders.length > 0) await createFolders(verifiedFolders, headers, createFoldersURL)
+        if (hostVolumes.length > 0) await createFolders(hostVolumes, headers, createFoldersURL)
         if (environmentService.files) await sendFilesToFortes(environmentService, headers, filesURL)
 
         //ELIMINA DUPLICADOS
@@ -249,14 +244,19 @@ export const createDockerService = async function (authUser, id, targetImage) {
 export const updateDockerService = async function (id, targetImage = null, user) {
     try {
         const { environmentService, dockerApiUrl, headers, createFoldersURL } = await getDockerApiConfig(id)
-        const verifiedFolders = createVerifiedFolders(environmentService)
+
+        environmentService.image = targetImage
+        await environmentService.save()
+
+        const hostVolumes = getHostVolumes(environmentService.volumes)
         const filesURL = dockerApiUrl + '/api/docker/files'
         const dockerService = await findDockerService(id)
 
         if (! await canUserDeploy(user, environmentService.environment.type)) throw new Error("El usuario no tiene permiso para actualizar este servicio")
         if (!dockerService) throw new Error("DockerService not found. ID:" + id)
 
-        if (verifiedFolders.length > 0) await createFolders(verifiedFolders, headers, createFoldersURL)
+
+        if (hostVolumes.length > 0) await createFolders(hostVolumes, headers, createFoldersURL)
         if (environmentService.files) await sendFilesToFortes(environmentService, headers, filesURL)
 
         //ELIMINA DUPLICADOS
@@ -271,11 +271,6 @@ export const updateDockerService = async function (id, targetImage = null, user)
         const response = await axios.put(URL, data, headers)
 
         if (response.status == 200) {
-            if (response?.data?.image?.fullname) {
-                environmentService.image = response?.data?.image?.fullname
-                await environmentService.save()
-            }
-
             await createAudit(user, { user: user.id, action: 'Update docker service', resource: `${data.name}` })
             return response.data
         } else {
