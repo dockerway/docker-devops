@@ -115,7 +115,7 @@ import {
 } from '../../modules/devops/permissions/Restore'
 
 module.exports = {
-    name: "Sudo",
+    name: "sudo",
     permissions: [
         RESTORE_SYSTEM,
         AUDIT_SHOW,
