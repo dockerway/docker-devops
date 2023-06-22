@@ -13,9 +13,8 @@ export const findDockerServiceTag = async function (id) {
         const dockerApiUrl = environmentService.environment.dockerApiUrl
 
         const serviceName = environmentService.name ? environmentService.name : environmentService.service.name
-        const fullServiceName = environmentService.stack.name + "_" + serviceName
 
-        const path = '/api/docker/service/' + fullServiceName + '/tag'
+        const path = '/api/docker/service/' + serviceName + '/tag'
         const URL = dockerApiUrl + path
 
         const headers = { headers: { 'Authorization': `Bearer ${token}` } }
@@ -40,9 +39,7 @@ export const findDockerServiceStats = async function (id) {
         const dockerApiUrl = environmentService.environment.dockerApiUrl
 
         const serviceName = environmentService.name ? environmentService.name : environmentService.service.name
-        const fullServiceName = environmentService.stack.name + "_" + serviceName
-
-        const path = '/api/docker/service/' + fullServiceName + '/stats'
+        const path = '/api/docker/service/' + serviceName + '/stats'
         const URL = dockerApiUrl + path
 
         const headers = { headers: { 'Authorization': `Bearer ${token}` } }
@@ -68,9 +65,8 @@ export const findDockerService = async function (id) {
         const dockerApiUrl = environmentService.environment.dockerApiUrl
 
         const serviceName = environmentService.name ? environmentService.name : environmentService.service.name
-        const fullServiceName = environmentService.stack.name + "_" + serviceName
 
-        const path = '/api/docker/service/' + fullServiceName
+        const path = '/api/docker/service/' + serviceName
         const URL = dockerApiUrl + path
 
         const headers = { headers: { 'Authorization': `Bearer ${token}` } }
@@ -174,7 +170,7 @@ async function createFolders(verifiedFolders, headers, createFoldersURL){
     }
 }
 
-function normalizeEnvironmentServiceData(fullServiceName, environmentService, targetImage){
+function normalizeEnvironmentServiceData(serviceName, environmentService, targetImage){
     try {
         const limits = {
             memoryReservation: environmentService.limits.memoryReservation ? parseFloat(environmentService.limits.memoryReservation * 1048576) : null,
@@ -184,7 +180,7 @@ function normalizeEnvironmentServiceData(fullServiceName, environmentService, ta
         }
 
         return {
-            name: fullServiceName,
+            name: serviceName,
             stack: environmentService.stack.name,
             image: targetImage ? targetImage : environmentService.image,
             replicas: environmentService.replicas,
@@ -219,16 +215,15 @@ export const createDockerService = async function (authUser, id, targetImage) {
         //ELIMINA DUPLICADOS
         environmentService.volumes = [...new Set(environmentService.volumes.map(a => JSON.stringify({ hostVolume: a.hostVolume, containerVolume: a.containerVolume })))].map(a => JSON.parse(a))
 
+        console.log(`environmentService: ${JSON.stringify(environmentService, null, 2)}`)
         const serviceName = environmentService.name ? environmentService.name : environmentService.service.name
-        const fullServiceName = environmentService.stack.name + "_" + serviceName
-
-        const data = normalizeEnvironmentServiceData(fullServiceName, environmentService, targetImage)
+        const serviceData = normalizeEnvironmentServiceData(serviceName, environmentService, targetImage)
 
         const URL = dockerApiUrl + '/api/docker/service'
-        const response = await axios.post(URL, data, headers);
+        const response = await axios.post(URL, serviceData, headers);
 
         if (response.status == 200) {
-            await createAudit(authUser, { user: authUser.id, action: 'Deploy docker service', resource: data.name, description: JSON.stringify(data) })
+            await createAudit(authUser, { user: authUser.id, action: 'Deploy docker service', resource: serviceData.name, description: JSON.stringify(serviceData) })
             return response.data
         } else {
             throw new Error(response);
@@ -263,15 +258,13 @@ export const updateDockerService = async function (id, targetImage = null, user)
         environmentService.volumes = [...new Set(environmentService.volumes.map(a => JSON.stringify({ hostVolume: a.hostVolume, containerVolume: a.containerVolume })))].map(a => JSON.parse(a))
 
         const serviceName = environmentService.name ? environmentService.name : environmentService.service.name
-        const fullServiceName = environmentService.stack.name + "_" + serviceName
-
-        const data = normalizeEnvironmentServiceData(fullServiceName, environmentService, targetImage)
+        const serviceData = normalizeEnvironmentServiceData(serviceName, environmentService, targetImage)
 
         const URL = dockerApiUrl + '/api/docker/service/' + dockerService.id
-        const response = await axios.put(URL, data, headers)
+        const response = await axios.put(URL, serviceData, headers)
 
         if (response.status == 200) {
-            await createAudit(user, { user: user.id, action: 'Update docker service', resource: `${data.name}` })
+            await createAudit(user, { user: user.id, action: 'Update docker service', resource: `${serviceData.name}` })
             return response.data
         } else {
             throw new Error(response)
