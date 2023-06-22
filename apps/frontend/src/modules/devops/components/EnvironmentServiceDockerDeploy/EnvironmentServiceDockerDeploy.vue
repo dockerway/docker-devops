@@ -35,6 +35,16 @@
         @click="createDockerService">DEPLOY</v-btn>
     </v-card-actions>
 
+    <v-alert
+      v-model="differenceAlert"
+      v-if="differenceMessage"
+      type="warning"
+      dismissible
+      dense
+      text
+      >
+      {{differenceMessage}}
+    </v-alert>
 
   </simple-dialog>
 </template>
@@ -45,6 +55,9 @@ import DockerProvider from "@/modules/devops/providers/DockerProvider";
 import EnvironmentServiceShowData
   from "@/modules/devops/pages/crud/EnvironmentServicePage/EnvironmentServiceShow/EnvironmentServiceShowData";
 import ImageTagCombobox from "@/modules/registry/components/ImageTagCombobox/ImageTagCombobox";
+import ServiceTemplateComparer from "../../../../helpers/ServiceTemplateComparer"
+import ServiceProvider from "../../providers/ServiceProvider";
+import EnvironmentServiceProvider from "../../providers/EnvironmentServiceProvider";
 
 export default {
   name: "EnvironmentServiceDockerDeploy",
@@ -61,7 +74,9 @@ export default {
       envServiceDeployed: null,
       errors: [],
       targetImage: this.envService?.service?.image,
-      buttonDisabledValue: true
+      buttonDisabledValue: true,
+      differenceAlert: false,
+      differenceMessage: '',
     }
   },
   computed: {
@@ -87,6 +102,9 @@ export default {
   },
   created() {
     this.findDockerService()
+  },
+  mounted(){
+    this.getDifferencesBetweenServiceAndTemplate()
   },
   methods: {
     async findDockerService() {
@@ -146,7 +164,22 @@ export default {
       } finally {
         this.loading = false
       }
+    },
+    async getDifferencesBetweenServiceAndTemplate() {
+      try {
+      const serviceTemplate = (await ServiceProvider.findService(this.envService.service.id)).data.findService
+      const service = (await EnvironmentServiceProvider.findEnvironmentService(this.envService.id)).data.findEnvironmentService     
+
+      const serviceTemplateComparer = new ServiceTemplateComparer(serviceTemplate, service)
+      if (serviceTemplateComparer.serviceIsDifferent){
+        this.differenceAlert = true
+        this.differenceMessage = serviceTemplateComparer.differencesText
+      }
+
+    } catch (error) {
+      console.error(`An error happened at the getDifferencesBetweenServiceAndTemplate method: ${error.message ? error.message : error}`)
     }
+    },
   },
   watch: {
     targetImage(newValue) {
