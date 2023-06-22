@@ -73,9 +73,6 @@ export default {
         try {
           this.loading = true
 
-          console.log(`this.form: ${JSON.stringify(this.form, null, 2)}`)
-          console.log(`this.form: ${this.form}`)
-
           const updatedItem = (await EnvironmentServiceProvider.updateEnvironmentService(this.id, this.form)).data.updateEnvironmentService
           this.$emit('itemUpdated', updatedItem)
           this.$emit('close')
