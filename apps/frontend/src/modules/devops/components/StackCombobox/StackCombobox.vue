@@ -42,7 +42,7 @@ export default {
     chips: {type: Boolean, default: false},
     readonly: {type: Boolean, default: false},
     disabled: {type: Boolean, default: false},
-    isRequired: {type: Boolean, default: true},
+    isRequired: {type: Boolean, default: false},
     clearable: {type: Boolean, default: false},
     hideDetails: {type: Boolean, default: false},
     width: {type: String, default: null},
