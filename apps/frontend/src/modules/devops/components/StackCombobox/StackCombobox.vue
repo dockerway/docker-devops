@@ -27,7 +27,7 @@
 
 <script>
 
-import {InputErrorsByProps, RequiredRule} from '@dracul/common-frontend'
+import { InputErrorsByProps, RequiredRule } from '@dracul/common-frontend'
 
 
 import StackProvider from "../../providers/StackProvider"
@@ -36,17 +36,17 @@ export default {
   name: "StackCombobox",
   mixins: [InputErrorsByProps, RequiredRule],
   props: {
-    value: {type: [String, Array]},
-    multiple: {type: Boolean, default: false},
-    solo: {type: Boolean, default: false},
-    chips: {type: Boolean, default: false},
-    readonly: {type: Boolean, default: false},
-    disabled: {type: Boolean, default: false},
-    isRequired: {type: Boolean, default: true},
-    clearable: {type: Boolean, default: false},
-    hideDetails: {type: Boolean, default: false},
-    width: {type: String, default: null},
-    returnObject: {type: Boolean, default: false},
+    value: { type: [String, Array] },
+    multiple: { type: Boolean, default: false },
+    solo: { type: Boolean, default: false },
+    chips: { type: Boolean, default: false },
+    readonly: { type: Boolean, default: false },
+    disabled: { type: Boolean, default: false },
+    isRequired: { type: Boolean, default: false },
+    clearable: { type: Boolean, default: false },
+    hideDetails: { type: Boolean, default: false },
+    width: { type: String, default: null },
+    returnObject: { type: Boolean, default: false },
   },
   data() {
     return {
@@ -65,23 +65,42 @@ export default {
       }
     }
   },
-  mounted() {
-    this.fetch()
+  async mounted() {
+    await this.fetch()
   },
   methods: {
     validate() {
       return this.$refs.form.validate()
     },
-    fetch() {
+    async fetch() {
       this.loading = true
-      StackProvider.fetchStack().then(r => {
-        this.items = r.data.fetchStack
-      }).catch(err => console.error(err))
-          .finally(() => this.loading = false)
+
+      try {
+        this.items = (await StackProvider.fetchStack()).data.fetchStack
+        this.sortItemsByName()
+      } catch (error) {
+        console.error(`An error happened at the fetch method: '${error.message ? error.message : error}'`)
+      }finally{
+        this.loading = false
+      }
     },
-    setPlatformStacks(platform){
+    setPlatformStacks(platform) {
       let stacks = this.items.filter(s => (s.platform && s.platform.id == platform))
       this.item = stacks
+    },
+    sortItemsByName() {
+      this.items.sort((itemA, itemB) => {
+        const nameA = itemA.name.toLowerCase()
+        const nameB = itemB.name.toLowerCase()
+
+        if (nameA < nameB) {
+          return -1
+        } else if (nameA > nameB) {
+          return 1
+        } else {
+          return 0
+        }
+      })
     }
 
   }

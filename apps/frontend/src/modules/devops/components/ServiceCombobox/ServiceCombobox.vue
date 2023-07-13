@@ -25,7 +25,7 @@
 
 <script>
 
-import {InputErrorsByProps, RequiredRule} from '@dracul/common-frontend'
+import { InputErrorsByProps, RequiredRule } from '@dracul/common-frontend'
 
 
 import ServiceProvider from "../../providers/ServiceProvider"
@@ -34,15 +34,15 @@ export default {
   name: "ServiceCombobox",
   mixins: [InputErrorsByProps, RequiredRule],
   props: {
-    value: {type: [String, Array]},
-    multiple: {type: Boolean, default: false},
-    solo: {type: Boolean, default: false},
-    chips: {type: Boolean, default: false},
-    readonly: {type: Boolean, default: false},
-    disabled: {type: Boolean, default: false},
-    isRequired: {type: Boolean, default: true},
-    clearable: {type: Boolean, default: false},
-    returnObject: {type: Boolean, default: false},
+    value: { type: [String, Array] },
+    multiple: { type: Boolean, default: false },
+    solo: { type: Boolean, default: false },
+    chips: { type: Boolean, default: false },
+    readonly: { type: Boolean, default: false },
+    disabled: { type: Boolean, default: false },
+    isRequired: { type: Boolean, default: true },
+    clearable: { type: Boolean, default: false },
+    returnObject: { type: Boolean, default: false },
   },
   data() {
     return {
@@ -58,9 +58,9 @@ export default {
       set(val) {
         this.$emit('image', val.image)
 
-        if(this.returnObject){
+        if (this.returnObject) {
           this.$emit('input', val)
-        }else{
+        } else {
           this.$emit('input', val.id)
         }
 
@@ -78,11 +78,27 @@ export default {
       try {
         this.loading = true
         this.items = (await ServiceProvider.fetchService()).data.fetchService
+        this.sortItemsByName()
       } catch (error) {
         console.error(`An error happened when we tried to fetch Services`)
-      }finally{
+      } finally {
         this.loading = false
       }
+    },
+
+    sortItemsByName() {
+      this.items.sort((itemA, itemB) => {
+        const nameA = itemA.name.toLowerCase()
+        const nameB = itemB.name.toLowerCase()
+
+        if (nameA < nameB) {
+          return -1
+        } else if (nameA > nameB) {
+          return 1
+        } else {
+          return 0
+        }
+      })
     }
 
   }
