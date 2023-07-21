@@ -12,22 +12,29 @@ export const findDockerServiceTag = async function (id) {
         const token = environmentService.environment.dockerApiToken
         const dockerApiUrl = environmentService.environment.dockerApiUrl
 
-        const serviceName = environmentService.name ? environmentService.name : environmentService.service.name
+        const environmentServiceName = environmentService.name ? environmentService.name : environmentService.service.name
 
-        const path = '/api/docker/service/' + serviceName + '/tag'
-        const URL = dockerApiUrl + path
+        const path = (serviceName) => '/api/docker/service/' + serviceName + '/tag'
+        const URL = (serviceName) => dockerApiUrl + path(serviceName)
 
         const headers = { headers: { 'Authorization': `Bearer ${token}` } }
-        const response = await axios.get(URL, headers)
+        const response = await axios.get(URL(environmentServiceName), headers).catch(async (error) => {
+            if (error?.response?.status == 500){
+                const serviceNameWithStackNamePrefix = environmentService.stack.name + "_" + environmentServiceName
+                const newUrl = URL(serviceNameWithStackNamePrefix)
 
-        if (response.status == 200) {
-            return response.data
-        } else {
-            throw new Error(response)
-        }
+                console.log(`Trying to search the tag with the old way of naming services: ${serviceNameWithStackNamePrefix} | ${newUrl}`)
+                const newResponse = await axios.get(newUrl, headers)
+        
+                return newResponse
+            }
+        })
+
+        if (response && response.status == 200) return response.data
 
     } catch (error) {
-        const message = error.message + ". " + (error.response?.data ? error.response.data : '');
+        console.error(`An error happened at the findDockerServiceTag function: ${error.message ? error.message : error} `)
+        const message = error.message + ". " + (error.response?.data ? error.response.data : '')
         throw new Error(message)
     }
 }
@@ -76,7 +83,7 @@ export const findDockerService = async function (id) {
 
         if (response.status == 200) {
             return response.data
-        }else{
+        } else {
             throw new Error(response)
         }
 
@@ -132,8 +139,8 @@ async function getDockerApiConfig(id) {
 function getHostVolumes(environmentServiceVolumes) {
     try {
         if (environmentServiceVolumes && Array.isArray(environmentServiceVolumes)) {
-            return environmentServiceVolumes.map( volume => volume.hostVolume )
-        }else{
+            return environmentServiceVolumes.map(volume => volume.hostVolume)
+        } else {
             return []
         }
     } catch (error) {
@@ -146,7 +153,7 @@ function getHostVolumes(environmentServiceVolumes) {
 async function sendFilesToFortes(environmentService, headers, filesURL) {
     try {
         const createFiles = await axios.post(filesURL, environmentService.files, headers)
-        if(createFiles.data === notMountedMessage) throw new Error(notMountedMessage)
+        if (createFiles.data === notMountedMessage) throw new Error(notMountedMessage)
 
         environmentService.volumes = [...environmentService.volumes, ...environmentService.files.map(file => {
             return {
@@ -158,19 +165,19 @@ async function sendFilesToFortes(environmentService, headers, filesURL) {
         if (error.message != notMountedMessage) console.error(`An error happened at sendFilesToFortes: '${error}'`)
         throw error
     }
-}  
+}
 
-async function createFolders(verifiedFolders, headers, createFoldersURL){    
+async function createFolders(verifiedFolders, headers, createFoldersURL) {
     try {
         const createFolder = await axios.post(createFoldersURL, verifiedFolders, headers)
-        if(createFolder.data === notMountedMessage) throw new Error(notMountedMessage)
+        if (createFolder.data === notMountedMessage) throw new Error(notMountedMessage)
     } catch (error) {
         if (error.message != notMountedMessage) console.error(`An error happened at the createFolders function: ${error}`)
         throw error
     }
 }
 
-function normalizeEnvironmentServiceData(serviceName, environmentService, targetImage){
+function normalizeEnvironmentServiceData(serviceName, environmentService, targetImage) {
     try {
         const limits = {
             memoryReservation: environmentService.limits.memoryReservation ? parseFloat(environmentService.limits.memoryReservation * 1048576) : null,
@@ -193,7 +200,7 @@ function normalizeEnvironmentServiceData(serviceName, environmentService, target
             preferences: environmentService.preferences ? environmentService.preferences : [],
             networks: environmentService.networks ? environmentService.networks : [],
             command: environmentService.command
-        }        
+        }
     } catch (error) {
         console.error(`An error happened at the normalizeEnvironmentServiceData function: '${error.message}'`)
         throw error
@@ -208,7 +215,7 @@ export const createDockerService = async function (authUser, id, targetImage) {
         const filesURL = dockerApiUrl + '/api/docker/files'
 
         if (! await canUserDeploy(authUser, environmentService.environment.type)) throw new Error("El usuario no tiene permiso para desplegar este servicio")
-        
+
         if (hostVolumes.length > 0) await createFolders(hostVolumes, headers, createFoldersURL)
         if (environmentService.files) await sendFilesToFortes(environmentService, headers, filesURL)
 
