@@ -19,18 +19,20 @@ export const findDockerServiceTag = async function (id) {
 
         const headers = { headers: { 'Authorization': `Bearer ${token}` } }
         const response = await axios.get(URL(environmentServiceName), headers).catch(async (error) => {
-            if (error?.response?.status == 500){
+            if (error?.response?.status == 500) {
                 const serviceNameWithStackNamePrefix = environmentService.stack.name + "_" + environmentServiceName
                 const newUrl = URL(serviceNameWithStackNamePrefix)
 
                 console.log(`Trying to search the tag with the old way of naming services: ${serviceNameWithStackNamePrefix} | ${newUrl}`)
-                const newResponse = await axios.get(newUrl, headers)
-        
+                const newResponse = await axios.get(newUrl, headers).catch(() => {
+                    if (error?.response?.status == 500) return { data: 'El servicio no existe' }
+                })
+
                 return newResponse
             }
         })
 
-        if (response && response.status == 200) return response.data
+        if (response && response.status == 200 || response && response.data === 'El servicio no existe') return response.data
 
     } catch (error) {
         console.error(`An error happened at the findDockerServiceTag function: ${error.message ? error.message : error} `)

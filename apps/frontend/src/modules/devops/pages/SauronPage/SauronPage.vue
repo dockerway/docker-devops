@@ -80,6 +80,8 @@ import ServiceProvider from "@/modules/devops/providers/ServiceProvider";
 import PlatformCombobox from "@/modules/devops/components/PlatformCombobox/PlatformCombobox";
 import StackCombobox from "@/modules/devops/components/StackCombobox/StackCombobox";
 
+const noEnvServiceMessage = 'El servicio no existe'
+
 export default {
   name: "SauronPage",
   components: { StackCombobox, PlatformCombobox },
@@ -115,32 +117,32 @@ export default {
     },
     getTag() {
       return (environment, stack, service) => {
-        let environmentService = this.getEnvironmentService(environment, stack, service)
-        return environmentService ? environmentService.tag : '---'
+        const environmentService = this.getEnvironmentService(environment, stack, service)
+        return environmentService ? environmentService.tag : noEnvServiceMessage
       }
     },
     getState() {
       return (environment, stack, service) => {
-        let environmentService = this.getEnvironmentService(environment, stack, service)
-        return environmentService ? environmentService.state : 'DOWN'
+        const environmentService = this.getEnvironmentService(environment, stack, service)
+        return environmentService ? environmentService.state : noEnvServiceMessage
       }
     },
     getCpu() {
       return (environment, stack, service) => {
-        let environmentService = this.getEnvironmentService(environment, stack, service)
-        return environmentService ? environmentService.cpu : '***'
+        const environmentService = this.getEnvironmentService(environment, stack, service)
+        return environmentService ? environmentService.cpu : noEnvServiceMessage
       }
     },
     getMemory() {
       return (environment, stack, service) => {
-        let environmentService = this.getEnvironmentService(environment, stack, service)
-        return environmentService ? environmentService.memory : '***'
+        const environmentService = this.getEnvironmentService(environment, stack, service)
+        return environmentService ? environmentService.memory : noEnvServiceMessage
       }
     },
     getStats() {
       return (environment, stack, service) => {
-        let environmentService = this.getEnvironmentService(environment, stack, service)
-        return environmentService ? environmentService.stats : '***'
+        const environmentService = this.getEnvironmentService(environment, stack, service)
+        return environmentService ? environmentService.stats : noEnvServiceMessage
       }
     },
     getServices() {
