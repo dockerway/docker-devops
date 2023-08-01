@@ -47,20 +47,26 @@ export const findDockerServiceStats = async function (id) {
         const token = environmentService.environment.dockerApiToken
         const dockerApiUrl = environmentService.environment.dockerApiUrl
 
-        const serviceName = environmentService.name ? environmentService.name : environmentService.service.name
-        const path = '/api/docker/service/' + serviceName + '/stats'
-        const URL = dockerApiUrl + path
+        const environmentServiceName = environmentService.name ? environmentService.name : environmentService.service.name
+
+        const path = (serviceName) => '/api/docker/service/' + serviceName + '/stats'
+        const URL = (serviceName) => dockerApiUrl + path(serviceName)
 
         const headers = { headers: { 'Authorization': `Bearer ${token}` } }
-        const response = await axios.get(URL, headers)
+        const response = await axios.get(URL(environmentServiceName), headers).catch(async (error) => {
+            if (error?.response?.status == 500) {
+                const serviceNameWithStackNamePrefix = environmentService.stack.name + "_" + environmentServiceName
+                const newUrl = URL(serviceNameWithStackNamePrefix)
 
-        if (response.status == 200) {
-            return response.data
-        } else {
-            throw new Error(response)
-        }
+                console.log(`Trying to search the stats with the old way of naming services: ${serviceNameWithStackNamePrefix} | ${newUrl}`)
+                const newResponse = await axios.get(newUrl, headers).catch(() => {
+                    if (error?.response?.status == 500) return { data: [] }
+                })
+                return newResponse
+            }
+        })
 
-
+        if (response && response.status == 200 || response && response.data) return response.data
     } catch (error) {
         const message = error.message + ". " + (error.response?.data ? error.response.data : '')
         throw new Error(message)
