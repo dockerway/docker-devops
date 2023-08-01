@@ -32,18 +32,9 @@ export const startDiscovery = async function (environmentId) {
             console.log("dockerServices found", dockerServices.length)
 
             for (const dockerService of dockerServices) {
-                let name
-
-                if (dockerService.stack) {
-                    name = dockerService.name.replace(dockerService.stack, "")
-                } else if (dockerService.stack && name[0] === "_") {
-                    name = name.substring(1)
-                } else {
-                    name = dockerService.name
-                }
 
                 const serviceDiscovered = {
-                    name: name,
+                    name: dockerService.name,
                     imageName: dockerService?.image?.name,
                     namespace: dockerService?.image?.namespace,
                     stack: dockerService?.stack,
@@ -89,6 +80,7 @@ export const startDiscovery = async function (environmentId) {
 
         return { servicesDiscovered }
     } catch (error) {
+        console.error(`An error happened at the startDiscovery function: ${error.message ? error.message : error}`)
         throw error
     }
 }
@@ -233,8 +225,9 @@ export const createDiscovery = async function (servicesDiscovered, user) {
             stacksCreated,
             environmentServicesCreated
         }
-        
+
     } catch (error) {
+        console.error(`An error happened at the createDiscovery function: ${error.message ? error.message : error}`)
         throw error
     }
 }
