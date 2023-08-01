@@ -3,66 +3,62 @@
 
     <v-card>
       <v-toolbar tile elevation="1">
-        <v-select v-model="mode" label="mode" hide-details :items="['tag','state','cpu','memory']"/>
+        <v-select v-model="mode" label="mode" hide-details :items="['tag', 'state', 'cpu', 'memory']" />
 
         <v-spacer></v-spacer>
 
-        <platform-combobox
-            v-model="platform" hide-details clearable
-            width="250px" @input="setPlatformStacks"
-        ></platform-combobox>
-        <stack-combobox
-            v-model="stacks" hide-details clearable multiple
-            chips ref="stackCombo" return-object
-        ></stack-combobox>
+        <platform-combobox v-model="platform" hide-details clearable width="250px"
+          @input="setPlatformStacks"></platform-combobox>
+        <stack-combobox v-model="stacks" hide-details clearable multiple chips ref="stackCombo"
+          return-object></stack-combobox>
       </v-toolbar>
       <v-card-text>
         <v-simple-table dense v-if="platform && stacks && stacks.length > 0">
           <thead>
-          <tr>
-            <th></th>
-            <template v-for="environment in environments">
-              <th v-for="stack in getEnvStacks(environment)" :key="environment.id+stack.id" class="text-center">
-                {{ environment.name }}<br>{{ stack.name }}
-              </th>
+            <tr>
+              <th></th>
+              <template v-for="environment in environments">
+                <th v-for="stack in getEnvStacks(environment)" :key="environment.id + stack.id" class="text-center">
+                  {{ environment.name }}<br>{{ stack.name }}
+                </th>
 
-            </template>
-          </tr>
+              </template>
+            </tr>
           </thead>
 
           <tbody>
 
-          <tr v-for="service in getServices" :key="service.id">
-            <td>{{ service.name }}</td>
+            <tr v-for="service in getServices" :key="service.id">
+              <td>{{ service.name }}</td>
 
-            <template v-for="environment in environments">
-              <td v-for="stack in getEnvStacks(environment)" :key="environment.id+stack.id" class="text-center">
+              <template v-for="environment in environments">
+                <td v-for="stack in getEnvStacks(environment)" :key="environment.id + stack.id" class="text-center">
 
-                <template v-if="mode==='tag'">
-                  {{ getTag(environment, stack, service) }}
-                </template>
+                  <template v-if="mode === 'tag'">
+                    {{ getTag(environment, stack, service) }}
+                  </template>
 
-                <template v-if="mode==='state'">
-                  {{ getState(environment, stack, service) }}
-                </template>
+                  <template v-if="mode === 'state'">
+                    {{ getState(environment, stack, service) }}
+                  </template>
 
-                <template v-if="mode==='cpu'">
-                  {{ getCpu(environment, stack, service) }}
-                </template>
+                  <template v-if="mode === 'cpu'">
+                    {{ getCpu(environment, stack, service) }}
+                  </template>
 
-                <template v-if="mode==='memory'">
-                  {{ getMemory(environment, stack, service) }}
-                </template>
+                  <template v-if="mode === 'memory'">
+                    {{ getMemory(environment, stack, service) }}
+                  </template>
 
-                <template v-if="mode==='stats'">
-                  {{ getStats(environment, stack, service) }}
-                </template>
+                  <template v-if="mode === 'stats'">
+                    {{ getStats(environment, stack, service) }}
+                  </template>
 
 
-              </td>
-            </template>
+                </td>
+              </template>
 
-          </tr>
+            </tr>
 
           </tbody>
         </v-simple-table>
@@ -84,9 +80,11 @@ import ServiceProvider from "@/modules/devops/providers/ServiceProvider";
 import PlatformCombobox from "@/modules/devops/components/PlatformCombobox/PlatformCombobox";
 import StackCombobox from "@/modules/devops/components/StackCombobox/StackCombobox";
 
+const noEnvServiceMessage = 'El servicio no existe'
+
 export default {
   name: "SauronPage",
-  components: {StackCombobox, PlatformCombobox},
+  components: { StackCombobox, PlatformCombobox },
   data() {
     return {
       envServices: [],
@@ -109,42 +107,42 @@ export default {
     getEnvironmentService() {
       return (environment, stack, service) => {
         return this.envServices.find(
-            item => (
-                item.environment.id === environment.id &&
-                item.stack.id === stack.id &&
-                item.service.id === service.id
-            )
+          item => (
+            item.environment.id === environment.id &&
+            item.stack.id === stack.id &&
+            item.service.id === service.id
+          )
         )
       }
     },
     getTag() {
       return (environment, stack, service) => {
-        let environmentService = this.getEnvironmentService(environment, stack, service)
-        return environmentService ? environmentService.tag : '---'
+        const environmentService = this.getEnvironmentService(environment, stack, service)
+        return environmentService ? environmentService.tag : noEnvServiceMessage
       }
     },
     getState() {
       return (environment, stack, service) => {
-        let environmentService = this.getEnvironmentService(environment, stack, service)
-        return environmentService ? environmentService.state : 'DOWN'
+        const environmentService = this.getEnvironmentService(environment, stack, service)
+        return environmentService ? environmentService.state : noEnvServiceMessage
       }
     },
     getCpu() {
       return (environment, stack, service) => {
-        let environmentService = this.getEnvironmentService(environment, stack, service)
-        return environmentService ? environmentService.cpu : '***'
+        const environmentService = this.getEnvironmentService(environment, stack, service)
+        return environmentService ? environmentService.cpu : noEnvServiceMessage
       }
     },
     getMemory() {
       return (environment, stack, service) => {
-        let environmentService = this.getEnvironmentService(environment, stack, service)
-        return environmentService ? environmentService.memory : '***'
+        const environmentService = this.getEnvironmentService(environment, stack, service)
+        return environmentService ? environmentService.memory : noEnvServiceMessage
       }
     },
     getStats() {
       return (environment, stack, service) => {
-        let environmentService = this.getEnvironmentService(environment, stack, service)
-        return environmentService ? environmentService.stats : '***'
+        const environmentService = this.getEnvironmentService(environment, stack, service)
+        return environmentService ? environmentService.stats : noEnvServiceMessage
       }
     },
     getServices() {
@@ -189,6 +187,7 @@ export default {
     },
     async findAllTags() {
       let timeout = 200
+
       for (let item of this.getEnvServices) {
         setTimeout(() => this.findServiceTag(item), timeout)
         timeout += 200
@@ -201,58 +200,61 @@ export default {
         timeout += 300
       }
     },
-    findServiceTag(item) {
-      return new Promise((resolve) => {
-        console.log("findServiceTag", item.name, item.stack)
-        DockerProvider.findDockerServiceTag(item.id)
-            .then(r => {
-              this.$set(item, 'tag', r.data.findDockerServiceTag)
-              resolve()
-            })
-            .catch(e => {
-              console.error("findServiceTag error:", e.graphQLErrors)
-              let m = (e.graphQLErrors && e.graphQLErrors.length > 0) ? e.graphQLErrors.reduce((a, v) => a + v.message.replace("Unexpected error value:", ""), '') : 'ERROR'
-              console.log("mensaje error", m)
-              this.$set(item, 'tag', m)
-              resolve()
-            })
-      })
+    async findServiceTag(item) {
+      console.log("Running findServiceTag", item.name, item.stack)
+
+      try {
+        const tag = (await DockerProvider.findDockerServiceTag(item.id)).data.findDockerServiceTag
+        this.$set(item, 'tag', tag)
+
+      } catch (error) {
+        let errorMessage = (error.graphQLErrors && error.graphQLErrors.length > 0) ? error.graphQLErrors.reduce((a, v) => a + v.message.replace("Unexpected error value:", ""), '') : 'ERROR'
+        this.$set(item, 'tag', errorMessage)
+
+        console.error(`An error happened at the findServiceTag function: ${errorMessage ? errorMessage : error.graphQLErrors}`)
+      }
     },
-    findServiceStats(item) {
-      return new Promise((resolve) => {
-        console.log("findServiceStat", item.name, item.stack)
-        DockerProvider.findDockerServiceStats(item.id)
-            .then(r => {
-              let result = r.data.findDockerServiceStats
-              this.setServiceState(item, result)
-              this.setServiceCpu(item, result)
-              this.setServiceMemory(item, result)
-              resolve()
-            })
-            .catch(e => {
-              console.error("findServiceStat error:", e.graphQLErrors)
-              let m = (e.graphQLErrors && e.graphQLErrors.length > 0) ? e.graphQLErrors.reduce((a, v) => a + v.message.replace("Unexpected error value:", ""), '') : 'ERROR'
-              this.$set(item, 'tasks', m)
-              resolve()
-            })
-      })
+    async findServiceStats(item) {
+      try {
+        const serviceStats = (await DockerProvider.findDockerServiceStats(item.id)).data.findDockerServiceStats
+
+        this.setServiceState(item, serviceStats)
+        this.setServiceCpu(item, serviceStats)
+        this.setServiceMemory(item, serviceStats)
+
+      } catch (error) {
+        console.error(`An error happened at the findServiceStats function: '${JSON.stringify(error.graphQLErrors, null, 2)}'`)
+
+        const errorMessage = (error.graphQLErrors && error.graphQLErrors.length > 0) ? error.graphQLErrors.reduce((a, v) => a + v.message.replace("Unexpected error value:", ""), '') : 'ERROR'
+        this.$set(item, 'tasks', errorMessage)
+      }
     },
     setServiceState(item, stats) {
-      let state = stats.map(i => i?.task?.state).join(" | ")
-      this.$set(item, 'state', state)
+      if (!stats || stats.length < 1) {
+        this.$set(item, 'state', 'No se encontro informacion')
+      } else {
+        const state = stats.map(i => i?.task?.state).join(" | ")
+        this.$set(item, 'state', state)
+      }
     },
     setServiceCpu(item, stats) {
-      let state = stats.map(i => i?.stats?.cpu).join(" | ")
-      this.$set(item, 'cpu', state)
+      if (!stats || stats.length < 1) {
+        this.$set(item, 'cpu', 'No se encontro informacion')
+      } else {
+        const state = stats.map(i => i?.stats?.cpu).join(" | ")
+        this.$set(item, 'cpu', state)
+      }
     },
     setServiceMemory(item, stats) {
-      let state = stats.map(i => i?.stats?.memoryUsage).join(" | ")
-      this.$set(item, 'memory', state)
+      if (!stats || stats.length < 1) {
+        this.$set(item, 'memory', 'No se encontro informacion')
+      } else {
+        const state = stats.map(i => i?.stats?.memoryUsage).join(" | ")
+        this.$set(item, 'memory', state)
+      }
     }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

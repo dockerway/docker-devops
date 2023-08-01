@@ -3,9 +3,6 @@ version: "3.5"
 services:
   incadevops:
     image: devops
-    volumes:
-      - ./media:/app/media
-      - ./logs:/app/logs
     ports:
       - "12345:12345"
     environment: 
