@@ -187,7 +187,7 @@ export default {
     },
     async findAllTags() {
       let timeout = 200
-      
+
       for (let item of this.getEnvServices) {
         setTimeout(() => this.findServiceTag(item), timeout)
         timeout += 200
@@ -213,39 +213,51 @@ export default {
 
         console.error(`An error happened at the findServiceTag function: ${errorMessage ? errorMessage : error.graphQLErrors}`)
       }
-  },
-  findServiceStats(item) {
-    return new Promise((resolve) => {
-      console.log("findServiceStat", item.name, item.stack)
-      DockerProvider.findDockerServiceStats(item.id)
-        .then(r => {
-          let result = r.data.findDockerServiceStats
-          this.setServiceState(item, result)
-          this.setServiceCpu(item, result)
-          this.setServiceMemory(item, result)
-          resolve()
-        })
-        .catch(e => {
-          console.error("findServiceStat error:", e.graphQLErrors)
-          let m = (e.graphQLErrors && e.graphQLErrors.length > 0) ? e.graphQLErrors.reduce((a, v) => a + v.message.replace("Unexpected error value:", ""), '') : 'ERROR'
-          this.$set(item, 'tasks', m)
-          resolve()
-        })
-    })
-  },
-  setServiceState(item, stats) {
-    let state = stats.map(i => i?.task?.state).join(" | ")
-    this.$set(item, 'state', state)
-  },
-  setServiceCpu(item, stats) {
-    let state = stats.map(i => i?.stats?.cpu).join(" | ")
-    this.$set(item, 'cpu', state)
-  },
-  setServiceMemory(item, stats) {
-    let state = stats.map(i => i?.stats?.memoryUsage).join(" | ")
-    this.$set(item, 'memory', state)
+    },
+    findServiceStats(item) {
+      return new Promise((resolve) => {
+        console.log("findServiceStat", item.name, item.stack)
+        DockerProvider.findDockerServiceStats(item.id)
+          .then(r => {
+            let result = r.data.findDockerServiceStats
+            this.setServiceState(item, result)
+            this.setServiceCpu(item, result)
+            this.setServiceMemory(item, result)
+            resolve()
+          })
+          .catch(e => {
+            console.error("findServiceStat error:", e.graphQLErrors)
+            let m = (e.graphQLErrors && e.graphQLErrors.length > 0) ? e.graphQLErrors.reduce((a, v) => a + v.message.replace("Unexpected error value:", ""), '') : 'ERROR'
+            this.$set(item, 'tasks', m)
+            resolve()
+          })
+      })
+    },
+    setServiceState(item, stats) {
+      if (!stats || stats.length < 1) {
+        this.$set(item, 'state', 'No se encontro informacion')
+      } else {
+        const state = stats.map(i => i?.task?.state).join(" | ")
+        this.$set(item, 'state', state)
+      }
+    },
+    setServiceCpu(item, stats) {
+      if (!stats || stats.length < 1) {
+        this.$set(item, 'cpu', 'No se encontro informacion')
+      } else {
+        const state = stats.map(i => i?.stats?.cpu).join(" | ")
+        this.$set(item, 'cpu', state)
+      }
+    },
+    setServiceMemory(item, stats) {
+      if (!stats || stats.length < 1) {
+        this.$set(item, 'memory', 'No se encontro informacion')
+      } else {
+        const state = stats.map(i => i?.stats?.memoryUsage).join(" | ")
+        this.$set(item, 'memory', state)
+      }
+    }
   }
-}
 }
 </script>
 
