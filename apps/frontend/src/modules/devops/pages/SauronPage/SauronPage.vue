@@ -214,24 +214,20 @@ export default {
         console.error(`An error happened at the findServiceTag function: ${errorMessage ? errorMessage : error.graphQLErrors}`)
       }
     },
-    findServiceStats(item) {
-      return new Promise((resolve) => {
-        console.log("findServiceStat", item.name, item.stack)
-        DockerProvider.findDockerServiceStats(item.id)
-          .then(r => {
-            let result = r.data.findDockerServiceStats
-            this.setServiceState(item, result)
-            this.setServiceCpu(item, result)
-            this.setServiceMemory(item, result)
-            resolve()
-          })
-          .catch(e => {
-            console.error("findServiceStat error:", e.graphQLErrors)
-            let m = (e.graphQLErrors && e.graphQLErrors.length > 0) ? e.graphQLErrors.reduce((a, v) => a + v.message.replace("Unexpected error value:", ""), '') : 'ERROR'
-            this.$set(item, 'tasks', m)
-            resolve()
-          })
-      })
+    async findServiceStats(item) {
+      try {
+        const serviceStats = (await DockerProvider.findDockerServiceStats(item.id)).data.findDockerServiceStats
+
+        this.setServiceState(item, serviceStats)
+        this.setServiceCpu(item, serviceStats)
+        this.setServiceMemory(item, serviceStats)
+
+      } catch (error) {
+        console.error(`An error happened at the findServiceStats function: '${JSON.stringify(error.graphQLErrors, null, 2)}'`)
+
+        const errorMessage = (error.graphQLErrors && error.graphQLErrors.length > 0) ? error.graphQLErrors.reduce((a, v) => a + v.message.replace("Unexpected error value:", ""), '') : 'ERROR'
+        this.$set(item, 'tasks', errorMessage)
+      }
     },
     setServiceState(item, stats) {
       if (!stats || stats.length < 1) {
