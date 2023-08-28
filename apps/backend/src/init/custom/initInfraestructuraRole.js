@@ -13,8 +13,11 @@ import {
 } from '../../modules/devops/permissions/Stack'
 
 import {
+    SERVICE_CREATE,
+    SERVICE_DELETE,
     SERVICE_MENU,
-    SERVICE_SHOW
+    SERVICE_SHOW,
+    SERVICE_UPDATE
 } from '../../modules/devops/permissions/Service'
 
 import {
@@ -77,6 +80,9 @@ module.exports = {
         STACK_SHOW,
         SERVICE_MENU,
         SERVICE_SHOW,
+        SERVICE_CREATE,
+        SERVICE_UPDATE,
+        SERVICE_DELETE,
         ENVIRONMENT_MENU,
         ENVIRONMENT_SHOW,
         ENVIRONMENTSERVICE_MENU,
