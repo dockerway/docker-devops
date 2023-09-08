@@ -45,7 +45,8 @@ const messages = {
                 image: "Image",
                 replicas: "Replicas",
                 name: "Name",
-                command: "Command"
+                command: "Command",
+                platform: "Platform",
             },
             status: 'Status'
           }
@@ -96,7 +97,8 @@ const messages = {
                 image: "Imagen",
                 replicas: "Replicas",
                 name: "Nombre",
-                command: "Comando"
+                command: "Comando",
+                platform: "Plataforma",
             },
             status: 'Estado'
           }
@@ -147,7 +149,8 @@ const messages = {
                 image: "Image",
                 replicas: "Replicas",
                 name: "Name",
-                command: "Command"
+                command: "Command",
+                platform: "Plataforma",
             },
             status: 'Status'
           }

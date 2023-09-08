@@ -13,10 +13,10 @@ export const findEnvironment = async function (id) {
 }
 
 export const fetchEnvironment = async function (user) {
-    console.log('fetchEnvironment')
+    if(!user) throw new Error("No user parameter was provided at the fetchEnvironment function")
+
     try {
         const envsAllowed = await environmentsAllowedView(user)
-
         return await (Environment.find({ _id: { $in: envsAllowed } }).exec())
     } catch (error) {
         console.log('An error happened when we tried to fetch the environments: ', error)

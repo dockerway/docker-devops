@@ -15,9 +15,9 @@ import { createStack, findStackByName, updateStack } from "./StackService";
  * @returns {Promise<Object>} A promise that resolves with an object containing the services discovered during the process.
  */
 
-export const startDiscovery = async function (environmentId) {
+export const startDiscovery = async function (environmentId, user) {
     try {
-        const envs = []
+        let envs = []
         const servicesDiscovered = []
 
         function addServiceDiscovered(sd) {
@@ -25,7 +25,7 @@ export const startDiscovery = async function (environmentId) {
             if (servicesDiscoveredIndex == -1) servicesDiscovered.push(sd)
         }
 
-        (environmentId) ? envs.push(await findEnvironment(environmentId)) : envs = await fetchEnvironment()
+        (environmentId) ? envs.push(await findEnvironment(environmentId)) : envs = await fetchEnvironment(user)
 
         for (const env of envs) {
             const dockerServices = await fetchDockerService(env.id)
@@ -162,7 +162,6 @@ export const createDiscovery = async function (servicesDiscovered, user) {
             let platform = await findPlatformByName(serviceDiscovered.namespace)
 
             if (!platform) {
-                console.log("PLATFORM NEW:", serviceDiscovered)
                 platform = await createPlatform(user, { name: serviceDiscovered.namespace })
                 platformsCreated.push(platform)
             }
@@ -173,8 +172,6 @@ export const createDiscovery = async function (servicesDiscovered, user) {
             let stack = await findStackByName(serviceDiscovered.stack)
 
             if (!stack) {
-                console.log("STACK NEW:", serviceDiscovered)
-
                 stack = await createStack(user,
                     {
                         name: serviceDiscovered.stack,

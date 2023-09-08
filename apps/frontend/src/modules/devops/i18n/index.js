@@ -5,6 +5,7 @@ import StackMessages from './messages/StackMessages';
 import EnvironmentMessages from './messages/EnvironmentMessages';
 import ServiceMessages from './messages/ServiceMessages';
 import PermissionMessages from './messages/PermissionsMessages';
+import DiscoveryMessages from './messages/DiscoveryMessages.js';
 
 const messages = merge.all([
     PlatformMessages,
@@ -13,6 +14,7 @@ const messages = merge.all([
     EnvironmentMessages,
     ServiceMessages,
     PermissionMessages,
+    DiscoveryMessages,
 ])
 
 export default messages;

@@ -1,6 +1,6 @@
 <template>
   <v-autocomplete
-      prepend-icon="space_dashboard"
+      dense
       :items="items"
       :item-text="'name'"
       :item-value="itemValue"
