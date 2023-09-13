@@ -156,8 +156,8 @@ export const updateEnvironment = async function (authUser, id, { name, dockerApi
 export const deleteEnvironment = async function (authUser, id) {
     const environment = await findEnvironment(id)
 
+    await createAudit(authUser, { user: authUser.id, action: 'Delete environment', resource: `${environment.name}` })
     await environment.delete()
-    await createAudit(authUser, { user: authUser.id, action: 'Delete environment', resource: `${doc.name}` })
 
     return ({ id: id, success: true })
 }
