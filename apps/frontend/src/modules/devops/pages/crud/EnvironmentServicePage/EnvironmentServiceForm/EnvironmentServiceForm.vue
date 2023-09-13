@@ -388,7 +388,7 @@ export default {
           service.constraints.forEach(constraint => {
             if (constraint) {
               const existingConstraint = this.form.constraints.find(c => c.name === constraint.name)
-              if (!existingConstraint) this.form.constraints.push({ name: constraint.name, operation: constraint.operation, value: constraint.value })
+              if (!existingConstraint) this.form.constraints.push({ name: constraint.name, operation: constraint.operation, value: constraint.defaultValue })
             }
           })
         }
