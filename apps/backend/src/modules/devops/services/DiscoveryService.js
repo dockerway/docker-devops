@@ -32,9 +32,18 @@ export const startDiscovery = async function (environmentId, user) {
             console.log("dockerServices found", dockerServices.length)
 
             for (const dockerService of dockerServices) {
+                let name
+
+                if (dockerService.stack) {
+                    name = dockerService.name.replace((dockerService.stack+"_"), "")
+                } else if (dockerService.stack && name[0] === "_") {
+                    name = name.substring(1)
+                } else {
+                    name = dockerService.name
+                }
 
                 const serviceDiscovered = {
-                    name: dockerService.name,
+                    name: name,
                     imageName: dockerService?.image?.name,
                     namespace: dockerService?.image?.namespace,
                     stack: dockerService?.stack,
