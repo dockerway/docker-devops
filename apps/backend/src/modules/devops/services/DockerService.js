@@ -14,22 +14,14 @@ export const findDockerServiceTag = async function (id) {
 
         const environmentServiceName = environmentService.name ? environmentService.name : environmentService.service.name
 
-        const path = (serviceName) => '/api/docker/service/' + serviceName + '/tag'
+        const fullServiceName = environmentService.stack.name + "_" + serviceName
+
+        const path = '/api/docker/service/' + fullServiceName + '/tag'
         const URL = (serviceName) => dockerApiUrl + path(serviceName)
 
         const headers = { headers: { 'Authorization': `Bearer ${token}` } }
         const response = await axios.get(URL(environmentServiceName), headers).catch(async (error) => {
-            if (error?.response?.status == 500) {
-                const serviceNameWithStackNamePrefix = environmentService.stack.name + "_" + environmentServiceName
-                const newUrl = URL(serviceNameWithStackNamePrefix)
-
-                console.log(`Trying to search the tag with the old way of naming services: ${serviceNameWithStackNamePrefix} | ${newUrl}`)
-                const newResponse = await axios.get(newUrl, headers).catch(() => {
-                    if (error?.response?.status == 500) return { data: 'El servicio no existe' }
-                })
-
-                return newResponse
-            }
+            if (error?.response?.status == 500) return { data: 'El servicio no existe' }
         })
 
         if (response && response.status == 200 || response && response.data === 'El servicio no existe') return response.data
@@ -49,8 +41,8 @@ export const findDockerServiceStats = async function (id) {
 
         const environmentServiceName = environmentService.name ? environmentService.name : environmentService.service.name
 
-        const path = (serviceName) => '/api/docker/service/' + serviceName + '/stats'
-        const URL = (serviceName) => dockerApiUrl + path(serviceName)
+        const fullServiceName = environmentService.stack.name + "_" + serviceName
+        const path = '/api/docker/service/' + fullServiceName + '/stats'
 
         const headers = { headers: { 'Authorization': `Bearer ${token}` } }
         const response = await axios.get(URL(environmentServiceName), headers).catch(async (error) => {
@@ -81,7 +73,9 @@ export const findDockerService = async function (id) {
 
         const serviceName = environmentService.name ? environmentService.name : environmentService.service.name
 
-        const path = '/api/docker/service/' + serviceName
+        const fullServiceName = environmentService.stack.name + "_" + serviceName
+
+        const path = '/api/docker/service/' + fullServiceName
         const URL = dockerApiUrl + path
 
         const headers = { headers: { 'Authorization': `Bearer ${token}` } }
@@ -232,7 +226,8 @@ export const createDockerService = async function (authUser, id, targetImage) {
 
         console.log(`environmentService: ${JSON.stringify(environmentService, null, 2)}`)
         const serviceName = environmentService.name ? environmentService.name : environmentService.service.name
-        const serviceData = normalizeEnvironmentServiceData(serviceName, environmentService, targetImage)
+        const fullServiceName = environmentService.stack.name + "_" + serviceName
+        const serviceData = normalizeEnvironmentServiceData(fullServiceName, environmentService, targetImage)
 
         const URL = dockerApiUrl + '/api/docker/service'
         const response = await axios.post(URL, serviceData, headers);
@@ -273,7 +268,8 @@ export const updateDockerService = async function (id, targetImage = null, user)
         environmentService.volumes = [...new Set(environmentService.volumes.map(a => JSON.stringify({ hostVolume: a.hostVolume, containerVolume: a.containerVolume })))].map(a => JSON.parse(a))
 
         const serviceName = environmentService.name ? environmentService.name : environmentService.service.name
-        const serviceData = normalizeEnvironmentServiceData(serviceName, environmentService, targetImage)
+        const fullServiceName = environmentService.stack.name + "_" + serviceName
+        const serviceData = normalizeEnvironmentServiceData(fullServiceName, environmentService, targetImage)
 
         const URL = dockerApiUrl + '/api/docker/service/' + dockerService.id
         const response = await axios.put(URL, serviceData, headers)
