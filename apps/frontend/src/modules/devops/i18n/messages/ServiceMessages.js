@@ -48,7 +48,13 @@ const messages = {
                 command: "Command",
                 platform: "Platform",
             },
-            status: 'Status'
+            status: 'Status',
+            limitsMessages: {
+                memoryReservation: 'Minimum memory available on a node to run a task (set to 0 for unlimited)',
+                memoryLimit: 'Maximum memory usage per task (set to 0 for unlimited)',
+                CPUReservation: 'Minimum CPU available on a node to run a task',
+                CPULimit: 'Maximum CPU usage per task',
+            }
           }
        }
     },
@@ -77,14 +83,14 @@ const messages = {
                 file: 'Archivo',
                 ports: 'Puertos',
                 port: 'Puerto',
-                hostPort: "Host port",
-                containerPort: "Container port",
-                hostVolume: "Host volume",
-                containerVolume: "Container volume",
+                hostPort: "Puerto del host",
+                containerPort: "Puerto del contenedor",
+                hostVolume: "Volúmen del host",
+                containerVolume: "Volúmen del contenedor",
                 fileName: "Nombre del archivo",
                 fileContent: "Contenido del archivo",
-                hostPath: "Host path",
-                containerPath: "Container path",
+                hostPath: "Ruta de archivo del Host",
+                containerPath: "Ruta de archivo del contenedor",
                 memoryReservation:"Reserva de Memoria",
                 memoryLimit:"Límite de Memoria",
                 CPUReservation:"Reserva de CPU",
@@ -100,7 +106,13 @@ const messages = {
                 command: "Comando",
                 platform: "Plataforma",
             },
-            status: 'Estado'
+            status: 'Estado',
+            limitsMessages: {
+                memoryReservation: 'Memoria mínima disponible en un nodo para ejecutar una tarea (establecer en 0 para ilimitado)',
+                memoryLimit: 'Uso máximo de memoria por tarea (establecer en 0 para ilimitado)',
+                CPUReservation: 'CPU mínima disponible en un nodo para ejecutar una tarea',
+                CPULimit: 'Uso máximo de CPU por tarea',
+              }
           }
        }
     },
@@ -152,7 +164,13 @@ const messages = {
                 command: "Command",
                 platform: "Plataforma",
             },
-            status: 'Status'
+            status: 'Status',
+            limitsMessages: {
+                memoryReservation: 'Minimum memory available on a node to run a task (set to 0 for unlimited)',
+                memoryLimit: 'Maximum memory usage per task (set to 0 for unlimited)',
+                CPUReservation: 'Minimum CPU available on a node to run a task',
+                CPULimit: 'Maximum CPU usage per task',
+            }
           }
        }
     }

@@ -2,7 +2,7 @@
   <div>
     <v-row justify="center" align="center">
       <v-col cols="12" sm="6">
-        <v-subheader>Minimum memory available on a node to run a task (set to 0 for unlimited)</v-subheader>
+        <v-subheader>{{this.$t('devops.service.limitsMessages.memoryReservation')}}</v-subheader>
       </v-col>
       <v-col cols="12" sm="4">
         <v-text-field
@@ -17,7 +17,7 @@
     </v-row>
     <v-row  justify="center" align="center">
       <v-col cols="12" sm="6">
-        <v-subheader>Maximum memory usage per task (set to 0 for unlimited)</v-subheader>
+        <v-subheader>{{this.$t('devops.service.limitsMessages.memoryLimit')}}</v-subheader>
       </v-col>
       <v-col cols="12" sm="4">
         <v-text-field
@@ -32,7 +32,7 @@
     </v-row>
     <v-row  justify="center" align="center">
       <v-col cols="12" sm="6">
-        <v-subheader>Minimum CPU available on a node to run a task</v-subheader>
+        <v-subheader>{{this.$t('devops.service.limitsMessages.CPUReservation')}}</v-subheader>
       </v-col>
       <v-col cols="12" sm="4">
         <v-slider
@@ -49,7 +49,7 @@
     </v-row>
     <v-row  justify="center" align="center">
       <v-col cols="12" sm="6">
-        <v-subheader>Maximum CPU usage per task</v-subheader>
+        <v-subheader>{{this.$t('devops.service.limitsMessages.CPULimit')}}</v-subheader>
       </v-col>
       <v-col cols="12" sm="4">
         <v-slider

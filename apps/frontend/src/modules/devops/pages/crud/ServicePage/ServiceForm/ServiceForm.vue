@@ -314,7 +314,7 @@ export default {
         this.$t('devops.serviceTemplate.labels.port'),
         this.$t('devops.serviceTemplate.labels.volume'),
         this.$t('devops.serviceTemplate.labels.file'),
-        'Envs',
+        this.$t('devops.serviceTemplate.labels.environmentVariables'),
         this.$t('devops.serviceTemplate.labels.constraints'),
         this.$t('devops.serviceTemplate.labels.limits'),
         this.$t('devops.serviceTemplate.labels.preferences')
