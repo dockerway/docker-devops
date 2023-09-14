@@ -9,7 +9,7 @@ const settings = [
         value: '^\\/(storage|logs|localdata){1}(\\/{1}[a-z\\_\\.\\-0-9]+)*$',
         type: 'string',
         group: 'Devops',
-        label: {en: 'Paths regular expression', es: 'Expresión regular de rutas', pt: 'Expressão regular de rotas'}
+        label: {en: 'Regex for Host Volumes', es: 'Regex para volúmenes del host', pt: 'Regex para volúmenes del host'}
     },
     {
         key: 'regexPathsFiles',
@@ -30,7 +30,7 @@ const settings = [
         value: '^\/(?:[\w.-]+\/)*[\w.-]+$',
         type: 'string',
         group: 'Devops',
-        label: {en: 'Regular expression for a linux file absolute path', es: 'Regex para paths absolutos de ficheros linux', pt: 'Regex para paths absolutos de ficheros linux'}
+        label: {en: 'Regex for Container Volumes', es: 'Regex para volúmenes del contenedor', pt: 'Regex para volúmenes del contenedor'}
     }
 ]
 
