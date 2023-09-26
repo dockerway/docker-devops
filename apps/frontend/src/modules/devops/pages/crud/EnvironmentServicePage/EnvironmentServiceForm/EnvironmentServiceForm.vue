@@ -378,7 +378,7 @@ export default {
         if (service.files) {
           service.files.forEach(file => {
             if (file) {
-              const existingFile = this.form.files.find(f => f.containerPath === file.containerPath)
+              const existingFile = this.form.files.find(f => f.fileName === file.fileName)
               if (!existingFile) this.form.files.push({ hostPath: file.hostPath, containerPath: file.containerPath, fileName: file.fileName, fileContent: file.fileContent })
             }
           })
