@@ -1,3 +1,3 @@
-import EnvironmentServiceUpdate from './EnvironmentServiceUpdate'
+import EnvironmentServiceUpdate from './EnvironmentServiceUpdate.vue'
 export {EnvironmentServiceUpdate}
 export default EnvironmentServiceUpdate
