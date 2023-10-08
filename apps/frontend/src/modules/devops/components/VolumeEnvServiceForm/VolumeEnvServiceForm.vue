@@ -64,10 +64,8 @@ export default {
   methods: {
     isAValidLinuxDirectory(path) {
       try {
-        /* eslint-disable no-useless-escape */
         const linuxDirectoryRegex = new RegExp(this.$store.getters.getSettingValue("regexPaths"), 'i')
-
-        return linuxDirectoryRegex.test(path) ? true : 'Debe ser un nombre de directorio Linux valido que NO finalice con un "/"'
+        return linuxDirectoryRegex.test(path)
       } catch (error) {
         console.error(`An error happened when we tried to check if a path was a valid linux directory name: '${error.message}'`)
         throw error
@@ -76,17 +74,18 @@ export default {
     isAValidFilename(path){
       try {
         const filenameRegex = new RegExp(this.$store.getters.getSettingValue("regexFileAbsolutePath"), 'i')
-
-        return filenameRegex.test(path) ? true : 'Debe ser un path absoluto correspondiente a un fichero linux valido'
+        return filenameRegex.test(path)
       } catch (error) {
         console.error(`An error happened when we tried to check if a filename was valid: '${error.message}'`)
         throw error
       }
     },
     isAValidVolume(path){
-      const userInputIsAValidAbsolutePath = this.isAValidFilename(path)
-      
-      return userInputIsAValidAbsolutePath ? userInputIsAValidAbsolutePath : this.isAValidLinuxDirectory(path)
+      const userInputIsAValidFileAbsolutePath = this.isAValidFilename(path)
+      const userInputIsAValidDirectoryAbsolutePath = this.isAValidLinuxDirectory(path)
+
+      const isNotAValidContainerVolume = (!userInputIsAValidFileAbsolutePath && !userInputIsAValidDirectoryAbsolutePath)
+      if (isNotAValidContainerVolume) return 'Debe ser una ruta absoluta hacia un fichero o directorio linux que NO finalice con un "/"'
     }
   },
 }
