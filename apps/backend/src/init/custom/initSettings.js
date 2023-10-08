@@ -13,21 +13,21 @@ const settings = [
     },
     {
         key: 'regexPathsFiles',
-        value: '^\\/(storage){1}(\\/{1}[a-z\\_\\.\\-0-9]+)*$',
+        value: '^\\\/(storage){1}(\\/{1}[a-z\\\_\\\.\\\-0-9]+)*$',
         type: 'string',
         group: 'Devops',
         label: {en: 'File Paths regular expression', es: 'Archivo Expresión regular de rutas', pt: 'Archivo Expressão regular de rotas'}
     },
     {
         key: 'regexFileName',
-        value: '^[a-zA-Z0-9\\.\\_]+$',
+        value: '^[a-zA-Z0-9\\\.\\\_]+$',
         type: 'string',
         group: 'Devops',
         label: {en: 'File name regular expression', es: 'Nombre del archivo Expresión regular de rutas', pt: 'Nombre del archivo Expressão regular de rotas'}
     },
     {
         key: 'regexFileAbsolutePath',
-        value: '^\/(?:[\w.-]+\/)*[\w.-]+$',
+        value: '^\\/(?:[\\w.-]+\\/)*[\\w.-]+$',
         type: 'string',
         group: 'Devops',
         label: {en: 'Regex for Container Volumes', es: 'Regex para volúmenes del contenedor', pt: 'Regex para volúmenes del contenedor'}
