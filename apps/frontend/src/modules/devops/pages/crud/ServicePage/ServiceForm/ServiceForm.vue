@@ -138,12 +138,12 @@
                         icon="storage"
                         name="volumes"
                         v-model="form.volumes[index]"
-                        :label="$t('devops.serviceTemplate.labels.volume')"
-                        :placeholder="$t('devops.serviceTemplate.labels.volume')"
+                        :label="$t('devops.service.labels.containerVolume')"
+                        :placeholder="$t('devops.service.labels.containerVolume')"
                         :error="hasInputErrors('volumes')"
                         :error-messages="getInputErrors('volumes')"
                         color="secondary"
-                        :rules="rules"
+                        :rules="volumesRules"
                     >
                       <template v-slot:prepend-inner>
                         <v-chip small>{{ index + 1 }}</v-chip>
@@ -305,6 +305,31 @@ export default {
   methods: {
     validate() {
       return this.$refs.form.validate()
+    },
+    isAValidLinuxDirectory(path) {
+      try {
+        const linuxDirectoryRegex = new RegExp(this.$store.getters.getSettingValue("regexPaths"), 'i')
+        return linuxDirectoryRegex.test(path)
+      } catch (error) {
+        console.error(`An error happened when we tried to check if a path was a valid linux directory name: '${error.message}'`)
+        throw error
+      }
+    },
+    isAValidFilename(path){
+      try {
+        const filenameRegex = new RegExp(this.$store.getters.getSettingValue("regexFileAbsolutePath"), 'i')
+        return filenameRegex.test(path)
+      } catch (error) {
+        console.error(`An error happened when we tried to check if a filename was valid: '${error.message}'`)
+        throw error
+      }
+    },
+    isAValidVolume(path){
+      const userInputIsAValidFileAbsolutePath = this.isAValidFilename(path)
+      const userInputIsAValidDirectoryAbsolutePath = this.isAValidLinuxDirectory(path)
+
+      const isNotAValidContainerVolume = (!userInputIsAValidFileAbsolutePath && !userInputIsAValidDirectoryAbsolutePath)
+      if (isNotAValidContainerVolume) return 'Debe ser una ruta absoluta hacia un fichero o directorio linux que NO finalice con un "/"'
     }
   },
   data() {
@@ -312,14 +337,14 @@ export default {
       tab: 0,
       items: [
         this.$t('devops.serviceTemplate.labels.port'),
-        this.$t('devops.serviceTemplate.labels.volume'),
+        this.$t('devops.service.labels.containerVolume'),
         this.$t('devops.serviceTemplate.labels.file'),
         this.$t('devops.serviceTemplate.labels.environmentVariables'),
         this.$t('devops.serviceTemplate.labels.constraints'),
         this.$t('devops.serviceTemplate.labels.limits'),
         this.$t('devops.serviceTemplate.labels.preferences')
       ],
-      rules: [ v => this.regexPaths.test(v) || 'Debe comenzar con /storage, /logs o /localdata y finalizar sin /' ]
+      volumesRules: [path => this.isAValidVolume(path)]
     }
   }
 }
