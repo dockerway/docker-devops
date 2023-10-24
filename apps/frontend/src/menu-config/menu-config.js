@@ -25,37 +25,44 @@ export default [
         panel: false,
         children: [
             {
-                icon: 'space_dashboard',
+                icon: ' mdi-application-braces-outline',
                 text: 'menu.platform',
                 link: {name: "PlatformPage"},
                 panel: false,
                 permission: 'PLATFORM_MENU'
             },
             {
-                icon: 'design_services',
-                text: 'menu.serviceTemplate',
-                link: {name: "ServicePage"},
-                panel: false,
-                permission: 'SERVICE_MENU'
-            },
-            {
-                icon: 'tune',
-                text: 'menu.environment',
-                link: {name: "EnvironmentPage"},
-                panel: false,
-                permission: 'ENVIRONMENT_MENU'
-            },
-            {
-                icon: 'table_rows',
+                icon: 'mdi-cloud-outline',
                 text: 'menu.stack',
                 link: {name: "StackPage"},
                 panel: false,
                 permission: 'STACK_MENU'
             },
             {
-                icon: 'tune',
+                icon: 'mdi-server-outline',
+                text: 'menu.environment',
+                link: {name: "EnvironmentPage"},
+                panel: false,
+                permission: 'ENVIRONMENT_MENU'
+            },
+            {
+                icon: 'mdi-application-edit-outline',
+                text: 'menu.serviceTemplate',
+                link: {name: "ServicePage"},
+                panel: false,
+                permission: 'SERVICE_MENU'
+            },
+            {
+                icon: 'mdi-application-outline',
                 text: 'menu.service',
                 link: {name: "EnvironmentServicePage"},
+                panel: false,
+                permission: 'ENVIRONMENTSERVICE_MENU'
+            },
+            {
+                icon: 'history',
+                text: 'menu.deployHistory',
+                link: {name: "DeployHistoryPage"},
                 panel: false,
                 permission: 'ENVIRONMENTSERVICE_MENU'
             },
