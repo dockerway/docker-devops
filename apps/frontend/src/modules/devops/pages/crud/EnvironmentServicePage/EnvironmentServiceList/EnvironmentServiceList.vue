@@ -7,11 +7,11 @@
           <!-- FILTERS HERE -->
           <v-row>
             <v-col cols="12" md="4">
-              <environment-combobox v-model="filters[0].value" @input="fetch" clearable/>
+              <environment-combobox v-model="filters[0].value" @input="fetch" clearable />
             </v-col>
 
             <v-col cols="12" md="5">
-              <stack-combobox v-model="filters[1].value" @input="fetch" clearable/>
+              <stack-combobox v-model="filters[1].value" @input="fetch" clearable />
             </v-col>
 
             <v-col cols="12" md="4">
@@ -21,7 +21,7 @@
 
         </v-col>
         <v-col cols="12" sm="6" md="4">
-          <search-input @search="performSearch" v-model="search"/>
+          <search-input @search="performSearch" v-model="search" />
         </v-col>
       </v-row>
     </v-col>
@@ -29,12 +29,9 @@
     <v-col cols="12">
 
       <v-data-table class="mt-3" :headers="headers" :items="items" :search="search" :single-expand="false"
-          :server-items-length="totalItems" :loading="loading" :page.sync="pageNumber"
-          :items-per-page.sync="itemsPerPage"
-          :sort-by.sync="orderBy" :sort-desc.sync="orderDesc"
-          :footer-props="{ itemsPerPageOptions: [5, 10, 25, 50] }"
-          @update:page="fetch" @update:sort-by="fetch" @update:sort-desc="fetch"
-          @update:items-per-page="fetch">
+        :server-items-length="totalItems" :loading="loading" :page.sync="pageNumber" :items-per-page.sync="itemsPerPage"
+        :sort-by.sync="orderBy" :sort-desc.sync="orderDesc" :footer-props="{ itemsPerPageOptions: [5, 10, 25, 50] }"
+        @update:page="fetch" @update:sort-by="fetch" @update:sort-desc="fetch" @update:items-per-page="fetch">
 
 
         <template v-slot:item.environment="{ item }">
@@ -63,37 +60,33 @@
         </template>
 
         <template v-slot:item.status="{ item }">
-          <v-chip :color="item.status == 'running' ? 'green' : null">{{ item.status }}</v-chip>
+          <v-chip :color="item.status == $t('devops.service.active') ? 'green' : null">{{ item.status }}</v-chip>
         </template>
 
         <template v-slot:item.deploy="{ item }">
           <v-btn color="purple" class="white--text" x-small @click="openDeploy(item)"
-                 :disabled="!$store.getters.hasPermission(`${item.environment.type}_DEPLOY`)">
+            :disabled="!$store.getters.hasPermission(`${item.environment.type}_DEPLOY`)">
             Deploy
           </v-btn>
         </template>
 
         <template v-slot:item.action="{ item }">
           <show-button
-              v-if="$store.getters.hasPermission('ENVIRONMENTSERVICE_SHOW') && $store.getters.hasPermission(`${item.environment.type}_VIEW`)"
-              @click="$emit('show', item)"/>
+            v-if="$store.getters.hasPermission('ENVIRONMENTSERVICE_SHOW') && $store.getters.hasPermission(`${item.environment.type}_VIEW`)"
+            @click="$emit('show', item)" />
           <edit-button
-              v-if="$store.getters.hasPermission('ENVIRONMENTSERVICE_UPDATE') && $store.getters.hasPermission(`${item.environment.type}_EDIT`)"
-              @click="$emit('update', item)"/>
+            v-if="$store.getters.hasPermission('ENVIRONMENTSERVICE_UPDATE') && $store.getters.hasPermission(`${item.environment.type}_EDIT`)"
+            @click="$emit('update', item)" />
           <delete-button
-              v-if="$store.getters.hasPermission('ENVIRONMENTSERVICE_DELETE') && $store.getters.hasPermission(`${item.environment.type}_EDIT`)"
-              @click="$emit('delete', item)"/>
+            v-if="$store.getters.hasPermission('ENVIRONMENTSERVICE_DELETE') && $store.getters.hasPermission(`${item.environment.type}_EDIT`)"
+            @click="$emit('delete', item)" />
         </template>
 
       </v-data-table>
     </v-col>
 
-    <environment-service-docker-deploy
-        v-if="deploy"
-        v-model="deploy"
-        :env-service="envServiceToDeploy"
-        @close="closeDeploy"
-    />
+    <environment-service-docker-deploy v-if="deploy" v-model="deploy" :env-service="envServiceToDeploy"
+      @close="closeDeploy" />
 
   </v-row>
 </template>
@@ -197,15 +190,19 @@ export default {
           this.getOrderBy,
           this.getOrderDesc
         )).data.paginateEnvironmentService
-        
+
         for (let index = 0; index < items.length; index++) {
-          const dockerService = (await DockerProvider.findDockerService(items[index].id)).data.findDockerService
-          
-          if (dockerService && dockerService.id) {
-            items[index].status = 'running'
-          }else{
-            items[index].status = 'inactive'
+
+          if (items[index]) {
+            const dockerService = (await DockerProvider.findDockerService(items[index].id)).data.findDockerService
+
+            if (dockerService && dockerService.id) {
+              items[index].status = this.$t('devops.service.active')
+            } else {
+              items[index].status = this.$t('devops.service.inactive')
+            }
           }
+
         }
 
         this.items = items

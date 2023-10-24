@@ -49,6 +49,8 @@ const messages = {
                 platform: "Platform",
             },
             status: 'Status',
+            active: 'Active',
+            inactive: 'Inactive',
             limitsMessages: {
                 memoryReservation: 'Minimum memory available on a node to run a task (set to 0 for unlimited)',
                 memoryLimit: 'Maximum memory usage per task (set to 0 for unlimited)',
@@ -107,6 +109,8 @@ const messages = {
                 platform: "Plataforma",
             },
             status: 'Estado',
+            active: 'Activo',
+            inactive: 'Inactivo',
             limitsMessages: {
                 memoryReservation: 'Memoria mínima disponible en un nodo para ejecutar una tarea (establecer en 0 para ilimitado)',
                 memoryLimit: 'Uso máximo de memoria por tarea (establecer en 0 para ilimitado)',
@@ -165,6 +169,8 @@ const messages = {
                 platform: "Plataforma",
             },
             status: 'Status',
+            active: 'Activo',
+            inactive: 'Inactivo',
             limitsMessages: {
                 memoryReservation: 'Minimum memory available on a node to run a task (set to 0 for unlimited)',
                 memoryLimit: 'Maximum memory usage per task (set to 0 for unlimited)',
