@@ -14,13 +14,13 @@ export const findDockerServiceTag = async function (id) {
 
         const environmentServiceName = environmentService.name ? environmentService.name : environmentService.service.name
 
-        const fullServiceName = environmentService.stack.name + "_" + serviceName
+        const fullServiceName = environmentService.stack.name + "_" + environmentServiceName
 
         const path = '/api/docker/service/' + fullServiceName + '/tag'
-        const URL = (serviceName) => dockerApiUrl + path(serviceName)
+        const URL = dockerApiUrl + path
 
         const headers = { headers: { 'Authorization': `Bearer ${token}` } }
-        const response = await axios.get(URL(environmentServiceName), headers).catch(async (error) => {
+        const response = await axios.get(URL, headers).catch(async (error) => {
             if (error?.response?.status == 500) return { data: 'El servicio no existe' }
         })
 
@@ -39,26 +39,22 @@ export const findDockerServiceStats = async function (id) {
         const token = environmentService.environment.dockerApiToken
         const dockerApiUrl = environmentService.environment.dockerApiUrl
 
-        const environmentServiceName = environmentService.name ? environmentService.name : environmentService.service.name
-
+        const serviceName = environmentService.name ? environmentService.name : environmentService.service.name
         const fullServiceName = environmentService.stack.name + "_" + serviceName
+
         const path = '/api/docker/service/' + fullServiceName + '/stats'
+        const URL = dockerApiUrl + path
 
         const headers = { headers: { 'Authorization': `Bearer ${token}` } }
-        const response = await axios.get(URL(environmentServiceName), headers).catch(async (error) => {
-            if (error?.response?.status == 500) {
-                const serviceNameWithStackNamePrefix = environmentService.stack.name + "_" + environmentServiceName
-                const newUrl = URL(serviceNameWithStackNamePrefix)
+        const response = await axios.get(URL, headers)
 
-                console.log(`Trying to search the stats with the old way of naming services: ${serviceNameWithStackNamePrefix} | ${newUrl}`)
-                const newResponse = await axios.get(newUrl, headers).catch(() => {
-                    if (error?.response?.status == 500) return { data: [] }
-                })
-                return newResponse
-            }
-        })
+        if (response.status = 200) {
+            return response.data
+        } else {
+            throw new Error(response)
+        }
 
-        if (response && response.status == 200 || response && response.data) return response.data
+
     } catch (error) {
         const message = error.message + ". " + (error.response?.data ? error.response.data : '')
         throw new Error(message)
