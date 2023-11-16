@@ -13,10 +13,10 @@ export const findEnvironment = async function (id) {
 }
 
 export const fetchEnvironment = async function (user) {
-    console.log('fetchEnvironment')
+    if(!user) throw new Error("No user parameter was provided at the fetchEnvironment function")
+
     try {
         const envsAllowed = await environmentsAllowedView(user)
-
         return await (Environment.find({ _id: { $in: envsAllowed } }).exec())
     } catch (error) {
         console.log('An error happened when we tried to fetch the environments: ', error)
@@ -156,8 +156,8 @@ export const updateEnvironment = async function (authUser, id, { name, dockerApi
 export const deleteEnvironment = async function (authUser, id) {
     const environment = await findEnvironment(id)
 
+    await createAudit(authUser, { user: authUser.id, action: 'Delete environment', resource: `${environment.name}` })
     await environment.delete()
-    await createAudit(authUser, { user: authUser.id, action: 'Delete environment', resource: `${doc.name}` })
 
     return ({ id: id, success: true })
 }

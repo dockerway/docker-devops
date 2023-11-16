@@ -35,7 +35,9 @@ const messages = {
                 variable: {
                     name: "Name",
                     defaultValue: "Default value"
-                }
+                },
+                environmentVariables: 'Environment variables',
+                labels: 'Labels'
             },
 
           }
@@ -64,8 +66,8 @@ const messages = {
                 file: 'Archivo',
                 ports: 'Puertos',
                 port: 'Puerto',
-                constraints: 'Constraints',
-                limits: 'Límite',
+                constraints: 'Restricciones',
+                limits: 'Límites',
                 memoryReservation:"Reserva de Memoria",
                 memoryLimit:"Límite de Memoria",
                 CPUReservation:"Reserva de CPU", 
@@ -75,7 +77,9 @@ const messages = {
                 variable: {
                     name: "Nombre",
                     defaultValue: "Valor por defecto"
-                }
+                },
+                environmentVariables: 'Variables de entorno',
+                labels: 'Etiquetas'
             },
 
           }
@@ -104,8 +108,8 @@ const messages = {
                 file: 'Arquivo',
                 ports: 'Ports',
                 port: 'Port',
-                constraints: 'Constraints',
-                limits: 'Limite',
+                constraints: 'Restricciones',
+                limits: 'Limites',
                 memoryReservation:"Reserva de memória",
                 memoryLimit:"Limite de Memória",
                 CPUReservation:"Reserva de CPU", 
@@ -115,7 +119,9 @@ const messages = {
                 variable: {
                     name: "Name",
                     defaultValue: "Default value"
-                }
+                },
+                environmentVariables: 'Variables de entorno',
+                labels: 'Etiquetas'
 
             },
 

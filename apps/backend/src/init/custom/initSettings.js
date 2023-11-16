@@ -9,28 +9,28 @@ const settings = [
         value: '^\\/(storage|logs|localdata){1}(\\/{1}[a-z\\_\\.\\-0-9]+)*$',
         type: 'string',
         group: 'Devops',
-        label: {en: 'Paths regular expression', es: 'Expresión regular de rutas', pt: 'Expressão regular de rotas'}
+        label: {en: 'Regex for Host Volumes', es: 'Regex para volúmenes del host', pt: 'Regex para volúmenes del host'}
     },
     {
         key: 'regexPathsFiles',
-        value: '^\\/(storage){1}(\\/{1}[a-z\\_\\.\\-0-9]+)*$',
+        value: '^\\\/(storage){1}(\\/{1}[a-z\\\_\\\.\\\-0-9]+)*$',
         type: 'string',
         group: 'Devops',
         label: {en: 'File Paths regular expression', es: 'Archivo Expresión regular de rutas', pt: 'Archivo Expressão regular de rotas'}
     },
     {
         key: 'regexFileName',
-        value: '^[a-zA-Z0-9\\.\\_]+$',
+        value: '^[a-zA-Z0-9\\\.\\\_]+$',
         type: 'string',
         group: 'Devops',
         label: {en: 'File name regular expression', es: 'Nombre del archivo Expresión regular de rutas', pt: 'Nombre del archivo Expressão regular de rotas'}
     },
     {
         key: 'regexFileAbsolutePath',
-        value: '^\/(?:[\w.-]+\/)*[\w.-]+$',
+        value: '^\\/(?:[\\w.-]+\\/)*[\\w.-]+$',
         type: 'string',
         group: 'Devops',
-        label: {en: 'Regular expression for a linux file absolute path', es: 'Regex para paths absolutos de ficheros linux', pt: 'Regex para paths absolutos de ficheros linux'}
+        label: {en: 'Regex for Container Volumes', es: 'Regex para volúmenes del contenedor', pt: 'Regex para volúmenes del contenedor'}
     }
 ]
 

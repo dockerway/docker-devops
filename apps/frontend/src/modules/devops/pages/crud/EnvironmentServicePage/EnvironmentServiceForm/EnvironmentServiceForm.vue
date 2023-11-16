@@ -378,7 +378,7 @@ export default {
         if (service.files) {
           service.files.forEach(file => {
             if (file) {
-              const existingFile = this.form.files.find(f => f.containerPath === file.containerPath)
+              const existingFile = this.form.files.find(f => f.fileName === file.fileName)
               if (!existingFile) this.form.files.push({ hostPath: file.hostPath, containerPath: file.containerPath, fileName: file.fileName, fileContent: file.fileContent })
             }
           })
@@ -388,7 +388,7 @@ export default {
           service.constraints.forEach(constraint => {
             if (constraint) {
               const existingConstraint = this.form.constraints.find(c => c.name === constraint.name)
-              if (!existingConstraint) this.form.constraints.push({ name: constraint.name, operation: constraint.operation, value: constraint.value })
+              if (!existingConstraint) this.form.constraints.push({ name: constraint.name, operation: constraint.operation, value: constraint.defaultValue })
             }
           })
         }
@@ -458,8 +458,8 @@ export default {
         this.$t('devops.serviceTemplate.labels.port'),
         this.$t('devops.serviceTemplate.labels.volume'),
         this.$t('devops.serviceTemplate.labels.file'),
-        'Envs',
-        'Labels',
+        this.$t('devops.serviceTemplate.labels.environmentVariables'),
+        this.$t('devops.serviceTemplate.labels.labels'),
         this.$t('devops.serviceTemplate.labels.constraints'),
         this.$t('devops.serviceTemplate.labels.limits'),
         this.$t('devops.serviceTemplate.labels.preferences')

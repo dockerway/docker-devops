@@ -16,7 +16,8 @@ const messages = {
             registry: "Registry",
             image: "Image",
             setting: "Setting",
-            audit:"Audit"
+            audit:"Audit",
+            deployHistory: "Deploy history"
         }
     },
    es: {
@@ -35,7 +36,8 @@ const messages = {
             registry: "Registry",
             image: "Image",
             setting: "Configuración",
-            audit:"Auditoria"
+            audit:"Auditoria",
+            deployHistory: "Historial de despliegues"
 
         }
     },
@@ -55,7 +57,8 @@ const messages = {
             registry: "Registry",
             image: "Image",
             setting: "Configuração",
-            audit:"Audit"
+            audit:"Audit",
+            deployHistory: "Historial de despliegues"
         }
     }
 }

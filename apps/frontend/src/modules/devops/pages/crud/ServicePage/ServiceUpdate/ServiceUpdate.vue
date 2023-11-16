@@ -1,11 +1,11 @@
 <template>
-  <crud-update :open="open"
-               :loading="loading"
-               :title="title"
-               :errorMessage="errorMessage"
-               @update="update"
-               @close="$emit('close')" fullscreen
-
+  <crud-update 
+    :open="open"
+    :loading="loading"
+    :title="title"
+    :errorMessage="errorMessage"
+    @update="update"
+    @close="$emit('close')" fullscreen
   >
     <service-form ref="form" v-model="form" :input-errors="inputErrors"/>
   </crud-update>
@@ -14,9 +14,7 @@
 <script>
 
 import ServiceProvider from "../../../../providers/ServiceProvider";
-
 import {CrudUpdate, ClientError} from '@dracul/common-frontend'
-
 import ServiceForm from "../ServiceForm";
 
 

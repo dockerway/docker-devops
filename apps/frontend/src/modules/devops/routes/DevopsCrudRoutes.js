@@ -3,6 +3,7 @@ import ServicePage from '../pages/crud/ServicePage'
 import EnvironmentPage from '../pages/crud/EnvironmentPage'
 import EnvironmentServicePage from '../pages/crud/EnvironmentServicePage'
 import StackPage from '../pages/crud/StackPage'
+import DeployHistoryPage from '../pages/crud/DeployHistoryPage'
 
 const routes = [
        
@@ -50,6 +51,15 @@ const routes = [
         name: 'StackPage', 
         path: '/crud/stack', 
         component: StackPage,  
+        meta: {
+            requiresAuth: true,
+            permission: "STACK_SHOW"
+        }
+     },
+     {
+        name: 'DeployHistoryPage', 
+        path: '/crud/DeployHistory', 
+        component: DeployHistoryPage,  
         meta: {
             requiresAuth: true,
             permission: "STACK_SHOW"

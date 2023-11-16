@@ -51,7 +51,7 @@ const FileSchema = new Schema({
     containerPath: {type: String, required: false, index: false},
 })
 
-const EnvironmentServiceSchema = new Schema({
+export const EnvironmentServiceSchema = new Schema({
     environment: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Environment",
