@@ -3,8 +3,10 @@ const messages = {
     en: {
        devops: {
           service: {
+            deployed: 'Service deployed with id: ',
             name: 'Service',
             title: 'Service management',
+            deploySectionTitle: 'Deploy service',
             subtitle: 'Services CRUD',
             creating: 'Creating Service',
             created: 'Service created',
@@ -14,6 +16,7 @@ const messages = {
             deleting: 'Deleting Service',
             showing: 'Showing Service',
             menu: 'Service',
+            update: 'Update',
             labels: {
                 main: 'Main',
                 environment: 'Environment',
@@ -63,8 +66,10 @@ const messages = {
     es: {
        devops: {
           service: {
+            deployed: 'Servicio desplegado con id:',
             name: 'Servicios',
             title: 'Administración de Servicios',
+            deploySectionTitle: 'Desplegar servicio',
             subtitle: 'ABM de Servicios',
             creating: 'Creando Servicio',
             created: 'Servicio creado',
@@ -74,6 +79,7 @@ const messages = {
             deleting: 'Eliminando Servicio',
             showing: 'Detalles de Servicio',
             menu: 'Servicios',
+            update: 'Actualizar',
             labels: {
                 main: 'Principal',
                 environment: 'Entorno',
@@ -123,8 +129,10 @@ const messages = {
     pt: {
        devops: {
           service: {
+            deployed: 'Serviço implantado com id:',
             name: 'Service',
             title: 'Administração de Service',
+            deploySectionTitle: 'Implantar Service',
             subtitle: 'Ver, buscar, criar, editar e usar Service',
             creating: 'Criando Service',
             created: 'Serviço criado',
@@ -134,6 +142,7 @@ const messages = {
             deleting: 'Apagando Service',
             showing: 'Detalhes do Service',
             menu: 'Service',
+            update: 'Atualizar',
             labels: {
                 main: 'Main',
                 environment: 'Environment',

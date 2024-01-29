@@ -1,7 +1,10 @@
 import { findEnvironmentService } from "./EnvironmentServiceService";
-import { findEnvironment } from "./EnvironmentService";
 import { canUserDeploy } from "./EnvironmentAllowedService";
+import { findEnvironment } from "./EnvironmentService";
+
+import { DefaultLogger as winston } from "@dracul/logger-backend";
 import { createAudit } from "@dracul/audit-backend";
+
 import axios from 'axios';
 
 const notMountedMessage = 'The needed directories are not mounted; please contact your infrastructure team!' //has to match the agent's notMountedMessage
@@ -27,7 +30,7 @@ export const findDockerServiceTag = async function (id) {
         if (response && response.status == 200 || response && response.data === 'El servicio no existe') return response.data
 
     } catch (error) {
-        console.error(`An error happened at the findDockerServiceTag function: ${error.message ? error.message : error} `)
+        winston.error(`An error happened at the findDockerServiceTag function: ${error.message ? error.message : error} `)
         const message = error.message + ". " + (error.response?.data ? error.response.data : '')
         throw new Error(message)
     }
@@ -77,8 +80,6 @@ export const findDockerService = async function (id) {
         const headers = { headers: { 'Authorization': `Bearer ${token}` } }
         const response = await axios.get(URL, headers)
 
-        console.log(`response status = '${response.status}'`)
-
         if (response.status == 200) {
             return response.data
         } else {
@@ -87,7 +88,7 @@ export const findDockerService = async function (id) {
 
 
     } catch (error) {
-        console.log(`error status = '${error}'`)
+        winston.error(`error status = '${error}'`)
         if (error.message.includes('404')) return error.message
 
         throw new Error(error.message + ". " + (error.response?.data ? error.response.data : ''))
@@ -142,7 +143,7 @@ function getHostVolumes(environmentServiceVolumes) {
             return []
         }
     } catch (error) {
-        console.error(`An error happened at the getHostVolumes function: '${error}'`)
+        winston.error(`An error happened at the getHostVolumes function: '${error}'`)
         throw error
     }
 }
@@ -160,7 +161,7 @@ async function sendFilesToFortes(environmentService, headers, filesURL) {
             }
         })]
     } catch (error) {
-        if (error.message != notMountedMessage) console.error(`An error happened at sendFilesToFortes: '${error}'`)
+        winston.error(`An error happened at sendFilesToFortes: '${error}'`)
         throw error
     }
 }
@@ -170,7 +171,7 @@ async function createFolders(verifiedFolders, headers, createFoldersURL) {
         const createFolder = await axios.post(createFoldersURL, verifiedFolders, headers)
         if (createFolder.data === notMountedMessage) throw new Error(notMountedMessage)
     } catch (error) {
-        if (error.message != notMountedMessage) console.error(`An error happened at the createFolders function: ${error}`)
+        winston.error(`An error happened at the createFolders function: ${error}`)
         throw error
     }
 }
@@ -200,7 +201,7 @@ function normalizeEnvironmentServiceData(serviceName, environmentService, target
             command: environmentService.command
         }
     } catch (error) {
-        console.error(`An error happened at the normalizeEnvironmentServiceData function: '${error.message}'`)
+        winston.error(`An error happened at the normalizeEnvironmentServiceData function: '${error.message}'`)
         throw error
     }
 
@@ -220,7 +221,6 @@ export const createDockerService = async function (authUser, id, targetImage) {
         //ELIMINA DUPLICADOS
         environmentService.volumes = [...new Set(environmentService.volumes.map(a => JSON.stringify({ hostVolume: a.hostVolume, containerVolume: a.containerVolume })))].map(a => JSON.parse(a))
 
-        console.log(`environmentService: ${JSON.stringify(environmentService, null, 2)}`)
         const serviceName = environmentService.name ? environmentService.name : environmentService.service.name
         const fullServiceName = environmentService.stack.name + "_" + serviceName
         const serviceData = normalizeEnvironmentServiceData(fullServiceName, environmentService, targetImage)
@@ -237,7 +237,8 @@ export const createDockerService = async function (authUser, id, targetImage) {
 
     } catch (error) {
         const message = error.message + ". " + (error.response?.data ? error.response.data : '')
-        throw message
+        winston.error(`An error happened at the createDockerService function: '${message}'`)
+        throw new Error(message)
     }
 }
 

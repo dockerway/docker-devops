@@ -39,7 +39,11 @@ const messages = {
                 environmentVariables: 'Environment variables',
                 labels: 'Labels'
             },
-
+            networks: {
+                sectionTitle: 'Networks',
+                target: 'Target',
+                aliases: 'Aliases'
+            }
           }
        }
     },
@@ -81,7 +85,11 @@ const messages = {
                 environmentVariables: 'Variables de entorno',
                 labels: 'Etiquetas'
             },
-
+            networks: {
+                sectionTitle: 'Redes',
+                target: 'Red',
+                aliases: 'Alias'
+            }
           }
        }
     },
@@ -124,7 +132,11 @@ const messages = {
                 labels: 'Etiquetas'
 
             },
-
+            networks: {
+                sectionTitle: 'Redes',
+                target: 'Red',
+                aliases: 'Alias'
+            }
           }
        }
     }

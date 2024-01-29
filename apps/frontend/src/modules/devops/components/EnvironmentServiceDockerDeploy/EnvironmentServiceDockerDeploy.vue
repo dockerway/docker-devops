@@ -1,5 +1,5 @@
 <template>
-  <simple-dialog v-model="value" @close="$emit('close')" fullscreen title="Docker Deploy">
+  <simple-dialog v-model="value" @close="$emit('close')" fullscreen :title="$t('devops.service.deploySectionTitle')">
 
     <v-card-text class="overflow-y-auto" style="height: 420px">
 
@@ -15,7 +15,7 @@
 
     <v-card-text v-if="created" class="pa-0">
       <v-alert type="success" dense>
-        Service deployed with id: {{ envServiceDeployed.id }}
+        {{$t('devops.service.deployed')}} {{ envServiceDeployed.id }}
       </v-alert>
 
     </v-card-text>
@@ -24,7 +24,7 @@
       <image-tag-combobox show-name :name="getBaseImage" v-model="targetImage"></image-tag-combobox>
       <v-spacer></v-spacer>
       <v-btn :disabled="buttonDisabledValue" :loading="loading" class="teal white--text"
-        @click="updateDockerService">UPDATE</v-btn>
+        @click="updateDockerService">{{$t('devops.service.update')}}</v-btn>
     </v-card-actions>
 
 
@@ -111,7 +111,6 @@ export default {
       try {
         this.loading = true
 
-        console.log("finding DockerService:", this.envService.id)
         const dockerService = (await DockerProvider.findDockerService(this.envService.id)).data.findDockerService
 
         if (dockerService && dockerService.id) {
@@ -127,7 +126,6 @@ export default {
       }
     },
     async createDockerService() {
-      console.log("CREATE DOCKER SERVICE")
       this.errors = []
       this.loading = true
 
@@ -144,7 +142,6 @@ export default {
       }
     },
     async updateDockerService() {
-      console.log("UPDATE DOCKER SERVICE")
       this.errors = []
       this.loading = true
 
@@ -156,7 +153,6 @@ export default {
         //Update Image to the view
         this.envService.image = updatedDockerServiceResponse.data.updateDockerService.image.fullname
 
-        console.log(`updatedDockerService.data.updateDockerService: '${JSON.stringify(this.envServiceDeployed)}'`)
         return this.envServiceDeployed
       } catch (error) {
         this.errors = error.graphQLErrors.map(i => (!i.message.includes('404') ? i.message : null))
