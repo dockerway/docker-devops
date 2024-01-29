@@ -43,6 +43,11 @@ type FileEnvService{
     hostPath: String
 }
 
+type Networks{
+    Target: String
+    Aliases: [String]
+}
+
 type EnvironmentService{
     id: ID!
     environment: Environment!
@@ -60,6 +65,7 @@ type EnvironmentService{
     limits: LimitService
     preferences: [PreferenceService]
     command: String
+    networks: [Networks]
 }
 
 type EnvironmentServicePaginated{
@@ -120,6 +126,11 @@ input FileEnvServiceInput{
     hostPath: String
 }
 
+input NetworksInput{
+    Target: String
+    Aliases: [String]
+}
+
 input EnvironmentServiceInput{
     environment: ID!
     service: ID
@@ -136,6 +147,7 @@ input EnvironmentServiceInput{
     limits: LimitServiceInput
     preferences: [PreferenceServiceInput]
     command: String
+    networks: [NetworksInput]
 }
 
 type EnvironmentServiceDelete{

@@ -17,8 +17,7 @@
           <v-row>
             <v-col cols="12" sm="6" md="4">
               <v-list>
-                <show-field :value="item.environment.name" :label="$t('devops.service.labels.environment')"
-                  icon="tune" />
+                <show-field :value="item.environment.name" :label="$t('devops.service.labels.environment')" icon="tune" />
                 <show-field :value="item.replicas ? item.replicas.toString() : ''"
                   :label="$t('devops.service.labels.replicas')" icon="double_arrow" />
               </v-list>
@@ -28,8 +27,7 @@
               <v-list>
                 <show-field :value="item.service.name" :label="$t('devops.service.labels.serviceTemplate')"
                   icon="design_services" />
-                <show-field :value="item.stack.name" :label="$t('devops.service.labels.stack')"
-                  icon="table_rows" />
+                <show-field :value="item.stack.name" :label="$t('devops.service.labels.stack')" icon="table_rows" />
 
               </v-list>
             </v-col>
@@ -82,12 +80,11 @@
         <!--VARIABLES-->
         <v-tab-item key="Envs" v-if="item.envs">
           <template v-if="$store.getters.hasPermission(item.environment.type + '_ENV')">
-            <v-data-table :items="item.envs" hide-default-footer :items-per-page="1000" :headers="
-              [
+            <v-data-table :items="item.envs" hide-default-footer :items-per-page="1000" :headers="[
                 { text: 'name', value: 'name' },
                 { text: 'value', value: 'value' },
               ]
-            " />
+              " />
           </template>
         </v-tab-item>
 
@@ -125,6 +122,14 @@
           ]"></v-data-table>
         </v-tab-item>
 
+        <!--Networks-->
+        <v-tab-item key="Networks" v-if="item.networks">
+          <v-data-table :items="item.networks" :items-per-page="5" :headers="[
+            { text: $t('devops.serviceTemplate.networks.target'), value: 'Target' },
+            { text: $t('devops.serviceTemplate.networks.aliases'), value: 'Aliases' },
+          ]"></v-data-table>
+        </v-tab-item>
+
       </v-tabs-items>
     </v-card-text>
 
@@ -151,7 +156,8 @@ export default {
         this.$t('devops.serviceTemplate.labels.labels'),
         this.$t('devops.serviceTemplate.labels.constraints'),
         this.$t('devops.serviceTemplate.labels.limits'),
-        this.$t('devops.serviceTemplate.labels.preferences')
+        this.$t('devops.serviceTemplate.labels.preferences'),
+        this.$t('devops.serviceTemplate.networks.sectionTitle')
       ]
     }
   },

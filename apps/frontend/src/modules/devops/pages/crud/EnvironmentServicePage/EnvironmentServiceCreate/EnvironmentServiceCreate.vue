@@ -45,7 +45,8 @@ export default {
           CPULimit: 0
         },
         preferences: [],
-        command: null
+        command: null,
+        networks: []
       }
     }
   },

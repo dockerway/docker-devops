@@ -1,10 +1,8 @@
 const mongoose = require('mongoose');
-
-
 const mongoosePaginate = require('mongoose-paginate-v2');
 const uniqueValidator = require('mongoose-unique-validator');
 
-const Schema = mongoose.Schema;
+const Schema = mongoose.Schema
 
 const EnvSchema = new Schema({
     name: {type: String, required: true, index: false},
@@ -51,6 +49,11 @@ const FileSchema = new Schema({
     containerPath: {type: String, required: false, index: false},
 })
 
+const NetworksSchema = new Schema({
+    Target: {type: String, required: false, index: false},
+    Aliases: {type: Array, required: false, index: false},
+})
+
 export const EnvironmentServiceSchema = new Schema({
     environment: {
         type: mongoose.Schema.Types.ObjectId,
@@ -72,13 +75,14 @@ export const EnvironmentServiceSchema = new Schema({
     constraints: [ConstraintSchema],
     limits: LimitSchema,
     preferences: [PreferenceSchema],
-    command: {type: String, required: false, index: false}
-}, {timestamps: true});
+    command: {type: String, required: false, index: false},
+    networks: [NetworksSchema],
+}, {timestamps: true})
 
 
-EnvironmentServiceSchema.plugin(mongoosePaginate);
-EnvironmentServiceSchema.plugin(uniqueValidator, {message: 'validation.unique'});
+EnvironmentServiceSchema.plugin(mongoosePaginate)
+EnvironmentServiceSchema.plugin(uniqueValidator, {message: 'validation.unique'})
 
-const EnvironmentService = mongoose.model('EnvironmentService', EnvironmentServiceSchema);
+const EnvironmentService = mongoose.model('EnvironmentService', EnvironmentServiceSchema)
 
 module.exports = EnvironmentService;
