@@ -38,7 +38,7 @@ export default {
       }
   ),
   computed: {
-        ...mapGetters(['me', 'hasPermission']),
+        ...mapGetters(['me']),
 
     theme() {
       return (this.$vuetify.theme.dark) ? 'dark' : 'light'
