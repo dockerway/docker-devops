@@ -54,6 +54,10 @@ mutation updateEnvironmentService($id: ID!, $input: EnvironmentServiceInput){
             value
         }
         command
+        networks{
+            Target
+            Aliases
+        }
     }
 }
 

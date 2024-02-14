@@ -123,7 +123,7 @@ export const createEnvironmentService = async function (authUser, { environment,
     }
 }
 
-export const updateEnvironmentService = async function (authUser, id, { environment, service, stack, image, name, replicas, labels, envs, ports, volumes, files, constraints, limits, preferences, command }) {
+export const updateEnvironmentService = async function (authUser, id, { environment, service, stack, image, name, replicas, labels, envs, ports, volumes, files, constraints, limits, preferences, command, networks }) {
     try {
         const environmentService = await findEnvironmentService(id)
         const envServiceOriginalName = environmentService.name
@@ -132,7 +132,11 @@ export const updateEnvironmentService = async function (authUser, id, { environm
 
         const updatedEnvService = await EnvironmentService.findOneAndUpdate(
             { _id: id },
-            { environment, service, stack, image, name, replicas, labels, envs, ports, volumes, files, constraints, limits, preferences, command },
+            {
+                environment, service, stack, image, name, replicas,
+                labels, envs, ports, volumes, files, constraints,
+                limits, preferences, command, networks
+            },
             { new: true, runValidators: true, context: 'query' }
         ).populate('environment').populate('service').populate('stack')
 

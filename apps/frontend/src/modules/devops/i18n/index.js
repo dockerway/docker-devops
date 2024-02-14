@@ -7,6 +7,7 @@ import ServiceMessages from './messages/ServiceMessages';
 import PermissionMessages from './messages/PermissionsMessages';
 import DiscoveryMessages from './messages/DiscoveryMessages.js';
 import DeployHistoryMessages from './messages/DeployHistoryMessages.js'
+import RegistryMessages from './messages/RegistryMessages.js'
 const messages = merge.all([
     PlatformMessages,
     ServiceTemplateMessages,
@@ -16,6 +17,7 @@ const messages = merge.all([
     PermissionMessages,
     DiscoveryMessages,
     DeployHistoryMessages,
+    RegistryMessages,
 ])
 
 export default messages;

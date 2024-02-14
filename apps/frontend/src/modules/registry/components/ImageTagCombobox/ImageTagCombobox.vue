@@ -4,7 +4,7 @@
           prepend-icon="tag"
           :items="getItems"
           v-model="item"
-          label="Image Tags"
+          :label="$t('registry.image.tag')"
           :loading="loading"
           color="secondary"
           item-color="secondary"

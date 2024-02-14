@@ -59,6 +59,10 @@ query paginateEnvironmentService( $pageNumber: Int, $itemsPerPage:Int, $search: 
                 value
             }
             command
+            networks{
+                Target
+                Aliases
+            }
         }
     }
 }

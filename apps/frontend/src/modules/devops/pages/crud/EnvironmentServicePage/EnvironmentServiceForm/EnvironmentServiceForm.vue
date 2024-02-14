@@ -238,6 +238,25 @@
               </v-col>
             </v-row>
           </v-tab-item>
+
+          <!--Networks-->
+          <v-tab-item
+            key="Networks"
+          >
+            <v-row>
+              <v-col cols="12">
+                <!--VER-->
+                <form-list
+                  v-model="form.networks"
+                  :new-item="{Target:'', Aliases:''}"
+                >
+                  <template v-slot:default="{_item ,index}">
+                    <EnvironmentServiceNetworkForm :tabsType="'networks'" v-model="form.networks[index]"/>
+                  </template>
+                </form-list>
+              </v-col>
+            </v-row>
+          </v-tab-item>
         </v-tabs-items>
       </v-card-text>
     </v-card>
@@ -262,6 +281,7 @@ import StackCombobox from "@/modules/devops/components/StackCombobox/StackCombob
 import LabelEnvServiceForm from "@/modules/devops/components/LabelEnvServiceForm/LabelEnvServiceForm";
 import LimitServiceForm from "@/modules/devops/components/LimitServiceForm/LimitServiceForm";
 import VariablePreferencesEnvServiceForm from "@/modules/devops/components/VariablePreferencesEnvServiceForm"
+import EnvironmentServiceNetworkForm from "@/modules/devops/components/EnvironmentServiceNetworkForm"
 
 export default {
   name: "EnvironmentServiceForm",
@@ -277,7 +297,8 @@ export default {
     VariableEnvServiceForm,
     EnvironmentCombobox,
     ServiceCombobox,
-    VariablePreferencesEnvServiceForm
+    VariablePreferencesEnvServiceForm,
+    EnvironmentServiceNetworkForm
   },
   props: {
     value: { type: Object, required: true },
@@ -462,7 +483,8 @@ export default {
         this.$t('devops.serviceTemplate.labels.labels'),
         this.$t('devops.serviceTemplate.labels.constraints'),
         this.$t('devops.serviceTemplate.labels.limits'),
-        this.$t('devops.serviceTemplate.labels.preferences')
+        this.$t('devops.serviceTemplate.labels.preferences'),
+        this.$t('devops.serviceTemplate.networks.sectionTitle')
       ]
     }
   }
