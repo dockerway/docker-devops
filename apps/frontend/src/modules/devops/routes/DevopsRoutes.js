@@ -10,7 +10,7 @@ const routes = [
         component: SauronPage,
         meta: {
             requiresAuth: true,
-            //permission: "PLATFORM_SHOW"
+            permission: "PLATFORM_SHOW"
         }
     },
 
@@ -20,7 +20,7 @@ const routes = [
         component: DiscoveryPage,
         meta: {
             requiresAuth: true,
-            //permission: "PLATFORM_SHOW"
+            permission: "PLATFORM_SHOW"
         }
     },
 
