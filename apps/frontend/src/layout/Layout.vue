@@ -5,12 +5,10 @@
     </v-navigation-drawer>
 
     <v-app-bar app color="appBar" :clipped-left="clipped">
-       <template v-if="me">
-      <v-app-bar-nav-icon color="onAppBar" @click="drawer=!drawer"/>
+      <v-app-bar-nav-icon color="onAppBar" @click="drawer=!drawer" v-if="me"/>
       <slot name="toolbar-left"></slot>
       <v-spacer></v-spacer>
-      <slot name="toolbar-right"></slot>
-      </template>
+      <slot name="toolbar-right" v-if="me"></slot>
     </v-app-bar>
 
     <v-main>
