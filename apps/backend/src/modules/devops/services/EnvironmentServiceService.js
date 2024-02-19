@@ -3,6 +3,7 @@ import { UserInputError } from 'apollo-server-express'
 import { canUserUpdate, environmentsAllowedView } from './EnvironmentAllowedService'
 import { findEnvironment } from './EnvironmentService'
 import { createAudit } from "@dracul/audit-backend"
+import winston from 'winston'
 
 export const findEnvironmentService = async function (id) {
     try {
@@ -10,6 +11,43 @@ export const findEnvironmentService = async function (id) {
         return envService
     } catch (error) {
         const message = error.message + ". " + (error.response.data ? error.response.data : '')
+        throw message
+    }
+}
+
+export const findEnvironmentServiceByItsName = async function (name) {
+    winston.info(`name at findEnvironmentServiceByItsName: ${name}`)
+    try {
+        const envService = await (EnvironmentService.find({ name: name })
+            .populate('environment')
+            .populate('service')
+            .populate('stack')
+            .exec())
+
+        winston.info(`envService at findEnvironmentServiceByItsName: ${JSON.stringify(envService, null, 2)}`)
+
+        return envService[0]
+    } catch (error) {
+        const message = error.message + ". " + (error.response?.data ? error.response.data : error)
+        throw message
+    }
+}
+
+export const findEnvironmentServiceByItsNameAndStack = async function (name, stack) {
+    try {
+        const envService = await (EnvironmentService.find({ name })
+            .populate('environment')
+            .populate('service')
+            .populate({
+                path: 'stack',
+                match: {name: stack}
+            })
+            .exec())
+
+        const filteredEnvService = (envService.filter(doc => doc.stack !== null && doc.stack.name === stack))[0]
+        return filteredEnvService
+    } catch (error) {
+        const message = error.message + ". " + (error.response?.data ? error.response.data : error)
         throw message
     }
 }
@@ -171,14 +209,14 @@ export const deleteEnvironmentService = async function (authUser, id) {
 
 export const deleteEnvironmentServicesByStack = async function (authUser, stackID) {
     try {
-        const environmentServicesByStack = await EnvironmentService.find({stack: stackID})
-        
+        const environmentServicesByStack = await EnvironmentService.find({ stack: stackID })
+
         environmentServicesByStack.forEach(async (environmentService) => {
             const environment = await findEnvironment(environmentService.environment)
 
-            if (!await canUserUpdate(authUser, environment.type)){
+            if (!await canUserUpdate(authUser, environment.type)) {
                 console.log(`El usuario no tiene permiso para eliminar el servicio '${JSON.stringify(environmentService, null, 2)}' del entorno '${environmentService.environment.type}'`)
-            }else{
+            } else {
                 await environmentService.delete()
                 await createAudit(authUser, { user: authUser.id, action: 'Delete environment service by stack', resource: `${environmentService.name}` })
             }
@@ -192,14 +230,14 @@ export const deleteEnvironmentServicesByStack = async function (authUser, stackI
 
 export const deleteEnvironmentServicesByService = async function (authUser, serviceID) {
     try {
-        const environmentServicesByStack = await EnvironmentService.find({service: serviceID})
-        
+        const environmentServicesByStack = await EnvironmentService.find({ service: serviceID })
+
         environmentServicesByStack.forEach(async (environmentService) => {
             const environment = await findEnvironment(environmentService.environment)
 
-            if (!await canUserUpdate(authUser, environment.type)){
+            if (!await canUserUpdate(authUser, environment.type)) {
                 console.log(`El usuario no tiene permiso para eliminar el servicio '${JSON.stringify(environmentService, null, 2)}' del entorno '${environmentService.environment.type}'`)
-            }else{
+            } else {
                 await environmentService.delete()
                 await createAudit(authUser, { user: authUser.id, action: 'Delete environment service by service', resource: `${environmentService.name}` })
             }

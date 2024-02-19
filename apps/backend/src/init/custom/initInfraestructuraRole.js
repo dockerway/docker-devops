@@ -67,6 +67,7 @@ module.exports = {
         QA_EDIT,
         QA_ENV,
         QA_DEPLOY,
+        QA_DELETE,
         PRE_VIEW,
         PRE_DELETE,
         PRE_EDIT,

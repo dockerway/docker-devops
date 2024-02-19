@@ -27,6 +27,7 @@ import {
     DEV_EDIT,
     DEV_ENV,
     DEV_DEPLOY,
+    DEV_DELETE,
     QA_VIEW,
     PRE_VIEW, PRE_DELETE,
     PROD_VIEW
@@ -53,6 +54,7 @@ module.exports = {
         DEV_EDIT,
         DEV_ENV,
         DEV_DEPLOY,
+        DEV_DELETE,
         QA_VIEW,
         PRE_VIEW, PRE_DELETE,
         PROD_VIEW,

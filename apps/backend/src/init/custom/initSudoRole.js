@@ -80,6 +80,7 @@ import {
     DEV_EDIT,
     DEV_ENV,
     DEV_DEPLOY,
+    DEV_DELETE,
     QA_VIEW,
     QA_EDIT,
     QA_ENV,
@@ -93,7 +94,6 @@ import {
     PROD_ENV,
     PROD_DEPLOY,
     QA_DELETE,
-    DEV_DELETE,
     PROD_DELETE
 } from '../../modules/devops/permissions/Environment'
 

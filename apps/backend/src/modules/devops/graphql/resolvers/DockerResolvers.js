@@ -16,7 +16,6 @@ import {
     deleteDockerService
 } from "../../services/DockerService";
 import { DEV_DELETE, PRE_DELETE, PROD_DELETE, QA_DELETE } from "../../permissions/Environment";
-import winston from "winston";
 
 export default {
     Query: {

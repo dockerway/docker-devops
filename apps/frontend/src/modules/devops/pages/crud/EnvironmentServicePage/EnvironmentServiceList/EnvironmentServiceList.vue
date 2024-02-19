@@ -92,7 +92,7 @@
             x-small
             
             @click="openDeploy(item)"
-            :disabled="!$store.getters.hasPermission(`${item.environment.type}_DEPLOY`)"
+            :disabled="!$store.getters.hasPermission(`${item.environment.type}_DEPLOY`) || item.status == $t('devops.service.active')"
           >
             {{$t('devops.service.deploy')}}
           </v-btn>
@@ -106,7 +106,7 @@
             x-small
             
             @click="$emit('deleteService', item)"
-            :disabled="!$store.getters.hasPermission(`${item.environment.type}_DEPLOY`)"
+            :disabled="!$store.getters.hasPermission(`${item.environment.type}_DELETE`) || (item.status !== $t('devops.service.active'))"
           >
             {{$t('devops.service.delete.action')}}
           </v-btn>
@@ -146,8 +146,8 @@ import DockerProvider from "../../../../providers/DockerProvider";
 import { DeleteButton, EditButton, ShowButton, SearchInput } from "@dracul/common-frontend"
 import StackCombobox from "@/modules/devops/components/StackCombobox/StackCombobox";
 import EnvironmentCombobox from "@/modules/devops/components/EnvironmentCombobox/EnvironmentCombobox";
-import EnvironmentServiceDockerDeploy
-  from "@/modules/devops/components/EnvironmentServiceDockerDeploy/EnvironmentServiceDockerDeploy";
+import { EnvironmentServiceDockerDeploy }
+  from "../../../../components/EnvironmentServiceDockerDeploy";
 
 
 export default {

@@ -29,7 +29,12 @@
 
 
     <v-card-actions v-else-if="!created" class="justify-center">
-      <image-tag-combobox show-name :name="getBaseImage" v-model="targetImage"></image-tag-combobox>
+      <image-tag-combobox
+        show-name
+        :name="getBaseImage"
+        v-model="targetImage"
+      
+      />
       <v-spacer></v-spacer>
       <v-btn :disabled="buttonDisabledValue" :loading="loading" class="teal white--text"
         @click="createDockerService">DEPLOY</v-btn>

@@ -5,7 +5,23 @@ class EnvironmentServiceProvider {
     findEnvironmentService(id) {
         return graphqlClient.query({
             query: require('./gql/EnvironmentService/findEnvironmentService.graphql'),
-            variables: {id:id},
+            variables: {id},
+            fetchPolicy: "network-only"
+        })
+    }
+
+    findEnvironmentServiceByItsName(name) {
+        return graphqlClient.query({
+            query: require('./gql/EnvironmentService/findEnvironmentServiceByItsName.graphql'),
+            variables: {name},
+            fetchPolicy: "network-only"
+        })
+    }
+
+    findEnvironmentServiceByItsNameAndStack(name, stack) {
+        return graphqlClient.query({
+            query: require('./gql/EnvironmentService/findEnvironmentServiceByItsNameAndStack.graphql'),
+            variables: {name, stack},
             fetchPolicy: "network-only"
         })
     }
