@@ -28,14 +28,17 @@ import {
     QA_EDIT,
     QA_ENV,
     QA_DEPLOY,
-    PRE_VIEW,
+    PRE_VIEW, PRE_DELETE,
     PRE_EDIT,
     PRE_ENV,
     PRE_DEPLOY,
     PROD_VIEW,
     PROD_EDIT,
     PROD_ENV,
-    PROD_DEPLOY
+    PROD_DEPLOY,
+    QA_DELETE,
+    DEV_DELETE,
+    PROD_DELETE
 } from '../../modules/devops/permissions/Environment'
 
 import {
@@ -59,11 +62,13 @@ module.exports = {
         DEV_EDIT,
         DEV_ENV,
         DEV_DEPLOY,
+        DEV_DELETE,
         QA_VIEW,
         QA_EDIT,
         QA_ENV,
         QA_DEPLOY,
         PRE_VIEW,
+        PRE_DELETE,
         PRE_EDIT,
         PRE_ENV,
         PRE_DEPLOY,
@@ -71,6 +76,7 @@ module.exports = {
         PROD_EDIT,
         PROD_ENV,
         PROD_DEPLOY,
+        PROD_DELETE,
         PLATFORM_MENU,
         PLATFORM_SHOW,
         STACK_MENU,

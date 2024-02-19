@@ -39,6 +39,13 @@ class DockerProvider {
             variables: {id, targetImage}
         })
     }
+
+    deleteDockerService(id, environment, name) {
+        return graphqlClient.mutate({
+            mutation: require('./gql/Docker/deleteDockerService.graphql'),
+            variables: {id, environment, name}
+        })
+    }
 }
 
 export default new DockerProvider()

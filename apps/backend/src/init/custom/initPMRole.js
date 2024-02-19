@@ -26,7 +26,9 @@ import {
     QA_DEPLOY,
     DEV_VIEW,
     PRE_VIEW,
-    PROD_VIEW
+    PROD_VIEW,
+    QA_DELETE,
+    PRE_DELETE
 } from '../../modules/devops/permissions/Environment'
 
 import {
@@ -50,8 +52,10 @@ module.exports = {
         QA_EDIT,
         QA_ENV,
         QA_DEPLOY,
+        QA_DELETE,
         DEV_VIEW,
         PRE_VIEW,
+        PRE_DELETE,
         PROD_VIEW,
         PLATFORM_MENU,
         PLATFORM_SHOW,

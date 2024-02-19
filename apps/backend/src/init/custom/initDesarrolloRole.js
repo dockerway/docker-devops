@@ -28,7 +28,7 @@ import {
     DEV_ENV,
     DEV_DEPLOY,
     QA_VIEW,
-    PRE_VIEW,
+    PRE_VIEW, PRE_DELETE,
     PROD_VIEW
 } from '../../modules/devops/permissions/Environment'
 
@@ -54,7 +54,7 @@ module.exports = {
         DEV_ENV,
         DEV_DEPLOY,
         QA_VIEW,
-        PRE_VIEW,
+        PRE_VIEW, PRE_DELETE,
         PROD_VIEW,
         PLATFORM_MENU,
         PLATFORM_SHOW,

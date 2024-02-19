@@ -284,3 +284,22 @@ export const updateDockerService = async function (id, targetImage = null, user)
     }
 }
 
+export async function deleteDockerService(id, name, user) {
+    try {
+        const { dockerApiUrl, headers } = await getDockerApiConfig(id)
+        const deleteEndpoint = `${dockerApiUrl}/api/docker/service/${name}`
+
+        const deleteResult = await axios.delete(deleteEndpoint, headers)
+
+        winston.info(`delete result at deleteDockerService: '${JSON.stringify(deleteResult.data, null, 2)}'`)
+
+        if (deleteResult.status == 200) {
+            await createAudit(user, { user: user.id, action: 'Delete docker service', resource: `${name}`, description: `Through endpoint ${deleteEndpoint}`})
+            return deleteResult.data
+        } else {
+            throw new Error(deleteResult)
+        }
+    } catch (error) {
+        winston.error(`An error happened at the deleteDockerService function: '${error}'`)
+    }
+}
