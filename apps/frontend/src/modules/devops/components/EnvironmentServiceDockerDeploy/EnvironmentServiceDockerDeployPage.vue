@@ -20,7 +20,7 @@
     </v-card-text>
 
     <v-card-actions v-if="created && !updated && baseImage" class="justify-center">
-      <image-tag-combobox show-name :name="baseImage" v-model="targetImage" />
+      <image-tag-combobox show-name :name="baseImage" v-model="targetImage" :wishedImage="imageTag"/>
 
       <v-spacer></v-spacer>
 
@@ -88,7 +88,7 @@ export default {
 
   },
   mounted() {
-    // this.getDifferencesBetweenServiceAndTemplate()
+    this.getDifferencesBetweenServiceAndTemplate()
   },
   computed: {
     environment() {
@@ -170,7 +170,7 @@ export default {
       this.loading = true
 
       try {
-        const createDockerServiceResponse = await DockerProvider.createDockerService(this.environmentService.id, this.getTargetImage)
+        const createDockerServiceResponse = await DockerProvider.createDockerService(this.environmentService.id, this.getTargetImage())
 
         this.created = true
         this.environmentServiceDeployed = createDockerServiceResponse.data.createDockerService
@@ -187,7 +187,7 @@ export default {
       this.loading = true
 
       try {
-        const updatedDockerServiceResponse = await DockerProvider.updateDockerService(this.environmentService.id, this.getTargetImage)
+        const updatedDockerServiceResponse = await DockerProvider.updateDockerService(this.environmentService.id, this.getTargetImage())
 
         this.updated = true
         this.environmentServiceDeployed = updatedDockerServiceResponse.data.updateDockerService

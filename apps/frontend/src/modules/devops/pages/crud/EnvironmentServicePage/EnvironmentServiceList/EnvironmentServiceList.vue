@@ -92,7 +92,7 @@
             x-small
             
             @click="openDeploy(item)"
-            :disabled="!$store.getters.hasPermission(`${item.environment.type}_DEPLOY`) || item.status == $t('devops.service.active')"
+            :disabled="!$store.getters.hasPermission(`${item.environment.type}_DEPLOY`)"
           >
             {{$t('devops.service.deploy')}}
           </v-btn>
