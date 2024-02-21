@@ -72,7 +72,7 @@ const routes = [
         component: EnvironmentServiceDockerDeployPage,  
         meta: {
             requiresAuth: true,
-            permission: "STACK_SHOW"
+            permissions: ["DEV_DEPLOY", "QA_DEPLOY", "PRE_DEPLOY", "PROD_DEPLOY"]
         }
      }
 ]
