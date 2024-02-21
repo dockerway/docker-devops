@@ -1,49 +1,57 @@
 <template>
-  <v-container>
-    <v-card-text class="overflow-y-auto" style="height: 420px">
+    <v-card class="d-flex flex-column fill-height">
+      <v-card-text class="overflow-y-auto">
 
-      <environment-service-show-data v-if="environmentService" :item="environmentService" />
+        <environment-service-show-data v-if="environmentService" :item="environmentService" />
 
-    </v-card-text>
+      </v-card-text>
 
-    <v-card-text class="pa-0">
-      <v-alert v-for="(error, index) in errors" type="error" :key="index">
-        {{ error }}
-      </v-alert>
-    </v-card-text>
+      <v-card-text class="pa-0">
+        <v-alert v-for="(error, index) in errors" type="error" :key="index">
+          {{ error }}
+        </v-alert>
+      </v-card-text>
 
-    <v-card-text v-if="created" class="pa-0">
-      <v-alert type="success" dense>
-        {{ $t('devops.service.deployed') }} {{ environmentServiceDeployed.id }}
-      </v-alert>
+      <v-card-text v-if="created" class="pa-0">
+        <v-alert type="success" dense>
+          {{ $t('devops.service.deployed') }} {{ environmentServiceDeployed.id }}
+        </v-alert>
 
-    </v-card-text>
-
-    <v-card-actions v-if="created && !updated && baseImage" class="justify-center">
-      <image-tag-combobox show-name :name="baseImage" v-model="targetImage" :wishedImage="imageTag"/>
-
+      </v-card-text>
       <v-spacer></v-spacer>
+      <v-card-text>
+        <v-row
+          v-if="created && !updated && baseImage"
+          class="ma-0 pa-0"
+          align="center"
+          justify="space-between"
+        >
+          <v-col cols="12" md="6" align-self="center">
+            <image-tag-combobox show-name :name="baseImage" v-model="targetImage" :wishedImage="imageTag"/>
+          </v-col>
+          <v-btn :block="$vuetify.breakpoint.smAndDown" :disabled="buttonDisabledValue" :loading="loading" class="teal white--text" @click="updateDockerService">
+            {{ $t('devops.service.update') }}
+          </v-btn>
+        </v-row>
+        <v-row 
+          v-else-if="!created && baseImage" 
+          class="ma-0 pa-0"
+          align="center"
+          justify="space-between"
+        >
+          <v-col cols="12" md="6" align-self="center">
+            <image-tag-combobox show-name :name="baseImage" v-model="targetImage" :wishedImage="imageTag" />
+          </v-col>
+          <v-btn :block="$vuetify.breakpoint.smAndDown" :disabled="buttonDisabledValue" :loading="loading" class="teal white--text" @click="createDockerService">
+            {{$t('devops.service.deploy')}}
+          </v-btn>
+        </v-row>
+      </v-card-text>
 
-      <v-btn :disabled="buttonDisabledValue" :loading="loading" class="teal white--text" @click="updateDockerService">
-        {{ $t('devops.service.update') }}
-      </v-btn>
-    </v-card-actions>
-
-
-    <v-card-actions v-else-if="!created && baseImage" class="justify-center">
-      <image-tag-combobox show-name :name="baseImage" v-model="targetImage" :wishedImage="imageTag" />
-
-      <v-spacer></v-spacer>
-
-      <v-btn :disabled="buttonDisabledValue" :loading="loading" class="teal white--text" @click="createDockerService">
-        {{$t('devops.service.deploy')}}
-      </v-btn>
-    </v-card-actions>
-
-    <v-alert v-if="differenceMessage" v-model="differenceAlert" type="warning" dismissible dense text>
-      {{ differenceMessage }}
-    </v-alert>
-  </v-container>
+      <v-alert v-if="differenceMessage" v-model="differenceAlert" type="warning" dismissible dense text>
+        {{ differenceMessage }}
+      </v-alert>
+  </v-card>
 </template>
 
 <script>
