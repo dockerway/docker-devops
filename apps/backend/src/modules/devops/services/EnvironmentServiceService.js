@@ -16,7 +16,6 @@ export const findEnvironmentService = async function (id) {
 }
 
 export const findEnvironmentServiceByItsName = async function (name) {
-    winston.info(`name at findEnvironmentServiceByItsName: ${name}`)
     try {
         const envService = await (EnvironmentService.find({ name: name })
             .populate('environment')
@@ -24,7 +23,6 @@ export const findEnvironmentServiceByItsName = async function (name) {
             .populate('stack')
             .exec())
 
-        winston.info(`envService at findEnvironmentServiceByItsName: ${JSON.stringify(envService, null, 2)}`)
 
         return envService[0]
     } catch (error) {

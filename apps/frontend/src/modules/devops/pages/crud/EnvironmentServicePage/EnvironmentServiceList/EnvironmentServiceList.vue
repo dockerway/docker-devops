@@ -5,11 +5,11 @@
         <v-col cols="12" sm="6" md="8">
           <v-row>
             <v-col cols="12" md="4">
-              <environment-combobox v-model="filters[0].value" @input="fetch" clearable />
+              <environment-combobox v-model="filters[0].value" @input="getPaginatedServices" clearable />
             </v-col>
 
             <v-col cols="12" md="5">
-              <stack-combobox v-model="filters[1].value" @input="fetch" clearable />
+              <stack-combobox v-model="filters[1].value" @input="getPaginatedServices" clearable />
             </v-col>
 
             <v-col cols="12" md="4">
@@ -26,29 +26,12 @@
 
     <v-col cols="12">
 
-      <v-data-table
-        class="mt-3"
-        :loading="loading"
-
-        :search="search" 
-        :headers="headers"
-        :single-expand="false"
-        :footer-props="{ itemsPerPageOptions: [5, 10, 25, 50] }"
-        
-        :sort-by.sync="orderBy"
-        :sort-desc.sync="orderDesc"
-
-        :page.sync="pageNumber"
-        
-        :items="items"
-        :server-items-length="totalItems"
-        :items-per-page.sync="itemsPerPage"
-
-        @update:page="fetch"
-        @update:sort-by="fetch"
-        @update:sort-desc="fetch"
-        @update:items-per-page="fetch"
-      >
+      <v-data-table class="mt-3" :loading="loading" :single-expand="false" :search="search" :headers="headers"
+        :items="services" :sort-by.sync="orderBy" :sort-desc.sync="orderDesc" :page.sync="pageNumber"
+        :server-items-length="totalItems" :items-per-page.sync="itemsPerPage"
+        :footer-props="{ itemsPerPageOptions: [5, 10, 25, 50] }" @update:page="getPaginatedServices"
+        @update:sort-by="getPaginatedServices" @update:sort-desc="getPaginatedServices"
+        @update:items-per-page="getPaginatedServices">
 
 
         <template v-slot:item.environment="{ item }">
@@ -77,77 +60,57 @@
         </template>
 
         <template v-slot:item.status="{ item }">
-          <v-chip
-            :color="item.status == $t('devops.service.active') ? 'green' : null"
-          >
+          <v-chip :color="getStatusChipColor(item)" outlined label small>
             {{ item.status }}
           </v-chip>
         </template>
 
         <template v-slot:item.deploy="{ item }">
-          <v-btn
-            color="purple"
-            class="white--text"
-            outlined
-            x-small
-            
-            @click="openDeploy(item)"
-            :disabled="!$store.getters.hasPermission(`${item.environment.type}_DEPLOY`)"
-          >
-            {{$t('devops.service.deploy')}}
+          <v-btn color="purple" class="white--text" outlined x-small @click="openDeploy(item)"
+            :disabled="!$store.getters.hasPermission(`${item.environment.type}_DEPLOY`)">
+            {{ $t('devops.service.deploy') }}
           </v-btn>
         </template>
 
         <template v-slot:item.delete="{ item }">
-          <v-btn
-            color="red"
-            class="white--text"
-            outlined
-            x-small
-            
-            @click="$emit('deleteService', item)"
-            :disabled="!$store.getters.hasPermission(`${item.environment.type}_DELETE`) || (item.status !== $t('devops.service.active'))"
-          >
-            {{$t('devops.service.delete.action')}}
+          <v-btn color="red" class="white--text" outlined x-small @click="$emit('deleteService', item)"
+            :disabled="!$store.getters.hasPermission(`${item.environment.type}_DELETE`) || (item.status !== $t('devops.service.active'))">
+            {{ $t('devops.service.delete.action') }}
           </v-btn>
         </template>
 
         <template v-slot:item.action="{ item }">
           <show-button
             v-if="$store.getters.hasPermission('ENVIRONMENTSERVICE_SHOW') && $store.getters.hasPermission(`${item.environment.type}_VIEW`)"
-            @click="$emit('show', item)"
-          />
+            @click="$emit('show', item)" />
 
           <edit-button
             v-if="$store.getters.hasPermission('ENVIRONMENTSERVICE_UPDATE') && $store.getters.hasPermission(`${item.environment.type}_EDIT`)"
-            @click="$emit('update', item)"
-          />
+            @click="$emit('update', item)" />
 
           <delete-button
             v-if="$store.getters.hasPermission('ENVIRONMENTSERVICE_DELETE') && $store.getters.hasPermission(`${item.environment.type}_EDIT`)"
-            @click="$emit('delete', item)"
-          />
+            @click="$emit('delete', item)" />
         </template>
 
       </v-data-table>
     </v-col>
 
     <environment-service-docker-deploy v-if="deploy" v-model="deploy" :env-service="envServiceToDeploy"
-      @close="closeDeploy"
-    />
+      @close="closeDeploy" />
 
   </v-row>
 </template>
 
 <script>
-import EnvironmentServiceProvider from "../../../../providers/EnvironmentServiceProvider";
-import DockerProvider from "../../../../providers/DockerProvider";
+// import EnvironmentServiceProvider from "../../../../providers/EnvironmentServiceProvider";
 
 import { DeleteButton, EditButton, ShowButton, SearchInput } from "@dracul/common-frontend"
 import StackCombobox from "@/modules/devops/components/StackCombobox/StackCombobox";
 import EnvironmentCombobox from "@/modules/devops/components/EnvironmentCombobox/EnvironmentCombobox";
 import { EnvironmentServiceDockerDeploy }
   from "../../../../components/EnvironmentServiceDockerDeploy";
+import ServicesList from "./ServicesList";
 
 
 export default {
@@ -161,12 +124,12 @@ export default {
 
   data() {
     return {
-      items: [],
+      services: [],
       totalItems: null,
       loading: false,
       orderBy: null,
       orderDesc: false,
-      itemsPerPage: 10,
+      itemsPerPage: 5,
       pageNumber: 1,
       search: '',
       filters: [
@@ -207,10 +170,11 @@ export default {
     },
     getOrderDesc() {
       return (Array.isArray(this.orderDesc)) ? this.orderDesc[0] : this.orderDesc
-    }
+    },
   },
   async created() {
-    await this.fetch()
+    await this.getPaginatedServices()
+    await ServicesList.setInitialServicesStatus(this.services, this.$t('devops.service.unknown'))
   },
   methods: {
     openDeploy(envService) {
@@ -221,47 +185,69 @@ export default {
       this.serviceToCreate = null
       this.deploy = false
 
-      await this.fetch()
+      await this.getPaginatedServices()
     },
     async performSearch() {
       this.pageNumber = 1
-      await this.fetch()
+      await this.getPaginatedServices()
     },
-    async fetch() {
-      this.loading = true
+    getStatusChipColor(service) {
+      let serviceStatusChipColor = null
 
+      if (service.status == this.$t('devops.service.active')) {
+        serviceStatusChipColor = 'green'
+      } else if (service.status == this.$t('devops.service.unknown')) {
+        serviceStatusChipColor = 'orange'
+      }
+
+      return serviceStatusChipColor
+    },
+
+    async fetchServiceStatus(service) {
       try {
-        const { items, totalItems } = (await EnvironmentServiceProvider.paginateEnvironmentService(
+        console.log(`serviceID: ${service.id}`)
+        const status = await ServicesList.getServiceStatus(
+          service.id,
+          this.$t('devops.service.active'),
+          this.$t('devops.service.inactive')
+        )
+        console.log(`status: ${status}`)
+        service.status = status; // Assuming status is fetched and set properly
+        return service;
+      } catch (error) {
+        console.error(`An error occurred while fetching status for service ${service.id}: ${error}`);
+        return service; // Return service even if status couldn't be fetched
+      }
+    },
+
+    async getPaginatedServices() {
+      this.loading = true
+      try {
+        const { items, totalItems } = await ServicesList.getPaginatedServices(
           this.pageNumber,
           this.itemsPerPage,
           this.search,
           this.filters,
           this.getOrderBy,
           this.getOrderDesc
-        )).data.paginateEnvironmentService
+        )
 
-        for (let index = 0; index < items.length; index++) {
-
-          if (items[index]) {
-            const dockerService = (await DockerProvider.findDockerService(items[index].id)).data.findDockerService
-
-            if (dockerService && dockerService.id) {
-              items[index].status = this.$t('devops.service.active')
-            } else {
-              items[index].status = this.$t('devops.service.inactive')
-            }
-          }
-
+        this.services = items
+        await ServicesList.setInitialServicesStatus(this.services, this.$t('devops.service.unknown'))
+        for (let i = 0; i < items.length; i++) {
+          this.$set(items, i, await this.fetchServiceStatus(items[i]));
         }
-
-        this.items = items
         this.totalItems = totalItems
       } catch (error) {
-        console.error(`An error happened when we tried to fetch the environment services: '${error}'`)
+        console.error(`An error happened when we tried to getPaginatedServices the environment services: '${error}'`)
       } finally {
         this.loading = false
       }
     },
+
+
+
+
   }
 }
 </script>
