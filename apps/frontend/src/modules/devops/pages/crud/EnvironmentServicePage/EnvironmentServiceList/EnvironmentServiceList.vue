@@ -26,13 +26,29 @@
 
     <v-col cols="12">
 
-      <v-data-table class="mt-3" :loading="loading" :single-expand="false" :search="search" :headers="headers"
-        :items="services" :sort-by.sync="orderBy" :sort-desc.sync="orderDesc" :page.sync="pageNumber"
-        :server-items-length="totalItems" :items-per-page.sync="itemsPerPage"
-        :footer-props="{ itemsPerPageOptions: [5, 10, 25, 50] }" @update:page="getPaginatedServices"
-        @update:sort-by="getPaginatedServices" @update:sort-desc="getPaginatedServices"
-        @update:items-per-page="getPaginatedServices">
+      <v-data-table 
+        class="mt-3" 
+      
+        :loading="loading" 
+        :single-expand="false" 
+      
+        :search="search" 
+        :headers="headers"
+        :items="services"
 
+        :sort-by.sync="orderBy"
+        :sort-desc.sync="orderDesc" 
+        :page.sync="pageNumber"
+        :items-per-page.sync="itemsPerPage"
+
+        :server-items-length="totalItems" 
+        :footer-props="{ itemsPerPageOptions: [5, 10, 25, 50] }"
+        
+        @update:page="getPaginatedServices"
+        @update:sort-by="getPaginatedServices" 
+        @update:sort-desc="getPaginatedServices"
+        @update:items-per-page="getPaginatedServices">
+        
 
         <template v-slot:item.environment="{ item }">
           {{ item.environment ? item.environment.name : '' }}
@@ -56,11 +72,17 @@
         </template>
 
         <template slot="loading">
-          <div class="text-xs-center" v-t="'common.loading'"></div>
+          <div class="text-xs-center" v-t="'common.loading'">ASDASDAS</div>
         </template>
 
         <template v-slot:item.status="{ item }">
-          <v-chip :color="getStatusChipColor(item)" outlined label small>
+          <v-chip
+            :color="getStatusChipColor(item)"
+            
+            outlined 
+            label
+            small
+          >
             {{ item.status }}
           </v-chip>
         </template>
@@ -105,7 +127,7 @@
 <script>
 // import EnvironmentServiceProvider from "../../../../providers/EnvironmentServiceProvider";
 
-import { DeleteButton, EditButton, ShowButton, SearchInput } from "@dracul/common-frontend"
+import { DeleteButton, EditButton, ShowButton, SearchInput } from '@dracul/common-frontend';
 import StackCombobox from "@/modules/devops/components/StackCombobox/StackCombobox";
 import EnvironmentCombobox from "@/modules/devops/components/EnvironmentCombobox/EnvironmentCombobox";
 import { EnvironmentServiceDockerDeploy }
@@ -129,7 +151,7 @@ export default {
       loading: false,
       orderBy: null,
       orderDesc: false,
-      itemsPerPage: 5,
+      itemsPerPage: 10  ,
       pageNumber: 1,
       search: '',
       filters: [
@@ -174,7 +196,6 @@ export default {
   },
   async created() {
     await this.getPaginatedServices()
-    await ServicesList.setInitialServicesStatus(this.services, this.$t('devops.service.unknown'))
   },
   methods: {
     openDeploy(envService) {
@@ -193,33 +214,16 @@ export default {
     },
     getStatusChipColor(service) {
       let serviceStatusChipColor = null
-
       if (service.status == this.$t('devops.service.active')) {
         serviceStatusChipColor = 'green'
-      } else if (service.status == this.$t('devops.service.unknown')) {
+      } else if (service.status == this.$t('devops.service.inactive')) {
+        serviceStatusChipColor = 'grey'
+      } else {
         serviceStatusChipColor = 'orange'
       }
 
       return serviceStatusChipColor
     },
-
-    async fetchServiceStatus(service) {
-      try {
-        console.log(`serviceID: ${service.id}`)
-        const status = await ServicesList.getServiceStatus(
-          service.id,
-          this.$t('devops.service.active'),
-          this.$t('devops.service.inactive')
-        )
-        console.log(`status: ${status}`)
-        service.status = status; // Assuming status is fetched and set properly
-        return service;
-      } catch (error) {
-        console.error(`An error occurred while fetching status for service ${service.id}: ${error}`);
-        return service; // Return service even if status couldn't be fetched
-      }
-    },
-
     async getPaginatedServices() {
       this.loading = true
       try {
@@ -232,20 +236,31 @@ export default {
           this.getOrderDesc
         )
 
-        this.services = items
-        await ServicesList.setInitialServicesStatus(this.services, this.$t('devops.service.unknown'))
-        for (let i = 0; i < items.length; i++) {
-          this.$set(items, i, await this.fetchServiceStatus(items[i]));
-        }
+        this.services = [...items]
+
+        ServicesList.setInitialServicesStatus(this.services, this.$t('devops.service.unknown'))
+        this.getServiceStatuses()
         this.totalItems = totalItems
+
       } catch (error) {
         console.error(`An error happened when we tried to getPaginatedServices the environment services: '${error}'`)
-      } finally {
-        this.loading = false
       }
     },
 
+    async getServiceStatuses() {
+      try {
+        this.services = await ServicesList.setServicesStatus(
+          this.services,
+          this.$t('devops.service.active'),
+          this.$t('devops.service.inactive')
+        )
 
+        
+        this.loading = false
+      } catch (error) {
+        console.error(`An error happened while at getServiceStatuses: '${error}'`)
+      }
+    }
 
 
   }

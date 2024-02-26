@@ -32,27 +32,25 @@ export class ServicesList {
 
     async setServicesStatus(services, activeMessage, inactiveMessage) {
         try {
-            console.log(`starting setServicesStatus`)
-            for (let index = 0; index < services.length; index++) {
-                const dockerService = (await DockerProvider.findDockerService(services[index].id)).data.findDockerService
-                console.log(`setServicesStatus loop at index '${index}'`)
-
-                if (dockerService && dockerService.id) {
-                    services[index].status = activeMessage
-                } else {
-                    services[index].status = inactiveMessage
-                }
-
-                console.log(`services[index].status at index '${index}': '${services[index].status}'`)
-            }
-
-            return services
+          const updatedServices = await Promise.all(
+            services.map(async (service) => {
+              const dockerService = (await DockerProvider.findDockerService(service.id)).data.findDockerService
+              const updatedStatus = dockerService && dockerService.id ? activeMessage : inactiveMessage
+      
+              return { ...service, status: updatedStatus }
+            })
+          )
+      
+          return updatedServices
         } catch (error) {
-            console.error(`An error happened at the setServicesStatus function: '${error}'`)
+          console.error(`An error happened at the setServicesStatus function: '${error}'`);
         }
-    }
+      }
+      
+    
+    
 
-    async getServiceStatus(serviceId, activeMessage, inactiveMessage){
+    async getServiceStatus(serviceId, activeMessage, inactiveMessage) {
         const service = (await DockerProvider.findDockerService(serviceId)).data.findDockerService
         return service && service.id ? activeMessage : inactiveMessage
     }
