@@ -1,6 +1,6 @@
 <template>
         <v-autocomplete
-                prepend-icon="tune"
+                :prepend-icon="icon"
                 :items="items"
                 :item-text="'name'"
                 :item-value="'id'"
@@ -41,6 +41,7 @@ export default {
         disabled: { type: Boolean, default: false },
         isRequired: { type: Boolean, default: false },
         clearable: { type: Boolean, default: false },
+        icon: {type: String, default: 'tune'},
     },
     data() {
         return {

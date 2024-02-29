@@ -77,6 +77,11 @@ import {
     REGISTRY_UPDATE
 } from '../../modules/registry/permissions/Registry'
 
+import {
+    NODES_SHOW,
+} from '../../modules/nodes/permissions/Nodes.js'
+import { NETWORKS_SHOW } from '../../modules/networks/permissions/Networks.js'
+
 export default [
     BASE_SHOW,
     PLATFORM_CREATE,
@@ -133,4 +138,7 @@ export default [
     PROD_ENV,
     PROD_DEPLOY,
     PROD_DELETE,
+
+    NODES_SHOW,
+    NETWORKS_SHOW,
 ]
