@@ -97,6 +97,7 @@ type Query {
     findDockerServiceStats(id: ID!): [DockerTaskStats]
     findDockerServiceTag(id: ID!): String
     findDockerService(id: ID!): DockerService
+    findDockerServiceStatus(id: ID!): String!
 }
 
 input PortInput{

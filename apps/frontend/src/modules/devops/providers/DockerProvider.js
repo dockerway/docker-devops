@@ -26,6 +26,14 @@ class DockerProvider {
         })
     }
 
+    findDockerServiceStatus(id) {
+        return graphqlClient.query({
+            query: require('./gql/Docker/findDockerServiceStatus.graphql'),
+            variables: {id},
+            fetchPolicy: "network-only"
+        })
+    }
+
     createDockerService(id, targetImage) {
         return graphqlClient.mutate({
             mutation: require('./gql/Docker/createDockerService.graphql'),

@@ -6,6 +6,7 @@ import { DefaultLogger as winston } from "@dracul/logger-backend";
 import { createAudit } from "@dracul/audit-backend";
 
 import axios from 'axios';
+import { findSettingsByKey } from "@dracul/settings-backend";
 
 const notMountedMessage = 'The needed directories are not mounted; please contact your infrastructure team!' //has to match the agent's notMountedMessage
 
@@ -78,7 +79,7 @@ export const findDockerService = async function (id) {
         const URL = dockerApiUrl + path
 
         const headers = { headers: { 'Authorization': `Bearer ${token}` } }
-        const response = await axios.get(URL, headers)
+        const response = await axios.get(URL, {...headers})
 
         if (response.status == 200) {
             return response.data
@@ -89,7 +90,43 @@ export const findDockerService = async function (id) {
 
     } catch (error) {
         winston.error(`error status = '${error}'`)
+        
         if (error.message.includes('404')) return error.message
+        throw new Error(error.message + ". " + (error.response?.data ? error.response.data : ''))
+    }
+}
+
+
+export const findDockerServiceStatus = async function (id) {
+    try {
+        const environmentService = await findEnvironmentService(id)
+        const token = environmentService.environment.dockerApiToken
+        const dockerApiUrl = environmentService.environment.dockerApiUrl
+
+        const serviceName = environmentService.name ? environmentService.name : environmentService.service.name
+        const fullServiceName = environmentService.stack.name + "_" + serviceName
+
+        const path = '/api/docker/service/' + fullServiceName
+        const URL = dockerApiUrl + path
+
+        const requestTimeoutInSeconds = (await findSettingsByKey('serviceStatusRequestTimeout')).value
+        const requestTimeoutInMilliseconds = requestTimeoutInSeconds * 1000
+
+        const headers = { headers: { 'Authorization': `Bearer ${token}` } }
+        const response = await axios.get(URL, { ...headers, timeout: requestTimeoutInMilliseconds})
+
+        if (response.status == 200 && response.data.id) {
+            return 'active'
+        } else {
+            throw new Error(response)
+        }
+
+
+    } catch (error) {
+        winston.error(`error status = '${error}'`)
+        
+        if (error.message.includes('404')) return 'inactive'
+        if (error.message.includes('timeout')) return 'timeout'
 
         throw new Error(error.message + ". " + (error.response?.data ? error.response.data : ''))
     }

@@ -72,11 +72,24 @@
         </template>
 
         <template slot="loading">
-          <div class="text-xs-center" v-t="'common.loading'">ASDASDAS</div>
+          <div class="text-xs-center" v-t="'common.loading'"></div>
         </template>
 
         <template v-slot:item.status="{ item }">
-          <v-chip
+
+          <v-btn v-if="item.status == null"
+            color="blue"
+            outlined
+            label
+            x-small
+
+            @click="getServiceStatus(item)"
+          >
+            {{$t('devops.service.getStatus')}}
+          </v-btn>
+
+
+          <v-chip v-else
             :color="getStatusChipColor(item)"
             
             outlined 
@@ -85,6 +98,8 @@
           >
             {{ item.status }}
           </v-chip>
+
+
         </template>
 
         <template v-slot:item.deploy="{ item }">
@@ -132,7 +147,8 @@ import StackCombobox from "@/modules/devops/components/StackCombobox/StackCombob
 import EnvironmentCombobox from "@/modules/devops/components/EnvironmentCombobox/EnvironmentCombobox";
 import { EnvironmentServiceDockerDeploy }
   from "../../../../components/EnvironmentServiceDockerDeploy";
-import ServicesList from "./ServicesList";
+import { ServicesList } from "./ServicesList";
+import EnvironmentServiceProvider from "../../../../providers/EnvironmentServiceProvider";
 
 
 export default {
@@ -167,7 +183,8 @@ export default {
         }
       ],
       deploy: false,
-      envServiceToDeploy: null
+      envServiceToDeploy: null,
+      servicesListClassInstance: new ServicesList(EnvironmentServiceProvider, this.$t('devops.service.active'), this.$t('devops.service.inactive'), this.$t('devops.service.unknown'))
     }
   },
   computed: {
@@ -224,10 +241,26 @@ export default {
 
       return serviceStatusChipColor
     },
+    async getServiceStatus(service){
+      try {
+        this.loading = true
+
+        const indexOfServiceOnServicesArray = this.services.indexOf(service)
+        const serviceStatus = await this.servicesListClassInstance.getServiceStatus(service.id)
+
+        this.services[indexOfServiceOnServicesArray].status = serviceStatus
+
+      } catch (error) {
+        console.error(`An error happened at the getServiceStatus vue method: '${error}'`)
+      }finally{
+        this.loading = false
+      }
+    },
+
     async getPaginatedServices() {
       this.loading = true
       try {
-        const { items, totalItems } = await ServicesList.getPaginatedServices(
+        const { items, totalItems } = await this.servicesListClassInstance.getPaginatedServices(
           this.pageNumber,
           this.itemsPerPage,
           this.search,
@@ -238,30 +271,24 @@ export default {
 
         this.services = [...items]
 
-        ServicesList.setInitialServicesStatus(this.services, this.$t('devops.service.unknown'))
-        this.getServiceStatuses()
+        // this.getServiceStatuses()
         this.totalItems = totalItems
 
       } catch (error) {
         console.error(`An error happened when we tried to getPaginatedServices the environment services: '${error}'`)
+      }finally{
+        this.loading = false
       }
     },
 
     async getServiceStatuses() {
       try {
-        this.services = await ServicesList.setServicesStatus(
-          this.services,
-          this.$t('devops.service.active'),
-          this.$t('devops.service.inactive')
-        )
-
-        
+        this.services = await this.servicesListClassInstance.setServicesStatus(this.services)
         this.loading = false
       } catch (error) {
         console.error(`An error happened while at getServiceStatuses: '${error}'`)
       }
     }
-
 
   }
 }

@@ -127,7 +127,6 @@ export default {
     }
   },
   created() {
-      console.log(`AAAAAAAAAAAAAAAAAAAAAAA`)
     this.findDockerService()
   },
   mounted() {

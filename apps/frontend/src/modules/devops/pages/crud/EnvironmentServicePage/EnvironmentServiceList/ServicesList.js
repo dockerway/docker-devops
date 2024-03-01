@@ -1,11 +1,14 @@
-import EnvironmentServiceProvider from "../../../../providers/EnvironmentServiceProvider";
 import DockerProvider from "../../../../providers/DockerProvider";
 
 // import { string, object } from 'zod';
 
 export class ServicesList {
-    constructor(servicesProvider = EnvironmentServiceProvider) {
+    constructor(servicesProvider, activeStateMessage, inactiveStateMessage, unknownStateMessage) {
         this.servicesProvider = servicesProvider
+
+        this.activeStateMessage = activeStateMessage
+        this.inactiveStateMessage = inactiveStateMessage
+        this.unknownStateMessage = unknownStateMessage
     }
 
     async getPaginatedServices(pageNumber, itemsPerPage, search, filters, orderBy, orderDesc) {
@@ -20,24 +23,29 @@ export class ServicesList {
         }
     }
 
-    async setInitialServicesStatus(services, initialStatusMessage) {
-        try {
-            for (let index = 0; index < services.length; index++) {
-                services[index].status = initialStatusMessage
-            }
-        } catch (error) {
-            console.error(`An error happened at the setInitialServicesStatus function: '${error}'`)
-        }
-    }
-
-    async setServicesStatus(services, activeMessage, inactiveMessage) {
+    async setServicesStatus(services) {
         try {
           const updatedServices = await Promise.all(
             services.map(async (service) => {
-              const dockerService = (await DockerProvider.findDockerService(service.id)).data.findDockerService
-              const updatedStatus = dockerService && dockerService.id ? activeMessage : inactiveMessage
+              const dockerServiceStatus = (await DockerProvider.findDockerServiceStatus(service.id)).data.findDockerServiceStatus
+              let translatedStatus = null
+
+              switch (dockerServiceStatus) {
+                case 'active':
+                    translatedStatus = this.activeStateMessage
+                    break;
+                case 'inactive':
+                    translatedStatus = this.inactiveStateMessage
+                    break;
+                case 'unknown':
+                    translatedStatus = this.unknownStateMessage
+                    break;
+              
+                default:
+                    break;
+              }
       
-              return { ...service, status: updatedStatus }
+              return { ...service, status: translatedStatus }
             })
           )
       
@@ -50,10 +58,25 @@ export class ServicesList {
     
     
 
-    async getServiceStatus(serviceId, activeMessage, inactiveMessage) {
-        const service = (await DockerProvider.findDockerService(serviceId)).data.findDockerService
-        return service && service.id ? activeMessage : inactiveMessage
+    async getServiceStatus(serviceId) {
+        const dockerServiceStatus = (await DockerProvider.findDockerServiceStatus(serviceId)).data.findDockerServiceStatus
+        let translatedStatus = null
+
+        switch (dockerServiceStatus) {
+          case 'active':
+              translatedStatus = this.activeStateMessage
+              break;
+          case 'inactive':
+              translatedStatus = this.inactiveStateMessage
+              break;
+          case 'timeout':
+              translatedStatus = this.unknownStateMessage
+              break;
+        
+          default:
+              break;
+        }
+
+        return translatedStatus
     }
 }
-
-export default new ServicesList()

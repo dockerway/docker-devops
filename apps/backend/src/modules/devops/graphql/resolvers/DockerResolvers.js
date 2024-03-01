@@ -10,10 +10,12 @@ import {
 
 import {
     createDockerService,
-    findDockerService, findDockerServiceStats,
+    findDockerService,
+    findDockerServiceStats,
     findDockerServiceTag,
     updateDockerService,
-    deleteDockerService
+    deleteDockerService,
+    findDockerServiceStatus,
 } from "../../services/DockerService";
 import { DEV_DELETE, PRE_DELETE, PROD_DELETE, QA_DELETE } from "../../permissions/Environment";
 
@@ -35,6 +37,12 @@ export default {
             if (!rbac.isAllowed(user.id, ENVIRONMENTSERVICE_SHOW)) throw new ForbiddenError("Not Authorized")
 
             return findDockerService(id)
+        },
+        findDockerServiceStatus: async (_, { id }, { user, rbac }) => {
+            if (!user) throw new AuthenticationError("Unauthenticated")
+            if (!rbac.isAllowed(user.id, ENVIRONMENTSERVICE_SHOW)) throw new ForbiddenError("Not Authorized")
+
+            return await findDockerServiceStatus(id)
         },
     },
     Mutation: {
