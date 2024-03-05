@@ -25,6 +25,7 @@
             :headers="headers"
             :items-per-page.sync="itemsPerPage"
             :footer-props="{ itemsPerPageOptions: [5, 10, 25, 50,100] }"
+            :loading="isDataBeingLoaded"
         >
 
           <template v-slot:item.leader="{ item }">
@@ -50,6 +51,7 @@ export default {
   components: {NodesFilter},
   data() {
     return {
+      loading: false,
       nodes: [],
       itemsPerPage: 25,
       environment: ''
@@ -68,10 +70,22 @@ export default {
         {text: this.$t('nodes.reachability'), value: 'reachability'},
       ]
     },
+
+    isDataBeingLoaded(){
+      return this.loading
+    },
   },
   methods: {
     async getNodesFromEnvironment(environment) {
-      this.nodes = (await NodesProvider.getDockerNodes(environment)).data.getDockerNodes
+      this.loading = true
+
+      try {
+        this.nodes = (await NodesProvider.getDockerNodes(environment)).data.getDockerNodes
+      } catch (error) {
+        console.error(`An errpr happened at the getNodesFromEnvironment method: '${error}'`)
+      }finally{
+        this.loading = false
+      }
     }
   }
 }
