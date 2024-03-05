@@ -3,11 +3,11 @@
   <v-container>
     <v-card class="my-3" >
         <v-card-title>
-            {{$t('networks.title')}}
+          {{$t('networks.title')}}  
         </v-card-title>
 
         <v-card-subtitle>
-            {{ $t('networks.subtitle') }}
+          {{ $t('networks.subtitle') }}
         </v-card-subtitle>
 
         <v-divider/>
@@ -24,6 +24,7 @@
             :headers="headers"
             :items-per-page.sync="itemsPerPage"
             :footer-props="{ itemsPerPageOptions: [5, 10, 25, 50,100] }"
+            :loading="isDataBeingLoaded"
           >
 
           <template v-for="header in headers.filter((header) => header.hasOwnProperty('formatter'))" v-slot:[`item.${header.value}`]="{ header, value }">
@@ -54,6 +55,7 @@ export default {
   components: {NetworksFilter},
   data() {
     return {
+      loading: false,
       networks: [],
       itemsPerPage: 25,
       environment: ''
@@ -72,11 +74,23 @@ export default {
         {text: this.$t('networks.ipv4ipamgateway'), value: 'IPAM.Config[0].Gateway'}
       ]
     },
+
+    isDataBeingLoaded(){
+      return this.loading
+    },
   },
   methods: {
     async getDockerNetworks(environment) {
-      const networksFromEnvironment = (await NetworksProvider.getDockerNetworks(environment)).data.getDockerNetworks
-      this.networks = networksFromEnvironment
+      this.loading = true
+
+      try {
+        const networksFromEnvironment = (await NetworksProvider.getDockerNetworks(environment)).data.getDockerNetworks
+        this.networks = networksFromEnvironment
+      } catch (error) {
+        console.log(`An error happened at the getDockerNetworks method: '${error}'`)
+      } finally {
+        this.loading = false
+      }
     },
 
     formatDate(date){
