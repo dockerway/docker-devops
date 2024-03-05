@@ -117,6 +117,14 @@ import {
     RESTORE_SYSTEM,
 } from '../../modules/devops/permissions/Restore'
 
+import {
+    NETWORKS_SHOW,
+} from '../../modules/networks/permissions/Networks'
+
+import {
+    NODES_SHOW,
+} from '../../modules/nodes/permissions/Nodes'
+
 module.exports = {
     name: "sudo",
     permissions: [
@@ -202,6 +210,9 @@ module.exports = {
         SETTINGS_UPDATE,
         SETTINGS_CREATE,
         SETTINGS_DELETE,
+
+        NODES_SHOW,
+        NETWORKS_SHOW,
     ],
     readonly: true
 }
