@@ -28,7 +28,22 @@
 
 <script>
 
-import { InputErrorsByProps, RequiredRule } from '@dracul/common-frontend'
+function versionsCompare(versionA, versionB){
+  const versionAparts = versionA.split('.')
+  const versionBparts = versionB.split('.')
+
+  for (let i = 0; i < Math.max(versionAparts.length, versionBparts.length); i++) {
+    const versionANumber = parseInt(versionAparts[i]) || 0
+    const versionBNumber = parseInt(versionBparts[i]) || 0
+
+    if(versionANumber !== versionBNumber){
+      return versionBNumber - versionANumber
+    }
+  }
+  return versionBparts.length - versionAparts.length
+}
+
+import {InputErrorsByProps, RequiredRule} from '@dracul/common-frontend'
 
 
 import ImageProvider from "../../providers/ImageProvider"
@@ -63,11 +78,10 @@ export default {
       if (this.data && this.data.tags && this.data.tags.length > 0) {
 
         return this.data.tags
-          .map(tag => ({
-            text: this.showName ? this.data.name + ":" + tag : tag,
-            value: tag
-          }))
-          .sort((a, b) => b.value.localeCompare(a.value))
+            .map(tag => ({
+              text: this.showName ? this.data.name + ":" + tag : tag,
+              value: tag
+            }))
       }
 
       return []
@@ -102,35 +116,29 @@ export default {
     },
     async fetchImageTags() {
       this.loading = true
+      ImageProvider.imageTags(this.registry, this.name)
+          .then(r => {
+            let {name, tags} = r.data.imageTags
 
-      try {
-        this.data = (await ImageProvider.imageTags(this.registry, this.name)).data.imageTags
-      } catch (error) {
-        console.error(error)
-      } finally {
-        this.loading = false
-      }
+            tags = tags.sort(versionsCompare)
 
+            this.data = {name, tags}
+          })
+          .catch(err => console.error(err))
+          .finally(() => this.loading = false)
     },
     async fetchImageTagsByFullname() {
       this.loading = true
+      ImageProvider.imageTagsByFullname(this.name)
+          .then(r => {
+            let {name, tags} = r.data.imageTagsByFullname
 
-      try {
-        if(this.name){
-          this.data = (await ImageProvider.imageTagsByFullname(this.name)).data.imageTagsByFullname
-        }
-      } catch (error) {
-        console.error(error)
-      } finally {
-        this.loading = false
-      }
+            tags = tags.sort(versionsCompare)
 
-    },
-
-    setDefaultSelectedItem() {
-      if (this.wishedImage && this.data && this.data.tags && this.data.tags.includes(this.wishedImage)) {
-        this.item = this.wishedImage
-      }
+            this.data = {name, tags}
+          })
+          .catch(err => console.error(err))
+          .finally(() => this.loading = false)
     }
 
   }
