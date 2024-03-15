@@ -54,6 +54,7 @@ type EnvironmentService{
     service: Service
     stack: Stack
     image: String
+    deployMode: String
     replicas: Int
     name: String
     envs: [EnvService]
@@ -150,6 +151,7 @@ input EnvironmentServiceInput{
     preferences: [PreferenceServiceInput]
     command: String
     networks: [NetworksInput]
+    deployMode: String
 }
 
 type EnvironmentServiceDelete{

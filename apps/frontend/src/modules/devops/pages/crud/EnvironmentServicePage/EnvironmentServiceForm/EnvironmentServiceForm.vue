@@ -19,7 +19,6 @@
 
       <v-col cols="12" sm="6">
         <v-text-field
-
             prepend-icon="image"
             name="image"
             v-model="form.image"
@@ -32,22 +31,7 @@
         ></v-text-field>
       </v-col>
 
-      <v-col cols="12" sm="3">
-        <v-text-field
-
-            prepend-icon="double_arrow"
-            name="replicas"
-            v-model="form.replicas"
-            :label="$t('devops.service.labels.replicas')"
-            :placeholder="$t('devops.service.labels.replicas')"
-            :error="hasInputErrors('replicas')"
-            :error-messages="getInputErrors('replicas')"
-            color="secondary"
-            :rules="required"
-        ></v-text-field>
-      </v-col>
-
-      <v-col cols="12" sm="3">
+      <v-col cols="12" sm="6">
         <v-text-field
             prepend-icon="title"
             name="name"
@@ -60,6 +44,29 @@
             :rules="required"
         ></v-text-field>
       </v-col>
+      <v-col cols="12" md="6">
+        <v-row align="center" class="ma-0 pa-0">
+          <v-switch 
+            value
+            :input-value="deployModeValue" 
+            :label="deployModeLabel"
+            @click="form.deployMode === 'global' ? form.deployMode = 'replic' : form.deployMode = 'global'"
+            class="mr-16"
+          ></v-switch>
+          <v-text-field
+            v-if="!form.deployMode || form.deployMode === 'replic'"
+            prepend-icon="double_arrow"
+            name="replicas"
+            v-model="form.replicas"
+            :label="$t('devops.service.labels.replicas')"
+            :placeholder="$t('devops.service.labels.replicas')"
+            :error="hasInputErrors('replicas')"
+            :error-messages="getInputErrors('replicas')"
+            color="secondary"
+            :rules="required"
+          ></v-text-field>
+        </v-row>
+      </v-col>  
 
       <v-col cols="12" sm="12">
         <v-text-field
@@ -314,6 +321,18 @@ export default {
       set(val) {
         this.$emit('input', val)
       }
+    },
+    deployModeLabel(){
+      let deployModeLabel = this.$t('devops.service.labels.replicas')
+      if(this.form.deployMode === 'global') deployModeLabel = this.$t('devops.service.labels.global')
+      if(this.form.deployMode === 'replic') deployModeLabel = this.$t('devops.service.labels.replicas')
+      return deployModeLabel
+    },
+    deployModeValue(){
+      let deployModelValue = true
+      if(this.form.deployMode === 'global') deployModelValue = false
+      if(this.form.deployMode === 'replic') deployModelValue = true
+      return deployModelValue
     }
   },
   watch: {

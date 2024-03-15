@@ -15,7 +15,10 @@
           v-if="envService"
           :item="envService"
         ></environment-service-show-data>
-        <v-alert type="success" dense v-if="created">
+        <v-alert type="error" dense v-if="deployError">
+          {{ deployErrorMessage }}
+        </v-alert>
+        <v-alert type="success" dense v-else-if="created">
           {{ $t('devops.service.deployed') }} {{ envServiceDeployed.id }}
         </v-alert>
       </v-card-text>
@@ -84,6 +87,26 @@ import ServiceTemplateComparer from "../../../../helpers/ServiceTemplateComparer
 import ServiceProvider from "../../providers/ServiceProvider";
 import EnvironmentServiceProvider from "../../providers/EnvironmentServiceProvider";
 
+function handledErrors(error){
+  if(error && error.message){
+    
+    const httpCode501Regex = new RegExp('HTTP code 501', 'i')
+
+    const serviceModeChangeIsNotAllowedRegex = new RegExp('code = Unimplemented desc = service mode change is not allowed')
+
+    const serviceModeChangeIsNotAllowedError = httpCode501Regex.test(error.message) && serviceModeChangeIsNotAllowedRegex.test(error.message)
+
+    if(serviceModeChangeIsNotAllowedError){
+      const errorInfo = {
+        status: 501,
+        message: 'devops.service.deployErrors.serviceModeChangeIsNotAllowedError'
+      }
+      return errorInfo
+    }
+  }
+  return null
+}
+
 export default {
   name: "EnvironmentServiceDockerDeploy",
   components: { ImageTagCombobox, EnvironmentServiceShowData, ToolbarDialog },
@@ -102,6 +125,8 @@ export default {
       buttonDisabledValue: true,
       differenceAlert: false,
       differenceMessage: '',
+      deployErrorMessage: '',
+      deployError: false
     }
   },
   computed: {
@@ -161,6 +186,11 @@ export default {
         this.envServiceDeployed = createDockerServiceResponse.data.createDockerService
         return this.envServiceDeployed
       } catch (error) {
+        const handledError = handledErrors(error)
+        if(handledError){
+          this.deployError = true
+          this.deployErrorMessage = `${handledError.status}: ${this.$t(handledError.message)}`
+        }
         this.errors = error.graphQLErrors.map(i => (!i.message.includes('404') ? i.message : null))
         throw error
       } finally {
@@ -181,6 +211,11 @@ export default {
 
         return this.envServiceDeployed
       } catch (error) {
+        const handledError = handledErrors(error)
+        if(handledError){
+          this.deployError = true
+          this.deployErrorMessage = `${handledError.status}: ${this.$t(handledError.message)}`
+        }
         this.errors = error.graphQLErrors.map(i => (!i.message.includes('404') ? i.message : null))
         throw error
       } finally {

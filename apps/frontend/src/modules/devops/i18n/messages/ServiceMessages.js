@@ -18,6 +18,8 @@ const messages = {
             menu: 'Service',
             update: 'Update',
             labels: {
+                deployMode: 'Deploy Mode',
+                global: 'Global',
                 main: 'Main',
                 environment: 'Environment',
                 serviceTemplate: 'Service Template',
@@ -51,6 +53,12 @@ const messages = {
                 command: "Command",
                 platform: "Platform",
             },
+            values: {
+              deployModes: {
+                global: 'Global',
+                replic: 'Replicated'
+              }
+            },
             status: 'Status',
             active: 'Active',
             inactive: 'Inactive',
@@ -66,6 +74,9 @@ const messages = {
             delete:{
               action: 'Delete',
               title: 'Delete deployed service'
+            },
+            deployErrors: {
+              serviceModeChangeIsNotAllowedError: 'Changing the service mode is not allowed. To change the service mode, remove the service and deploy it again.',
             }
           },
           serviceRecords:{
@@ -91,6 +102,8 @@ const messages = {
             menu: 'Servicios',
             update: 'Actualizar',
             labels: {
+                deployMode: 'Modo de despliegue',
+                global: 'Global',
                 main: 'Principal',
                 environment: 'Entorno',
                 serviceTemplate: 'Plantilla de Servicio',
@@ -124,6 +137,12 @@ const messages = {
                 command: "Comando",
                 platform: "Plataforma",
             },
+            values: {
+              deployModes: {
+                global: 'Global',
+                replic: 'Replicado'
+              }
+            },
             status: 'Estado',
             active: 'Activo',
             inactive: 'Inactivo',
@@ -140,6 +159,9 @@ const messages = {
               action: 'Eliminar',
               title: 'Eliminar servicio desplegado',
               areYouSureMessage: '¿Esta seguro de que desea eliminar el servicio desplegado?'
+            },
+            deployErrors: {
+              serviceModeChangeIsNotAllowedError: 'El cambio de modo de despliegue no es posible. Para cambiar el modo de despliegue debe remover el servicio desplegado y volver a desplegar.'
             }
           },
           serviceRecords:{
@@ -165,6 +187,8 @@ const messages = {
             menu: 'Service',
             update: 'Atualizar',
             labels: {
+                deployMode: 'Modo de implantação',
+                global: 'Global',
                 main: 'Main',
                 environment: 'Environment',
                 serviceTemplate: 'Service',
@@ -198,6 +222,12 @@ const messages = {
                 command: "Command",
                 platform: "Plataforma",
             },
+            values: {
+              deployModes: {
+                global: 'Global',
+                replic: 'Replicado'
+              }
+            },
             status: 'Status',
             active: 'Activo',
             inactive: 'Inactivo',
@@ -214,7 +244,11 @@ const messages = {
               action: 'Delete',
               title: 'Delete deployed service',
               areYouSureMessage: 'Are you sure you want to delete this deployed service?'
-            }          },
+            },
+            deployErrors: {
+              serviceModeChangeIsNotAllowedError: 'Changing the service mode is not allowed. To change the service mode, remove the service and deploy it again.'
+            }          
+          },
           serviceRecords:{
             delete: "Eliminar registro del servicio"
           }

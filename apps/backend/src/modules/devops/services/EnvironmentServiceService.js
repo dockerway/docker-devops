@@ -136,13 +136,13 @@ export const paginateEnvironmentService = async function (user, pageNumber = 1, 
 }
 
 
-export const createEnvironmentService = async function (authUser, { environment, service, stack, image, name, replicas, labels, envs, ports, volumes, files, constraints, limits, preferences, command }) {
+export const createEnvironmentService = async function (authUser, { deployMode, environment, service, stack, image, name, replicas, labels, envs, ports, volumes, files, constraints, limits, preferences, command }) {
     const env = await findEnvironment(environment)
 
     if (! await canUserUpdate(authUser, env.type)) throw new Error("El usuario no tiene permiso para crear este entorno")
 
     const doc = new EnvironmentService({
-        environment, service, stack, image, name, replicas, labels, envs, ports, volumes, files, constraints, limits, preferences, command
+        deployMode, environment, service, stack, image, name, replicas, labels, envs, ports, volumes, files, constraints, limits, preferences, command
     })
 
     doc.id = doc._id
@@ -159,7 +159,7 @@ export const createEnvironmentService = async function (authUser, { environment,
     }
 }
 
-export const updateEnvironmentService = async function (authUser, id, { environment, service, stack, image, name, replicas, labels, envs, ports, volumes, files, constraints, limits, preferences, command, networks }) {
+export const updateEnvironmentService = async function (authUser, id, { deployMode, environment, service, stack, image, name, replicas, labels, envs, ports, volumes, files, constraints, limits, preferences, command, networks }) {
     try {
         const environmentService = await findEnvironmentService(id)
         const envServiceOriginalName = environmentService.name
@@ -169,9 +169,9 @@ export const updateEnvironmentService = async function (authUser, id, { environm
         const updatedEnvService = await EnvironmentService.findOneAndUpdate(
             { _id: id },
             {
-                environment, service, stack, image, name, replicas,
-                labels, envs, ports, volumes, files, constraints,
-                limits, preferences, command, networks
+                deployMode, environment, service, stack, image, name, 
+                replicas, labels, envs, ports, volumes, files, 
+                constraints, limits, preferences, command, networks
             },
             { new: true, runValidators: true, context: 'query' }
         ).populate('environment').populate('service').populate('stack')

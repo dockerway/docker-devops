@@ -226,6 +226,7 @@ function normalizeEnvironmentServiceData(serviceName, environmentService, target
             name: serviceName,
             stack: environmentService.stack.name,
             image: targetImage ? targetImage : environmentService.image,
+            deployMode: environmentService.deployMode ? environmentService.deployMode : 'replic',
             replicas: environmentService.replicas,
             volumes: environmentService.volumes ? environmentService.volumes : [],
             ports: environmentService.ports ? environmentService.ports : [],

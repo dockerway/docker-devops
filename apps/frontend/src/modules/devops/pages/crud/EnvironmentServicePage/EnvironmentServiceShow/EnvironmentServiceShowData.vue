@@ -18,7 +18,10 @@
             <v-col cols="12" sm="6" md="4">
               <v-list>
                 <show-field :value="item.environment.name" :label="$t('devops.service.labels.environment')" icon="tune" />
-                <show-field :value="item.replicas ? item.replicas.toString() : ''"
+                <show-field 
+                  :value="item.deployMode ? $t(`devops.service.values.deployModes.${item.deployMode}`) : this.$t('devops.service.values.deployModes.replic')"
+                  :label="$t('devops.service.labels.deployMode')" icon="mdi-resistor-nodes" />
+                <show-field v-if="item.deployMode != 'global'" :value="item.replicas ? item.replicas.toString() : ''"
                   :label="$t('devops.service.labels.replicas')" icon="double_arrow" />
               </v-list>
             </v-col>
