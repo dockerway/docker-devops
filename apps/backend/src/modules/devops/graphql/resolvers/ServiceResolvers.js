@@ -1,4 +1,4 @@
-import { createService, updateService, deleteService,  getAllServices, getServiceById, paginateServices} from '../../services/ServiceService'
+import { createService, updateService, deleteService,  getAllServices, getServiceById, paginateServices, getServiceByName} from '../../services/ServiceService'
 import {AuthenticationError, ForbiddenError} from "apollo-server-express";
 
 import {
@@ -16,6 +16,19 @@ export default {
             if(!rbac.isAllowed(user.id, SERVICE_SHOW)) throw new ForbiddenError("Not Authorized")
 
             return getServiceById(id)
+        },
+        findServiceByItsName: (_, {name}, {user,rbac}) => {
+            if (!user) throw new AuthenticationError("Unauthenticated")
+            if(!rbac.isAllowed(user.id, SERVICE_SHOW)) throw new ForbiddenError("Not Authorized")
+
+            return getServiceByName(name)
+        },
+
+        findServiceByItsNameAndStack:  (_, {name}, {user,rbac}) => {
+            if (!user) throw new AuthenticationError("Unauthenticated")
+            if(!rbac.isAllowed(user.id, SERVICE_SHOW)) throw new ForbiddenError("Not Authorized")
+
+            return findServiceByItsNameAndStack(name)
         },
         fetchService: (_, {}, {user,rbac}) => {
             if (!user) throw new AuthenticationError("Unauthenticated")

@@ -2,6 +2,8 @@ import merge from 'deepmerge'
 import baseRoutes from '../modules/base/routes'
 import devopsRoutes from '../modules/devops/routes'
 import registryRoutes from '../modules/registry/routes'
+import NodesRoutes from '../modules/nodes/routes'
+import NetworksRoutes from '../modules/networks/routes'
 
 import {routes as userRoutes} from '@dracul/user-frontend'
 import {routes as customRoutes} from '@dracul/customize-frontend'
@@ -13,7 +15,9 @@ const routes = merge.all([baseRoutes, devopsRoutes, registryRoutes, userRoutes,
     notificationRoutes,
     customRoutes,
     settingsRoutes,
-    auditRoutes
+    auditRoutes,
+    NodesRoutes,
+    NetworksRoutes
 ])
 
 

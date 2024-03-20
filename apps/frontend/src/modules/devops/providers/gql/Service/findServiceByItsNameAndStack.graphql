@@ -1,0 +1,39 @@
+query findServiceByItsNameAndStack($name:String!, $stack: String!){
+    findServiceByItsNameAndStack(name:$name, stack:$stack){
+        id
+        name
+        description
+        image
+        repository
+        platform{
+            id
+            name
+        }
+        volumes
+        files{
+            fileName
+            fileContent
+            containerPath
+        }
+        ports
+        envs{
+            name
+            defaultValue
+        }
+        constraints{
+            name
+            operation
+            defaultValue
+        }
+        limits{
+            memoryReservation
+            memoryLimit
+            CPUReservation
+            CPULimit
+        }
+        preferences{
+            name
+            defaultValue
+        }
+    }
+}

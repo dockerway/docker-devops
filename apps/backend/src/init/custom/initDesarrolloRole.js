@@ -27,8 +27,9 @@ import {
     DEV_EDIT,
     DEV_ENV,
     DEV_DEPLOY,
+    DEV_DELETE,
     QA_VIEW,
-    PRE_VIEW,
+    PRE_VIEW, PRE_DELETE,
     PROD_VIEW
 } from '../../modules/devops/permissions/Environment'
 
@@ -45,6 +46,14 @@ import {
     REGISTRY_SHOW,
 } from '../../modules/registry/permissions/Registry'
 
+import {
+    NETWORKS_SHOW,
+} from '../../modules/networks/permissions/Networks'
+
+import {
+    NODES_SHOW,
+} from '../../modules/nodes/permissions/Nodes'
+
 module.exports = {
     name: "Desarrollo",
     permissions: [
@@ -53,8 +62,9 @@ module.exports = {
         DEV_EDIT,
         DEV_ENV,
         DEV_DEPLOY,
+        DEV_DELETE,
         QA_VIEW,
-        PRE_VIEW,
+        PRE_VIEW, PRE_DELETE,
         PROD_VIEW,
         PLATFORM_MENU,
         PLATFORM_SHOW,
@@ -74,6 +84,8 @@ module.exports = {
         ENVIRONMENTSERVICE_DELETE,
         REGISTRY_MENU,
         REGISTRY_SHOW,
+        NETWORKS_SHOW,
+        NODES_SHOW,
     ],
     readonly: true
 }

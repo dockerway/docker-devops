@@ -1,0 +1,13 @@
+query getDockerNodes($environment:ID!){
+    getDockerNodes(environment:$environment){
+        id
+        hostname
+        ip
+        role
+        leader
+        reachability
+        availability
+        engine
+        state
+    }
+}

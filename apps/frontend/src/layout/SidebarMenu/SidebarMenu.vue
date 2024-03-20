@@ -1,11 +1,10 @@
 <template>
   <v-list dense class="pt-3">
     <template v-for="(item) in nav">
-
-      <v-list-group
-          v-if="item.children && isGranted(item)"
-          :key="item.text"
-          :value="isActive(item)"
+      
+      <v-list-group v-if="item.children && isGranted(item)"
+        :key="item.text"
+        :value="isActive(item)"
       >
 
         <v-list-item slot="activator">

@@ -3,6 +3,7 @@ import { UserInputError } from 'apollo-server-express'
 import { canUserUpdate, environmentsAllowedView } from './EnvironmentAllowedService'
 import { findEnvironment } from './EnvironmentService'
 import { createAudit } from "@dracul/audit-backend"
+import winston from 'winston'
 
 export const findEnvironmentService = async function (id) {
     try {
@@ -10,6 +11,41 @@ export const findEnvironmentService = async function (id) {
         return envService
     } catch (error) {
         const message = error.message + ". " + (error.response.data ? error.response.data : '')
+        throw message
+    }
+}
+
+export const findEnvironmentServiceByItsName = async function (name) {
+    try {
+        const envService = await (EnvironmentService.find({ name: name })
+            .populate('environment')
+            .populate('service')
+            .populate('stack')
+            .exec())
+
+
+        return envService[0]
+    } catch (error) {
+        const message = error.message + ". " + (error.response?.data ? error.response.data : error)
+        throw message
+    }
+}
+
+export const findEnvironmentServiceByItsNameAndStack = async function (name, stack) {
+    try {
+        const envService = await (EnvironmentService.find({ name })
+            .populate('environment')
+            .populate('service')
+            .populate({
+                path: 'stack',
+                match: {name: stack}
+            })
+            .exec())
+
+        const filteredEnvService = (envService.filter(doc => doc.stack !== null && doc.stack.name === stack))[0]
+        return filteredEnvService
+    } catch (error) {
+        const message = error.message + ". " + (error.response?.data ? error.response.data : error)
         throw message
     }
 }
@@ -100,13 +136,13 @@ export const paginateEnvironmentService = async function (user, pageNumber = 1, 
 }
 
 
-export const createEnvironmentService = async function (authUser, { environment, service, stack, image, name, replicas, labels, envs, ports, volumes, files, constraints, limits, preferences, command }) {
+export const createEnvironmentService = async function (authUser, { deployMode, environment, service, stack, image, name, replicas, labels, envs, ports, volumes, files, constraints, limits, preferences, command }) {
     const env = await findEnvironment(environment)
 
     if (! await canUserUpdate(authUser, env.type)) throw new Error("El usuario no tiene permiso para crear este entorno")
 
     const doc = new EnvironmentService({
-        environment, service, stack, image, name, replicas, labels, envs, ports, volumes, files, constraints, limits, preferences, command
+        deployMode, environment, service, stack, image, name, replicas, labels, envs, ports, volumes, files, constraints, limits, preferences, command
     })
 
     doc.id = doc._id
@@ -123,7 +159,7 @@ export const createEnvironmentService = async function (authUser, { environment,
     }
 }
 
-export const updateEnvironmentService = async function (authUser, id, { environment, service, stack, image, name, replicas, labels, envs, ports, volumes, files, constraints, limits, preferences, command, networks }) {
+export const updateEnvironmentService = async function (authUser, id, { deployMode, environment, service, stack, image, name, replicas, labels, envs, ports, volumes, files, constraints, limits, preferences, command, networks }) {
     try {
         const environmentService = await findEnvironmentService(id)
         const envServiceOriginalName = environmentService.name
@@ -133,9 +169,9 @@ export const updateEnvironmentService = async function (authUser, id, { environm
         const updatedEnvService = await EnvironmentService.findOneAndUpdate(
             { _id: id },
             {
-                environment, service, stack, image, name, replicas,
-                labels, envs, ports, volumes, files, constraints,
-                limits, preferences, command, networks
+                deployMode, environment, service, stack, image, name, 
+                replicas, labels, envs, ports, volumes, files, 
+                constraints, limits, preferences, command, networks
             },
             { new: true, runValidators: true, context: 'query' }
         ).populate('environment').populate('service').populate('stack')
@@ -171,14 +207,14 @@ export const deleteEnvironmentService = async function (authUser, id) {
 
 export const deleteEnvironmentServicesByStack = async function (authUser, stackID) {
     try {
-        const environmentServicesByStack = await EnvironmentService.find({stack: stackID})
-        
+        const environmentServicesByStack = await EnvironmentService.find({ stack: stackID })
+
         environmentServicesByStack.forEach(async (environmentService) => {
             const environment = await findEnvironment(environmentService.environment)
 
-            if (!await canUserUpdate(authUser, environment.type)){
+            if (!await canUserUpdate(authUser, environment.type)) {
                 console.log(`El usuario no tiene permiso para eliminar el servicio '${JSON.stringify(environmentService, null, 2)}' del entorno '${environmentService.environment.type}'`)
-            }else{
+            } else {
                 await environmentService.delete()
                 await createAudit(authUser, { user: authUser.id, action: 'Delete environment service by stack', resource: `${environmentService.name}` })
             }
@@ -192,14 +228,14 @@ export const deleteEnvironmentServicesByStack = async function (authUser, stackI
 
 export const deleteEnvironmentServicesByService = async function (authUser, serviceID) {
     try {
-        const environmentServicesByStack = await EnvironmentService.find({service: serviceID})
-        
+        const environmentServicesByStack = await EnvironmentService.find({ service: serviceID })
+
         environmentServicesByStack.forEach(async (environmentService) => {
             const environment = await findEnvironment(environmentService.environment)
 
-            if (!await canUserUpdate(authUser, environment.type)){
+            if (!await canUserUpdate(authUser, environment.type)) {
                 console.log(`El usuario no tiene permiso para eliminar el servicio '${JSON.stringify(environmentService, null, 2)}' del entorno '${environmentService.environment.type}'`)
-            }else{
+            } else {
                 await environmentService.delete()
                 await createAudit(authUser, { user: authUser.id, action: 'Delete environment service by service', resource: `${environmentService.name}` })
             }

@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-card elevation="2">
 
     <v-toolbar flat dense>
       <v-tabs v-model="tab" align-with-title>
@@ -11,14 +11,17 @@
       </v-tabs>
     </v-toolbar>
 
-    <v-card-text class="overflow-y-auto" :style="{ height: '300px' }">
+    <v-card-text>
       <v-tabs-items :value="tab">
         <v-tab-item>
           <v-row>
             <v-col cols="12" sm="6" md="4">
               <v-list>
                 <show-field :value="item.environment.name" :label="$t('devops.service.labels.environment')" icon="tune" />
-                <show-field :value="item.replicas ? item.replicas.toString() : ''"
+                <show-field 
+                  :value="item.deployMode ? $t(`devops.service.values.deployModes.${item.deployMode}`) : this.$t('devops.service.values.deployModes.replic')"
+                  :label="$t('devops.service.labels.deployMode')" icon="mdi-resistor-nodes" />
+                <show-field v-if="item.deployMode != 'global'" :value="item.replicas ? item.replicas.toString() : ''"
                   :label="$t('devops.service.labels.replicas')" icon="double_arrow" />
               </v-list>
             </v-col>
@@ -133,7 +136,7 @@
       </v-tabs-items>
     </v-card-text>
 
-  </v-container>
+  </v-card>
 </template>
 <script>
 import { ShowField } from '@dracul/common-frontend'

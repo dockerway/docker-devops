@@ -51,6 +51,8 @@ type ServicePaginated{
 
 type Query {
     findService(id:ID!): Service
+    findServiceByItsName(name:String!): Service
+    findServiceByItsNameAndStack(name:String!, stack:String!): Service
     fetchService: [Service]
     paginateService( pageNumber: Int, itemsPerPage: Int, search: String, filters: [FilterInput],orderBy: String, orderDesc: Boolean): ServicePaginated
 }

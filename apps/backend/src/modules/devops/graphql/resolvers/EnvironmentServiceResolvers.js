@@ -7,7 +7,9 @@ import {
     fetchEnvironmentService,
     paginateEnvironmentService,
     deleteEnvironmentServicesByStack,
-    deleteEnvironmentServicesByService
+    deleteEnvironmentServicesByService,
+    findEnvironmentServiceByItsName,
+    findEnvironmentServiceByItsNameAndStack
 } from '../../services/EnvironmentServiceService'
 
 import {AuthenticationError, ForbiddenError} from "apollo-server-express";
@@ -19,6 +21,8 @@ import {
     ENVIRONMENTSERVICE_DELETE
 } from "../../permissions/EnvironmentService";
 
+import { DefaultLogger as winston } from '@dracul/logger-backend'
+
 export default {
     Query: {
         findEnvironmentService: (_, {id}, {user,rbac}) => {
@@ -26,6 +30,21 @@ export default {
             if (!rbac.isAllowed(user.id, ENVIRONMENTSERVICE_SHOW)) throw new ForbiddenError("Not Authorized")
 
             return findEnvironmentService(id)
+        },
+        findEnvironmentServiceByItsName: (_, {name}, {user,rbac}) => {
+            if (!user) throw new AuthenticationError("Unauthenticated")
+            if (!rbac.isAllowed(user.id, ENVIRONMENTSERVICE_SHOW)) throw new ForbiddenError("Not Authorized")
+
+            const result = findEnvironmentServiceByItsName(name)
+            return result
+        },
+
+        findEnvironmentServiceByItsNameAndStack: (_, {name, stack}, {user,rbac}) => {
+            if (!user) throw new AuthenticationError("Unauthenticated")
+            if (!rbac.isAllowed(user.id, ENVIRONMENTSERVICE_SHOW)) throw new ForbiddenError("Not Authorized")
+            
+            const result = findEnvironmentServiceByItsNameAndStack(name, stack)
+            return result
         },
         fetchEnvironmentService: (_, {}, {user,rbac}) => {
             if (!user) throw new AuthenticationError("Unauthenticated")

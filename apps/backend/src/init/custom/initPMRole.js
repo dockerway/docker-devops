@@ -26,7 +26,9 @@ import {
     QA_DEPLOY,
     DEV_VIEW,
     PRE_VIEW,
-    PROD_VIEW
+    PROD_VIEW,
+    QA_DELETE,
+    PRE_DELETE
 } from '../../modules/devops/permissions/Environment'
 
 import {
@@ -42,6 +44,14 @@ import {
     REGISTRY_SHOW,
 } from '../../modules/registry/permissions/Registry'
 
+import {
+    NETWORKS_SHOW,
+} from '../../modules/networks/permissions/Networks'
+
+import {
+    NODES_SHOW,
+} from '../../modules/nodes/permissions/Nodes'
+
 module.exports = {
     name: "PM",
     permissions: [
@@ -50,8 +60,10 @@ module.exports = {
         QA_EDIT,
         QA_ENV,
         QA_DEPLOY,
+        QA_DELETE,
         DEV_VIEW,
         PRE_VIEW,
+        PRE_DELETE,
         PROD_VIEW,
         PLATFORM_MENU,
         PLATFORM_SHOW,
@@ -68,6 +80,8 @@ module.exports = {
         ENVIRONMENTSERVICE_DELETE,
         REGISTRY_MENU,
         REGISTRY_SHOW,
+        NETWORKS_SHOW,
+        NODES_SHOW,
     ],
     readonly: true
 }

@@ -1,56 +1,84 @@
 <template>
-  <simple-dialog v-model="value" @close="$emit('close')" fullscreen :title="$t('devops.service.deploySectionTitle')">
+  <v-dialog v-model="value" fullscreen width="1350">
+    <v-card class="d-flex flex-column">
+      <toolbar-dialog
+        fullscreen
 
-    <v-card-text class="overflow-y-auto" style="height: 420px">
+        :title="$t('devops.service.deploySectionTitle')"
+        @close="$emit('close')"
+        v-model="value"
+        class="flex-grow-0"
+      ></toolbar-dialog>
 
-      <environment-service-show-data v-if="envService" :item="envService"></environment-service-show-data>
+      <v-card-text class="pa-0">
+        <environment-service-show-data 
+          v-if="envService"
+          :item="envService"
+        ></environment-service-show-data>
+        <v-alert type="error" dense v-if="deployError">
+          {{ deployErrorMessage }}
+        </v-alert>
+        <v-alert type="success" dense v-else-if="created">
+          {{ $t('devops.service.deployed') }} {{ envServiceDeployed.id }}
+        </v-alert>
+      </v-card-text>
 
-    </v-card-text>
-
-    <v-card-text class="pa-0">
-      <v-alert type="error" v-for="(error, index) in errors" :key="index">
-        {{ error }}
-      </v-alert>
-    </v-card-text>
-
-    <v-card-text v-if="created" class="pa-0">
-      <v-alert type="success" dense>
-        {{$t('devops.service.deployed')}} {{ envServiceDeployed.id }}
-      </v-alert>
-
-    </v-card-text>
-
-    <v-card-actions v-if="created && !updated" class="justify-center">
-      <image-tag-combobox show-name :name="getBaseImage" v-model="targetImage"></image-tag-combobox>
       <v-spacer></v-spacer>
-      <v-btn :disabled="buttonDisabledValue" :loading="loading" class="teal white--text"
-        @click="updateDockerService">{{$t('devops.service.update')}}</v-btn>
-    </v-card-actions>
+      <v-card-actions>
+        <v-row
+          v-if="created && !updated"
+          class="ma-0 pa-0"
+          align="center"
+          justify="space-between"
+        >
+          <v-col cols="12" md="6" align-self="center">
+            <image-tag-combobox show-name :name="getBaseImage" v-model="targetImage"></image-tag-combobox>
+          </v-col>
 
+          <v-btn
+            :block="$vuetify.breakpoint.smAndDown"
+            :disabled="buttonDisabledValue"
+            :loading="loading" class="teal white--text"
+            @click="updateDockerService">{{ $t('devops.service.update') }}
+          </v-btn>
+        </v-row>
+        <v-row 
+          v-else-if="!created" 
+          class="ma-0 pa-0"
+          align="center"
+          justify="space-between"
+        >
+          <v-col cols="12" md="6" align-self="center">
+            <image-tag-combobox 
+              show-name :name="getBaseImage" 
+              v-model="targetImage"
+            ></image-tag-combobox>
+          </v-col>
+          <v-btn 
+              :block="$vuetify.breakpoint.smAndDown"
+              class="teal white--text"
+  
+              :disabled="buttonDisabledValue" 
+              :loading="loading"
+  
+              @click="createDockerService"
+            >
+              {{$t('devops.service.deploy')}}
+            </v-btn>
+        </v-row>
+      </v-card-actions>
 
-    <v-card-actions v-else-if="!created" class="justify-center">
-      <image-tag-combobox show-name :name="getBaseImage" v-model="targetImage"></image-tag-combobox>
-      <v-spacer></v-spacer>
-      <v-btn :disabled="buttonDisabledValue" :loading="loading" class="teal white--text"
-        @click="createDockerService">DEPLOY</v-btn>
-    </v-card-actions>
-
-    <v-alert
-      v-model="differenceAlert"
-      v-if="differenceMessage"
-      type="warning"
-      dismissible
-      dense
-      text
-      >
-      {{differenceMessage}}
-    </v-alert>
-
-  </simple-dialog>
+      <v-card-text v-if="differenceMessage">
+        <v-alert v-model="differenceAlert" type="warning" dismissible dense text>
+          {{ differenceMessage }}
+        </v-alert>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
-import { SimpleDialog } from "@dracul/common-frontend"
+import { ToolbarDialog } from '@dracul/common-frontend'
 import DockerProvider from "@/modules/devops/providers/DockerProvider";
 import EnvironmentServiceShowData
   from "@/modules/devops/pages/crud/EnvironmentServicePage/EnvironmentServiceShow/EnvironmentServiceShowData";
@@ -59,9 +87,29 @@ import ServiceTemplateComparer from "../../../../helpers/ServiceTemplateComparer
 import ServiceProvider from "../../providers/ServiceProvider";
 import EnvironmentServiceProvider from "../../providers/EnvironmentServiceProvider";
 
+function handledErrors(error){
+  if(error && error.message){
+    
+    const httpCode501Regex = new RegExp('HTTP code 501', 'i')
+
+    const serviceModeChangeIsNotAllowedRegex = new RegExp('code = Unimplemented desc = service mode change is not allowed')
+
+    const serviceModeChangeIsNotAllowedError = httpCode501Regex.test(error.message) && serviceModeChangeIsNotAllowedRegex.test(error.message)
+
+    if(serviceModeChangeIsNotAllowedError){
+      const errorInfo = {
+        status: 501,
+        message: 'devops.service.deployErrors.serviceModeChangeIsNotAllowedError'
+      }
+      return errorInfo
+    }
+  }
+  return null
+}
+
 export default {
   name: "EnvironmentServiceDockerDeploy",
-  components: { ImageTagCombobox, EnvironmentServiceShowData, SimpleDialog },
+  components: { ImageTagCombobox, EnvironmentServiceShowData, ToolbarDialog },
   props: {
     envService: { type: Object },
     value: { type: Boolean }
@@ -77,6 +125,8 @@ export default {
       buttonDisabledValue: true,
       differenceAlert: false,
       differenceMessage: '',
+      deployErrorMessage: '',
+      deployError: false
     }
   },
   computed: {
@@ -84,6 +134,7 @@ export default {
       return this.envService.service.image
     },
     getTargetImage() {
+
 
       function stripVersionFromURL(url) {
         const regex = /:(.*?)(?=[/?]|$)/;
@@ -103,7 +154,7 @@ export default {
   created() {
     this.findDockerService()
   },
-  mounted(){
+  mounted() {
     this.getDifferencesBetweenServiceAndTemplate()
   },
   methods: {
@@ -135,6 +186,11 @@ export default {
         this.envServiceDeployed = createDockerServiceResponse.data.createDockerService
         return this.envServiceDeployed
       } catch (error) {
+        const handledError = handledErrors(error)
+        if(handledError){
+          this.deployError = true
+          this.deployErrorMessage = `${handledError.status}: ${this.$t(handledError.message)}`
+        }
         this.errors = error.graphQLErrors.map(i => (!i.message.includes('404') ? i.message : null))
         throw error
       } finally {
@@ -155,6 +211,11 @@ export default {
 
         return this.envServiceDeployed
       } catch (error) {
+        const handledError = handledErrors(error)
+        if(handledError){
+          this.deployError = true
+          this.deployErrorMessage = `${handledError.status}: ${this.$t(handledError.message)}`
+        }
         this.errors = error.graphQLErrors.map(i => (!i.message.includes('404') ? i.message : null))
         throw error
       } finally {
@@ -163,18 +224,18 @@ export default {
     },
     async getDifferencesBetweenServiceAndTemplate() {
       try {
-      const serviceTemplate = (await ServiceProvider.findService(this.envService.service.id)).data.findService
-      const service = (await EnvironmentServiceProvider.findEnvironmentService(this.envService.id)).data.findEnvironmentService     
+        const serviceTemplate = (await ServiceProvider.findService(this.envService.service.id)).data.findService
+        const service = (await EnvironmentServiceProvider.findEnvironmentService(this.envService.id)).data.findEnvironmentService
 
-      const serviceTemplateComparer = new ServiceTemplateComparer(serviceTemplate, service)
-      if (serviceTemplateComparer.serviceIsDifferent){
-        this.differenceAlert = true
-        this.differenceMessage = serviceTemplateComparer.differencesText
+        const serviceTemplateComparer = new ServiceTemplateComparer(serviceTemplate, service)
+        if (serviceTemplateComparer.serviceIsDifferent) {
+          this.differenceAlert = true
+          this.differenceMessage = serviceTemplateComparer.differencesText
+        }
+
+      } catch (error) {
+        console.error(`An error happened at the getDifferencesBetweenServiceAndTemplate method: ${error.message ? error.message : error}`)
       }
-
-    } catch (error) {
-      console.error(`An error happened at the getDifferencesBetweenServiceAndTemplate method: ${error.message ? error.message : error}`)
-    }
     },
   },
   watch: {

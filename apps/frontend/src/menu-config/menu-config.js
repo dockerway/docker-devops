@@ -21,7 +21,7 @@ export default [
     },
     {
         icon: 'list_alt',
-        text: 'menu.cruds',
+        text: 'menu.serviceManagement',
         panel: false,
         children: [
             {
@@ -69,6 +69,27 @@ export default [
         ]
     },
 
+        {
+        icon: 'disc_full',
+        text: 'menu.environmentsManagement',
+        panel: false,
+        children: [
+            {
+                icon: 'workspaces',
+                text: 'menu.nodes',
+                link: {name: "NodesPage"},
+                panel: false,
+                permission: 'REGISTRY_MENU'
+            },
+            {
+                icon: 'lan',
+                text: 'menu.networks',
+                link: {name: "NetworksPage"},
+                panel: false,
+                permission: 'REGISTRY_MENU'
+            },
+        ]
+    },
     {
         icon: 'disc_full',
         text: 'menu.registry',
@@ -154,6 +175,5 @@ export default [
         link: {name: "about"},
         panel: false,
     },
-
 
 ]

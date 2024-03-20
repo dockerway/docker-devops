@@ -33,6 +33,14 @@ import {
   REGISTRY_SHOW,
 } from '../../modules/registry/permissions/Registry'
 
+import {
+  NETWORKS_SHOW,
+} from '../../modules/networks/permissions/Networks'
+
+import {
+  NODES_SHOW,
+} from '../../modules/nodes/permissions/Nodes'
+
 module.exports = {
     name: "Soporte",
     permissions: [
@@ -50,6 +58,8 @@ module.exports = {
         ENVIRONMENTSERVICE_SHOW,
         REGISTRY_MENU,
         REGISTRY_SHOW,
+        NODES_SHOW,
+        NETWORKS_SHOW,
     ],
     readonly: true
 }

@@ -97,6 +97,7 @@ type Query {
     findDockerServiceStats(id: ID!): [DockerTaskStats]
     findDockerServiceTag(id: ID!): String
     findDockerService(id: ID!): DockerService
+    findDockerServiceStatus(id: ID!): String!
 }
 
 input PortInput{
@@ -126,4 +127,5 @@ input LabelInput{
 type Mutation {
     createDockerService(id: ID!, targetImage: String): DockerService
     updateDockerService(id: ID!, targetImage: String): DockerService
+    deleteDockerService(id: String!, environment: String!, name: String!): String
 }

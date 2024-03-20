@@ -5,7 +5,7 @@ const messages = {
           service: {
             deployed: 'Service deployed with id: ',
             name: 'Service',
-            title: 'Service management',
+            title: 'View, search, create, edit and delete services',
             deploySectionTitle: 'Deploy service',
             subtitle: 'Services CRUD',
             creating: 'Creating Service',
@@ -18,6 +18,8 @@ const messages = {
             menu: 'Service',
             update: 'Update',
             labels: {
+                deployMode: 'Deploy Mode',
+                global: 'Global',
                 main: 'Main',
                 environment: 'Environment',
                 serviceTemplate: 'Service Template',
@@ -51,15 +53,34 @@ const messages = {
                 command: "Command",
                 platform: "Platform",
             },
+            values: {
+              deployModes: {
+                global: 'Global',
+                replic: 'Replicated'
+              }
+            },
             status: 'Status',
             active: 'Active',
             inactive: 'Inactive',
+            unknown: 'Unknown',
+            getStatus: 'Get',
             limitsMessages: {
                 memoryReservation: 'Minimum memory available on a node to run a task (set to 0 for unlimited)',
                 memoryLimit: 'Maximum memory usage per task (set to 0 for unlimited)',
                 CPUReservation: 'Minimum CPU available on a node to run a task',
                 CPULimit: 'Maximum CPU usage per task',
+            },
+            deploy: 'Deploy',
+            delete:{
+              action: 'Delete',
+              title: 'Delete deployed service'
+            },
+            deployErrors: {
+              serviceModeChangeIsNotAllowedError: 'Changing the service mode is not allowed. To change the service mode, remove the service and deploy it again.',
             }
+          },
+          serviceRecords:{
+            delete: "Delete service record"
           }
        }
     },
@@ -70,7 +91,7 @@ const messages = {
             name: 'Servicios',
             title: 'Administración de Servicios',
             deploySectionTitle: 'Desplegar servicio',
-            subtitle: 'ABM de Servicios',
+            subtitle: 'Ver, buscar, crear, editar y eliminar Servicios',
             creating: 'Creando Servicio',
             created: 'Servicio creado',
             updated: 'Servicio actualizado',
@@ -81,6 +102,8 @@ const messages = {
             menu: 'Servicios',
             update: 'Actualizar',
             labels: {
+                deployMode: 'Modo de despliegue',
+                global: 'Global',
                 main: 'Principal',
                 environment: 'Entorno',
                 serviceTemplate: 'Plantilla de Servicio',
@@ -114,15 +137,35 @@ const messages = {
                 command: "Comando",
                 platform: "Plataforma",
             },
+            values: {
+              deployModes: {
+                global: 'Global',
+                replic: 'Replicado'
+              }
+            },
             status: 'Estado',
             active: 'Activo',
             inactive: 'Inactivo',
+            unknown: 'Desconocido',
+            getStatus: 'Consultar',
             limitsMessages: {
                 memoryReservation: 'Memoria mínima disponible en un nodo para ejecutar una tarea (establecer en 0 para ilimitado)',
                 memoryLimit: 'Uso máximo de memoria por tarea (establecer en 0 para ilimitado)',
                 CPUReservation: 'CPU mínima disponible en un nodo para ejecutar una tarea',
                 CPULimit: 'Uso máximo de CPU por tarea',
-              }
+              },
+            deploy: 'Desplegar',
+            delete:{
+              action: 'Eliminar',
+              title: 'Eliminar servicio desplegado',
+              areYouSureMessage: '¿Esta seguro de que desea eliminar el servicio desplegado?'
+            },
+            deployErrors: {
+              serviceModeChangeIsNotAllowedError: 'El cambio de modo de despliegue no es posible. Para cambiar el modo de despliegue debe remover el servicio desplegado y volver a desplegar.'
+            }
+          },
+          serviceRecords:{
+            delete: "Eliminar registro del servicio"
           }
        }
     },
@@ -144,6 +187,8 @@ const messages = {
             menu: 'Service',
             update: 'Atualizar',
             labels: {
+                deployMode: 'Modo de implantação',
+                global: 'Global',
                 main: 'Main',
                 environment: 'Environment',
                 serviceTemplate: 'Service',
@@ -177,15 +222,35 @@ const messages = {
                 command: "Command",
                 platform: "Plataforma",
             },
+            values: {
+              deployModes: {
+                global: 'Global',
+                replic: 'Replicado'
+              }
+            },
             status: 'Status',
             active: 'Activo',
             inactive: 'Inactivo',
+            unknown: 'Unknown',
+            getStatus: 'Consultar',
             limitsMessages: {
                 memoryReservation: 'Minimum memory available on a node to run a task (set to 0 for unlimited)',
                 memoryLimit: 'Maximum memory usage per task (set to 0 for unlimited)',
                 CPUReservation: 'Minimum CPU available on a node to run a task',
                 CPULimit: 'Maximum CPU usage per task',
-            }
+            },
+            deploy: 'Deploy',
+            delete:{
+              action: 'Delete',
+              title: 'Delete deployed service',
+              areYouSureMessage: 'Are you sure you want to delete this deployed service?'
+            },
+            deployErrors: {
+              serviceModeChangeIsNotAllowedError: 'Changing the service mode is not allowed. To change the service mode, remove the service and deploy it again.'
+            }          
+          },
+          serviceRecords:{
+            delete: "Eliminar registro del servicio"
           }
        }
     }

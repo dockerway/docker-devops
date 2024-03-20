@@ -9,7 +9,7 @@ const messages = {
             serviceTemplate: "Service Template",
             environment: "Environment",
             service: "Services",
-            cruds: "Cruds",
+            serviceManagement: "Service Management",
             sauron: "Sauron",
             stack: "Stack",
             discovery: "Discovery",
@@ -17,7 +17,10 @@ const messages = {
             image: "Image",
             setting: "Setting",
             audit:"Audit",
-            deployHistory: "Deploy history"
+            deployHistory: "Deploy history",
+            environmentsManagement: "Environments Management",
+            nodes: "Nodes",
+            networks:'Redes'
         }
     },
    es: {
@@ -29,7 +32,7 @@ const messages = {
             serviceTemplate: "Plantillas de Servicio",
             environment: "Entorno",
             service: "Servicios",
-            cruds: "ABM",
+            serviceManagement: "Gestión de Servicios",
             sauron: "Sauron",
             stack: "Stack",
             discovery: "Discovery",
@@ -37,8 +40,10 @@ const messages = {
             image: "Image",
             setting: "Configuración",
             audit:"Auditoria",
-            deployHistory: "Historial de despliegues"
-
+            deployHistory: "Historial de despliegues",
+            environmentsManagement: "Gestión de Entornos",
+            nodes: "Nodos",
+            networks:'Redes'
         }
     },
     pt: {
@@ -50,7 +55,7 @@ const messages = {
             serviceTemplate: "Service Template",
             environment: "Environment",
             service: "EnvironmentService",
-            cruds: "Cruds",
+            serviceManagement: "Service Management",
             sauron: "Sauron",
             stack: "Stack",
             discovery: "Discovery",
@@ -58,7 +63,10 @@ const messages = {
             image: "Image",
             setting: "Configuração",
             audit:"Audit",
-            deployHistory: "Historial de despliegues"
+            deployHistory: "Historial de despliegues",
+            environmentsManagement: "Gestão de Ambientes",
+            nodes: "Nodos",
+            networks:'Redes'
         }
     }
 }

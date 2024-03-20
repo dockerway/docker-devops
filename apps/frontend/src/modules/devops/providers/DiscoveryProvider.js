@@ -5,7 +5,7 @@ class DiscoveryProvider {
     startDiscovery(environmentId) {
         return graphqlClient.query({
             query: require('./gql/Discovery/startDiscovery.graphql'),
-            variables: {environmentId:environmentId},
+            variables: {environmentId},
             fetchPolicy: "network-only"
         })
     }

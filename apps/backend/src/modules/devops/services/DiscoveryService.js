@@ -1,3 +1,5 @@
+import { DefaultLogger as winston } from "@dracul/logger-backend";
+
 import { fetchEnvironment, findEnvironment } from "./EnvironmentService";
 import { fetchDockerService } from "./DockerService";
 import { createService, getServiceByNameAndPlatform } from "./ServiceService";
@@ -29,7 +31,7 @@ export const startDiscovery = async function (environmentId, user) {
 
         for (const env of envs) {
             const dockerServices = await fetchDockerService(env.id)
-            console.log("dockerServices found", dockerServices.length)
+            winston.info(`${dockerServices.length} services were found at discovery`)
 
             for (const dockerService of dockerServices) {
                 let name
@@ -89,7 +91,7 @@ export const startDiscovery = async function (environmentId, user) {
 
         return { servicesDiscovered }
     } catch (error) {
-        console.error(`An error happened at the startDiscovery function: ${error.message ? error.message : error}`)
+        winston.error(`An error happened at the startDiscovery function: ${error.message ? error.message : error}`)
         throw error
     }
 }

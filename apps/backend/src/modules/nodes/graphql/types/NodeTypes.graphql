@@ -1,0 +1,15 @@
+type DockerNode{
+    id: String
+    hostname: String
+    ip: String
+    role: String
+    leader: Boolean
+    reachability: String
+    state: String
+    engine: String
+    availability: String
+}
+
+type Query{
+    getDockerNodes(environment: ID!): [DockerNode]   
+}

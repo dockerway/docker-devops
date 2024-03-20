@@ -66,6 +66,7 @@ export const EnvironmentServiceSchema = new Schema({
     stack: {type: mongoose.Schema.Types.ObjectId, ref: "Stack", required: true, unique: false, index: false},
     image: {type: String, required: true, index: false},
     name: {type: String, required: true, index: false},
+    deployMode: {type: String, required: true, enum: ['global', 'replic']},
     replicas: {type: Number, required: true, index: false, default: 1},
     envs: [EnvSchema],
     ports: [PortSchema],

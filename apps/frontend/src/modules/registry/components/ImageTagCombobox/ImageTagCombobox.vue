@@ -1,28 +1,47 @@
 <template>
-      <v-autocomplete
-          v-if="getItems && getItems.length > 0"
-          prepend-icon="tag"
-          :items="getItems"
-          v-model="item"
-          :label="$t('registry.image.tag')"
-          :loading="loading"
-          color="secondary"
-          item-color="secondary"
-          :rules="isRequired ? required : []"
-          :multiple="multiple"
-          :chips="chips"
-          :solo="solo"
-          :disabled="disabled"
-          :readonly="readonly"
-          :clearable="clearable"
-          :outlined="outlined"
-          :hide-details="hideDetails"
-      ></v-autocomplete>
-      <v-text-field v-else label="Image Tag" v-model="value"  :loading="loading"></v-text-field>
+  <v-autocomplete v-if="getItems && getItems.length > 0"
+    prepend-icon="tag" 
 
+    color="secondary" 
+    item-color="secondary"
+    
+    :label="$t('registry.image.tag')" 
+    :hide-details="hideDetails" 
+
+    :disabled="disabled" 
+    :readonly="readonly"
+    :clearable="clearable"
+
+    :outlined="outlined" 
+    :loading="loading" 
+    
+    :chips="chips" 
+    :solo="solo" 
+    :multiple="multiple" 
+    v-model="item" 
+    :items="getItems" 
+    :rules="isRequired ? required : []"
+  />
+
+  <v-text-field v-else label="Image Tag" v-model="value" :loading="loading" />
 </template>
 
 <script>
+
+function versionsCompare(versionA, versionB){
+  const versionAparts = versionA.split('.')
+  const versionBparts = versionB.split('.')
+
+  for (let i = 0; i < Math.max(versionAparts.length, versionBparts.length); i++) {
+    const versionANumber = parseInt(versionAparts[i]) || 0
+    const versionBNumber = parseInt(versionBparts[i]) || 0
+
+    if(versionANumber !== versionBNumber){
+      return versionBNumber - versionANumber
+    }
+  }
+  return versionBparts.length - versionAparts.length
+}
 
 import {InputErrorsByProps, RequiredRule} from '@dracul/common-frontend'
 
@@ -33,19 +52,20 @@ export default {
   name: "ImageTagCombobox",
   mixins: [InputErrorsByProps, RequiredRule],
   props: {
-    name: {type: String, required: true},
-    registry: {type: String, required: false},
-    showName: {type: Boolean, default: false},
-    value: {type: [String, Array]},
-    multiple: {type: Boolean, default: false},
-    solo: {type: Boolean, default: false},
-    outlined: {type: Boolean, default: false},
-    hideDetails: {type: Boolean, default: false},
-    chips: {type: Boolean, default: false},
-    readonly: {type: Boolean, default: false},
-    disabled: {type: Boolean, default: false},
-    isRequired: {type: Boolean, default: false},
-    clearable: {type: Boolean, default: false},
+    name: { type: String, required: true },
+    registry: { type: String, required: false },
+    showName: { type: Boolean, default: false },
+    value: { type: [String, Array] },
+    multiple: { type: Boolean, default: false },
+    solo: { type: Boolean, default: false },
+    outlined: { type: Boolean, default: false },
+    hideDetails: { type: Boolean, default: false },
+    chips: { type: Boolean, default: false },
+    readonly: { type: Boolean, default: false },
+    disabled: { type: Boolean, default: false },
+    isRequired: { type: Boolean, default: false },
+    clearable: { type: Boolean, default: false },
+    wishedImage: {type: String},
   },
   data() {
     return {
@@ -55,7 +75,6 @@ export default {
   },
   computed: {
     getItems() {
-
       if (this.data && this.data.tags && this.data.tags.length > 0) {
 
         return this.data.tags
@@ -63,7 +82,6 @@ export default {
               text: this.showName ? this.data.name + ":" + tag : tag,
               value: tag
             }))
-            .sort((a, b) => b.value.localeCompare(a.value))
       }
 
       return []
@@ -77,34 +95,47 @@ export default {
       }
     }
   },
-  mounted() {
-    this.fetch()
+  async mounted() {
+    await this.fetch()
+
+    this.setDefaultSelectedItem()
+
   },
   methods: {
     validate() {
       return this.$refs.form.validate()
     },
-    fetch() {
+    async fetch() {
+
       if (this.registry) {
-        this.fetchImageTags()
+        await this.fetchImageTags()
       } else {
-        this.fetchImageTagsByFullname()
+        await this.fetchImageTagsByFullname()
       }
+
     },
-    fetchImageTags() {
+    async fetchImageTags() {
       this.loading = true
       ImageProvider.imageTags(this.registry, this.name)
           .then(r => {
-            this.data = r.data.imageTags
+            let {name, tags} = r.data.imageTags
+
+            tags = tags.sort(versionsCompare)
+
+            this.data = {name, tags}
           })
           .catch(err => console.error(err))
           .finally(() => this.loading = false)
     },
-    fetchImageTagsByFullname() {
+    async fetchImageTagsByFullname() {
       this.loading = true
       ImageProvider.imageTagsByFullname(this.name)
           .then(r => {
-            this.data = r.data.imageTagsByFullname
+            let {name, tags} = r.data.imageTagsByFullname
+
+            tags = tags.sort(versionsCompare)
+
+            this.data = {name, tags}
           })
           .catch(err => console.error(err))
           .finally(() => this.loading = false)
@@ -114,6 +145,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

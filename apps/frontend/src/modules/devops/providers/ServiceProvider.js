@@ -10,6 +10,22 @@ class ServiceProvider {
         })
     }
 
+    findServiceByItsName(name) {
+        return graphqlClient.query({
+            query: require('./gql/Service/findServiceByItsName.graphql'),
+            fetchPolicy: "no-cache",
+            variables: {name}
+        })
+    }
+
+    findServiceByItsNameAndStack(name) {
+        return graphqlClient.query({
+            query: require('./gql/Service/findServiceByItsNameAndStack.graphql'),
+            fetchPolicy: "no-cache",
+            variables: {name}
+        })
+    }
+
     fetchService() {
         return graphqlClient.query({
             query: require('./gql/Service/fetchService.graphql'),

@@ -26,6 +26,7 @@ export default {
       inputErrors: {},
       loading: false,
       form: {
+        deployMode: 'global',
         environment: null,
         service: null,
         stack: '',

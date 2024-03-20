@@ -47,6 +47,7 @@ export default {
       loading: false,
       id: this.item.id,
       form: {
+        deployMode: this.item.deployMode ? this.item.deployMode : null,
         environment: this.item.environment ? this.item.environment.id : null,
         service: this.item.service ? this.item.service.id : null,
         stack: this.item.stack ? this.item.stack.id : null,
