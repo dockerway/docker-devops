@@ -9,7 +9,7 @@ const messages = {
             serviceTemplate: "Service Template",
             environment: "Environment",
             service: "Services",
-            cruds: "Cruds",
+            serviceManagement: "Service Management",
             sauron: "Sauron",
             stack: "Stack",
             discovery: "Discovery",
@@ -18,7 +18,7 @@ const messages = {
             setting: "Setting",
             audit:"Audit",
             deployHistory: "Deploy history",
-            containersGestion: "Containers gestion",
+            environmentsManagement: "Environments Management",
             nodes: "Nodes",
             networks:'Redes'
         }
@@ -32,7 +32,7 @@ const messages = {
             serviceTemplate: "Plantillas de Servicio",
             environment: "Entorno",
             service: "Servicios",
-            cruds: "ABM",
+            serviceManagement: "Gestión de Servicios",
             sauron: "Sauron",
             stack: "Stack",
             discovery: "Discovery",
@@ -41,7 +41,7 @@ const messages = {
             setting: "Configuración",
             audit:"Auditoria",
             deployHistory: "Historial de despliegues",
-            containersGestion: "Gestión de contenedores",
+            environmentsManagement: "Gestión de Entornos",
             nodes: "Nodos",
             networks:'Redes'
         }
@@ -55,7 +55,7 @@ const messages = {
             serviceTemplate: "Service Template",
             environment: "Environment",
             service: "EnvironmentService",
-            cruds: "Cruds",
+            serviceManagement: "Service Management",
             sauron: "Sauron",
             stack: "Stack",
             discovery: "Discovery",
@@ -64,7 +64,7 @@ const messages = {
             setting: "Configuração",
             audit:"Audit",
             deployHistory: "Historial de despliegues",
-            containersGestion: "Gerenciamento de contêineres",
+            environmentsManagement: "Gestão de Ambientes",
             nodes: "Nodos",
             networks:'Redes'
         }

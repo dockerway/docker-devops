@@ -21,7 +21,7 @@ export default [
     },
     {
         icon: 'list_alt',
-        text: 'menu.cruds',
+        text: 'menu.serviceManagement',
         panel: false,
         children: [
             {
@@ -71,7 +71,7 @@ export default [
 
         {
         icon: 'disc_full',
-        text: 'menu.containersGestion',
+        text: 'menu.environmentsManagement',
         panel: false,
         children: [
             {

@@ -5,7 +5,7 @@ const messages = {
           serviceTemplate: {
             name: 'Services Template',
             title: 'Services Templates management',
-            subtitle: 'Services Templates CRUD',
+            subtitle: 'View, create, edit and delete services templates',
             creating: 'Creating Services Template',
             editing: 'Editing Services Template',
             deleting: 'Deleting Services Template',
@@ -52,7 +52,7 @@ const messages = {
           serviceTemplate: {
             name: 'Plantillas de Servicios',
             title: 'Administración de Plantillas de Servicios',
-            subtitle: 'ABM de Plantillas de Servicios',
+            subtitle: 'Ver, buscar, crear, editar, y borrar Plantillas de Servicios',
             creating: 'Creando Plantilla de Servicios',
             editing: 'Modificando Plantilla de Servicios',
             deleting: 'Eliminando Plantilla de Servicios',

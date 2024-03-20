@@ -5,7 +5,7 @@ const messages = {
           service: {
             deployed: 'Service deployed with id: ',
             name: 'Service',
-            title: 'Service management',
+            title: 'View, search, create, edit and delete services',
             deploySectionTitle: 'Deploy service',
             subtitle: 'Services CRUD',
             creating: 'Creating Service',
@@ -91,7 +91,7 @@ const messages = {
             name: 'Servicios',
             title: 'Administración de Servicios',
             deploySectionTitle: 'Desplegar servicio',
-            subtitle: 'ABM de Servicios',
+            subtitle: 'Ver, buscar, crear, editar y eliminar Servicios',
             creating: 'Creando Servicio',
             created: 'Servicio creado',
             updated: 'Servicio actualizado',
