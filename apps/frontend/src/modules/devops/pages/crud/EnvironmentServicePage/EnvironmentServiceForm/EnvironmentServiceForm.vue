@@ -1,6 +1,7 @@
 <template>
-  <v-form ref="form" autocomplete="off" @submit.prevent="save">
-    <v-row>
+  <v-container fluid class="fill-heigth d-flex flex-column">
+  <v-form ref="form" autocomplete="off" @submit.prevent="save" style="min-height:100%">
+    <v-row  style="min-height: 35vh; max-height: 40vh;">
 
       <v-col cols="12" sm="4">
         <environment-combobox v-model="form.environment" :input-errors="inputErrors"/>
@@ -75,7 +76,7 @@
 
     </v-row>
 
-    <v-card outlined>
+    <v-card outlined style="min-height: 50vh;"  class="mt-auto">
 
       <v-card-actions class="py-1 my-0">
         <v-spacer></v-spacer>
@@ -262,6 +263,7 @@
     </v-card>
 
   </v-form>
+</v-container>
 </template>
 
 <script>

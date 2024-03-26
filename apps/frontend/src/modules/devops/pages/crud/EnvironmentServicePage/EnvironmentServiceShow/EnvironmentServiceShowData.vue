@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-card elevation="2">
 
     <v-toolbar flat dense>
       <v-tabs v-model="tab" align-with-title>
@@ -11,7 +11,7 @@
       </v-tabs>
     </v-toolbar>
 
-    <v-card-text class="overflow-y-auto" :style="{ height: '300px' }">
+    <v-card-text>
       <v-tabs-items :value="tab">
         <v-tab-item>
           <v-row>
@@ -133,7 +133,7 @@
       </v-tabs-items>
     </v-card-text>
 
-  </v-container>
+  </v-card>
 </template>
 <script>
 import { ShowField } from '@dracul/common-frontend'

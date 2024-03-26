@@ -1,0 +1,3 @@
+mutation deleteDockerService($id: String!, $environment: String!, $name: String!){
+    deleteDockerService(id: $id, environment: $environment, name: $name)
+}

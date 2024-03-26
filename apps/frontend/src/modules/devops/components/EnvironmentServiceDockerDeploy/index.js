@@ -1,4 +1,4 @@
-import EnvironmentServiceDockerDeploy from "./EnvironmentServiceDockerDeploy";
+import EnvironmentServiceDockerDeploy from "./EnvironmentServiceDockerDeploy.vue";
+import EnvironmentServiceDockerDeployPage from "./EnvironmentServiceDockerDeployPage.vue";
 
-export {EnvironmentServiceDockerDeploy}
-export default EnvironmentServiceDockerDeploy
+export { EnvironmentServiceDockerDeploy, EnvironmentServiceDockerDeployPage }

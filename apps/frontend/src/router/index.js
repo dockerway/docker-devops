@@ -20,16 +20,20 @@ router.beforeEach((to, from, next) => {
 
             next({
                 path: '/login',
-                query: {redirect: to.fullPath}
+                query: { redirect: to.fullPath }
             })
         } else {
 
             if (to.meta.role && !store.getters.hasRole(to.meta.role)) {
-                next({path: '/', query: {redirect: to.fullPath}})
+                next({ path: '/', query: { redirect: to.fullPath } })
             } else if (to.meta.permission && !store.getters.hasPermission(to.meta.permission)) {
                 //console.warn("PERMISO DENEGADO", to.meta.permission)
-                next({path: '/', query: {redirect: to.fullPath}})
-            }else{
+                next({ path: '/', query: { redirect: to.fullPath } })
+            } else if (to.meta.permissions && to.meta.permissions.filter(permission => store.getters.hasPermission(permission)).length < 1) {
+
+                next({ path: '/', query: { redirect: to.fullPath } })
+
+            } else {
                 next()
             }
 

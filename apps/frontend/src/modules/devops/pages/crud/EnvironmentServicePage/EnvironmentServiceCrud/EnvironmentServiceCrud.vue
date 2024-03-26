@@ -3,40 +3,44 @@
 
         <template v-slot:list>
             <environment-service-list 
-                       ref="list"
-                       @update="update"
-                       @delete="remove"
-                       @show="show"
-            
+                ref="list"
+                @update="update"
+                @delete="remove"
+                @deleteService="removeService"
+                @show="show"
             />
         </template>
         
-        <add-button v-if="$store.getters.hasPermission('ENVIRONMENTSERVICE_CREATE')" @click="create"></add-button>
+        <add-button v-if="$store.getters.hasPermission('ENVIRONMENTSERVICE_CREATE')"
+            @click="create"
+        />
       
         <environment-service-create v-if="creating" 
-                        :open="creating"
-                        v-on:itemCreated="onItemCreated" 
-                        v-on:close="creating=false" 
+            :open="creating"
+            v-on:itemCreated="onItemCreated" 
+            v-on:close="creating=false" 
         />
         
         <environment-service-update v-if="updating" 
-                        :open="updating"
-                        :item="itemToEdit" 
-                        v-on:itemUpdated="onItemUpdated" 
-                        v-on:close="updating=false" 
+            :open="updating"
+            :item="itemToEdit" 
+            v-on:itemUpdated="onItemUpdated" 
+            v-on:close="updating=false" 
         />
           
         <environment-service-show v-if="showing" 
-                           :open="showing" 
-                           :item="itemToShow"  
-                           v-on:close="showing=false" 
+            :open="showing" 
+            :item="itemToShow"  
+            v-on:close="showing=false" 
          />
 
         <environment-service-delete v-if="deleting" 
-                         :open="deleting"
-                         :item="itemToDelete"  
-                         v-on:itemDeleted="onItemDeleted" 
-                         v-on:close="deleting=false" 
+            :open="deleting"
+            :item="itemToDelete"  
+            :deletingRecord="deletingRecord"
+            
+            v-on:itemDeleted="onItemDeleted" 
+            v-on:close="deleting=false" 
         />
 
         <snackbar v-model="flash"/>
@@ -72,6 +76,7 @@ export default {
             creating: false,
             updating: false,
             deleting: false,
+            deletingRecord: null,
             showing: false,
             itemToEdit: null,
             itemToDelete: null,
@@ -106,6 +111,12 @@ export default {
         },
         remove(item) {
             this.deleting = true
+            this.deletingRecord = true
+            this.itemToDelete = item
+        },
+        removeService(item) {
+            this.deleting = true
+            this.deletingRecord = false
             this.itemToDelete = item
         }
     }

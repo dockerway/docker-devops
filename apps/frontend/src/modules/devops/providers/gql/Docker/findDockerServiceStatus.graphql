@@ -1,0 +1,3 @@
+query findDockerServiceStatus($id: ID!){
+    findDockerServiceStatus(id: $id)
+}

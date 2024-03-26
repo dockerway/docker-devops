@@ -54,12 +54,22 @@ const messages = {
             status: 'Status',
             active: 'Active',
             inactive: 'Inactive',
+            unknown: 'Unknown',
+            getStatus: 'Get',
             limitsMessages: {
                 memoryReservation: 'Minimum memory available on a node to run a task (set to 0 for unlimited)',
                 memoryLimit: 'Maximum memory usage per task (set to 0 for unlimited)',
                 CPUReservation: 'Minimum CPU available on a node to run a task',
                 CPULimit: 'Maximum CPU usage per task',
+            },
+            deploy: 'Deploy',
+            delete:{
+              action: 'Delete',
+              title: 'Delete deployed service'
             }
+          },
+          serviceRecords:{
+            delete: "Delete service record"
           }
        }
     },
@@ -117,12 +127,23 @@ const messages = {
             status: 'Estado',
             active: 'Activo',
             inactive: 'Inactivo',
+            unknown: 'Desconocido',
+            getStatus: 'Consultar',
             limitsMessages: {
                 memoryReservation: 'Memoria mínima disponible en un nodo para ejecutar una tarea (establecer en 0 para ilimitado)',
                 memoryLimit: 'Uso máximo de memoria por tarea (establecer en 0 para ilimitado)',
                 CPUReservation: 'CPU mínima disponible en un nodo para ejecutar una tarea',
                 CPULimit: 'Uso máximo de CPU por tarea',
-              }
+              },
+            deploy: 'Desplegar',
+            delete:{
+              action: 'Eliminar',
+              title: 'Eliminar servicio desplegado',
+              areYouSureMessage: '¿Esta seguro de que desea eliminar el servicio desplegado?'
+            }
+          },
+          serviceRecords:{
+            delete: "Eliminar registro del servicio"
           }
        }
     },
@@ -180,12 +201,22 @@ const messages = {
             status: 'Status',
             active: 'Activo',
             inactive: 'Inactivo',
+            unknown: 'Unknown',
+            getStatus: 'Consultar',
             limitsMessages: {
                 memoryReservation: 'Minimum memory available on a node to run a task (set to 0 for unlimited)',
                 memoryLimit: 'Maximum memory usage per task (set to 0 for unlimited)',
                 CPUReservation: 'Minimum CPU available on a node to run a task',
                 CPULimit: 'Maximum CPU usage per task',
-            }
+            },
+            deploy: 'Deploy',
+            delete:{
+              action: 'Delete',
+              title: 'Delete deployed service',
+              areYouSureMessage: 'Are you sure you want to delete this deployed service?'
+            }          },
+          serviceRecords:{
+            delete: "Eliminar registro del servicio"
           }
        }
     }

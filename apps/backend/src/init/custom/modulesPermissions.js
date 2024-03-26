@@ -39,18 +39,22 @@ import {
     DEV_EDIT,
     DEV_ENV,
     DEV_DEPLOY,
+    DEV_DELETE,
     QA_VIEW,
     QA_EDIT,
     QA_ENV,
     QA_DEPLOY,
+    QA_DELETE,
     PRE_VIEW,
     PRE_EDIT,
     PRE_ENV,
     PRE_DEPLOY,
+    PRE_DELETE,
     PROD_VIEW,
     PROD_EDIT,
     PROD_ENV,
-    PROD_DEPLOY
+    PROD_DEPLOY,
+    PROD_DELETE,
 } from '../../modules/devops/permissions/Environment'
 
 import {
@@ -72,6 +76,11 @@ import {
     REGISTRY_SHOW,
     REGISTRY_UPDATE
 } from '../../modules/registry/permissions/Registry'
+
+import {
+    NODES_SHOW,
+} from '../../modules/nodes/permissions/Nodes.js'
+import { NETWORKS_SHOW } from '../../modules/networks/permissions/Networks.js'
 
 export default [
     BASE_SHOW,
@@ -113,16 +122,23 @@ export default [
     DEV_EDIT,
     DEV_ENV,
     DEV_DEPLOY,
+    DEV_DELETE,
     QA_VIEW,
     QA_EDIT,
     QA_ENV,
     QA_DEPLOY,
+    QA_DELETE,
     PRE_VIEW,
     PRE_EDIT,
     PRE_ENV,
     PRE_DEPLOY,
+    PRE_DELETE,
     PROD_VIEW,
     PROD_EDIT,
     PROD_ENV,
-    PROD_DEPLOY
+    PROD_DEPLOY,
+    PROD_DELETE,
+
+    NODES_SHOW,
+    NETWORKS_SHOW,
 ]

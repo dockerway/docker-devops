@@ -4,6 +4,7 @@ import EnvironmentPage from '../pages/crud/EnvironmentPage'
 import EnvironmentServicePage from '../pages/crud/EnvironmentServicePage'
 import StackPage from '../pages/crud/StackPage'
 import DeployHistoryPage from '../pages/crud/DeployHistoryPage'
+import { EnvironmentServiceDockerDeployPage } from '../components/EnvironmentServiceDockerDeploy'
 
 const routes = [
        
@@ -63,6 +64,15 @@ const routes = [
         meta: {
             requiresAuth: true,
             permission: "STACK_SHOW"
+        }
+     },
+     {
+        name: 'DeployEnvironmentServicePage', 
+        path: '/crud/deploy/:environment/:stack/:environmentServiceName/:imageTag', 
+        component: EnvironmentServiceDockerDeployPage,  
+        meta: {
+            requiresAuth: true,
+            permissions: ["DEV_DEPLOY", "QA_DEPLOY", "PRE_DEPLOY", "PROD_DEPLOY"]
         }
      }
 ]

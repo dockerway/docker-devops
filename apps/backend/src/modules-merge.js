@@ -11,10 +11,15 @@ import {types as auditTypes, resolvers as auditResolvers} from '@dracul/audit-ba
 import {resolvers as baseResolvers } from './modules/base/graphql'
 import {resolvers as devopsResolvers } from './modules/devops/graphql'
 import {resolvers as registryResolvers } from './modules/registry/graphql'
+import {resolvers as nodesResolvers} from './modules/nodes/graphql'
+import {resolvers as networksResolvers} from './modules/networks/graphql'
+
 //BASE TYPEDEFS
 import {types as baseTypes} from './modules/base/graphql'
 import {types as devopsTypes} from './modules/devops/graphql'
 import {types as registryTypes} from './modules/registry/graphql'
+import {types as nodesTypes} from './modules/nodes/graphql'
+import {types as networksTypes} from './modules/networks/graphql'
 
 
 export const resolvers = mergeResolvers([
@@ -26,7 +31,9 @@ export const resolvers = mergeResolvers([
     settingsResolvers,
     devopsResolvers,
     registryResolvers,
-    auditResolvers
+    auditResolvers,
+    nodesResolvers,
+    networksResolvers,
 ])
 
 export const typeDefs = mergeTypes([
@@ -38,5 +45,7 @@ export const typeDefs = mergeTypes([
     settingsTypes,
     devopsTypes,
     registryTypes,
-    auditTypes
+    auditTypes,
+    nodesTypes,
+    networksTypes,
 ])

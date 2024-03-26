@@ -17,7 +17,10 @@ const messages = {
             image: "Image",
             setting: "Setting",
             audit:"Audit",
-            deployHistory: "Deploy history"
+            deployHistory: "Deploy history",
+            containersGestion: "Containers gestion",
+            nodes: "Nodes",
+            networks:'Redes'
         }
     },
    es: {
@@ -37,8 +40,10 @@ const messages = {
             image: "Image",
             setting: "Configuración",
             audit:"Auditoria",
-            deployHistory: "Historial de despliegues"
-
+            deployHistory: "Historial de despliegues",
+            containersGestion: "Gestión de contenedores",
+            nodes: "Nodos",
+            networks:'Redes'
         }
     },
     pt: {
@@ -58,7 +63,10 @@ const messages = {
             image: "Image",
             setting: "Configuração",
             audit:"Audit",
-            deployHistory: "Historial de despliegues"
+            deployHistory: "Historial de despliegues",
+            containersGestion: "Gerenciamento de contêineres",
+            nodes: "Nodos",
+            networks:'Redes'
         }
     }
 }

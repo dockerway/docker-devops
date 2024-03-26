@@ -31,13 +31,25 @@ const settings = [
         type: 'string',
         group: 'Devops',
         label: {en: 'Regex for Container Volumes', es: 'Regex para volúmenes del contenedor', pt: 'Regex para volúmenes del contenedor'}
+    },
+
+    {
+        key: 'serviceStatusRequestTimeout',
+        value: 15,
+        type: 'number',
+        group: 'APIs',
+        label: {
+            en: 'Timeout in seconds for the services status request made to fortes',
+            es: 'Timeout en segundos para consultas realizadas a fortes sobre el estado de los servicios',
+            pt: 'Timeout en segundos para consultas realizadas a fortes sobre el estado de los servicios',
+        }
     }
 ]
 
 export const initSettings = async function () {
 
     for (let i in settings) {
-        createOrUpdateSettings(null, settings[i])
+        await createOrUpdateSettings(null, settings[i])
     }
 
 

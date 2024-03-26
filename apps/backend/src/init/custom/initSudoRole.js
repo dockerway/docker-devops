@@ -80,18 +80,21 @@ import {
     DEV_EDIT,
     DEV_ENV,
     DEV_DEPLOY,
+    DEV_DELETE,
     QA_VIEW,
     QA_EDIT,
     QA_ENV,
     QA_DEPLOY,
-    PRE_VIEW,
+    PRE_VIEW, PRE_DELETE,
     PRE_EDIT,
     PRE_ENV,
     PRE_DEPLOY,
     PROD_VIEW,
     PROD_EDIT,
     PROD_ENV,
-    PROD_DEPLOY
+    PROD_DEPLOY,
+    QA_DELETE,
+    PROD_DELETE
 } from '../../modules/devops/permissions/Environment'
 
 import {
@@ -114,6 +117,14 @@ import {
     RESTORE_SYSTEM,
 } from '../../modules/devops/permissions/Restore'
 
+import {
+    NETWORKS_SHOW,
+} from '../../modules/networks/permissions/Networks'
+
+import {
+    NODES_SHOW,
+} from '../../modules/nodes/permissions/Nodes'
+
 module.exports = {
     name: "sudo",
     permissions: [
@@ -127,18 +138,23 @@ module.exports = {
         DEV_EDIT,
         DEV_ENV,
         DEV_DEPLOY,
+        DEV_DELETE,
         QA_VIEW,
         QA_EDIT,
         QA_ENV,
         QA_DEPLOY,
+        QA_DELETE,
         PRE_VIEW,
+        PRE_DELETE,
         PRE_EDIT,
         PRE_ENV,
         PRE_DEPLOY,
+        PRE_DELETE,
         PROD_VIEW,
         PROD_EDIT,
         PROD_ENV,
         PROD_DEPLOY,
+        PROD_DELETE,
         PLATFORM_MENU,
         PLATFORM_SHOW,
         PLATFORM_UPDATE,
@@ -194,6 +210,9 @@ module.exports = {
         SETTINGS_UPDATE,
         SETTINGS_CREATE,
         SETTINGS_DELETE,
+
+        NODES_SHOW,
+        NETWORKS_SHOW,
     ],
     readonly: true
 }

@@ -69,6 +69,27 @@ export default [
         ]
     },
 
+        {
+        icon: 'disc_full',
+        text: 'menu.containersGestion',
+        panel: false,
+        children: [
+            {
+                icon: 'workspaces',
+                text: 'menu.nodes',
+                link: {name: "NodesPage"},
+                panel: false,
+                permission: 'REGISTRY_MENU'
+            },
+            {
+                icon: 'lan',
+                text: 'menu.networks',
+                link: {name: "NetworksPage"},
+                panel: false,
+                permission: 'REGISTRY_MENU'
+            },
+        ]
+    },
     {
         icon: 'disc_full',
         text: 'menu.registry',
@@ -154,6 +175,5 @@ export default [
         link: {name: "about"},
         panel: false,
     },
-
 
 ]

@@ -1,0 +1,36 @@
+
+
+type IPAMConfig {
+  Subnet: String
+  Gateway: String
+}
+
+type IPAM {
+  Driver: String
+  Options: String
+  Config: [IPAMConfig]
+}
+
+type ConfigFrom {
+  Network: String
+}
+
+type DockerNetwork {
+  Name: String
+  Id: String
+  Created: String
+  Scope: String
+  Driver: String
+  EnableIPv6: Boolean
+  IPAM: IPAM
+  Internal: Boolean
+  Attachable: Boolean
+  Ingress: Boolean
+  ConfigFrom: ConfigFrom
+  ConfigOnly: Boolean
+  Containers: [String]
+}
+
+type Query{
+    getDockerNetworks(environment: ID!): [DockerNetwork]   
+}
